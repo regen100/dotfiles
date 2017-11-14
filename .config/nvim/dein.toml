@@ -1,0 +1,305 @@
+# cpp {{{
+[[plugins]]
+repo = 'octol/vim-cpp-enhanced-highlight'
+on_ft = ['c','cpp']
+hook_add='''
+  let g:cpp_class_scope_highlight = 1
+  let g:cpp_member_variable_highlight = 1
+  let g:cpp_class_decl_highlight = 1
+  let g:cpp_experimental_simple_template_highlight = 1
+  let g:cpp_concepts_highlight = 1
+  let g:cpp_no_function_highlight = 1
+'''
+# }}}
+
+# python {{{
+[[plugins]]
+repo = 'Vimjas/vim-python-pep8-indent'
+on_ft = 'python'
+
+[[plugins]]
+repo = 'tell-k/vim-autopep8'
+on_ft = 'python'
+# }}}
+
+# cmake {{{
+[[plugins]]
+repo = 'pboettch/vim-cmake-syntax'
+on_ft = 'cmake'
+#}}}
+
+# toml {{{
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
+# }}}
+
+# java {{{
+[[plugins]]
+repo = 'artur-shaik/vim-javacomplete2'
+on_ft = 'java'
+hook_add = '''
+  autocmd vimrc FileType java setlocal omnifunc=javacomplete#Complete
+'''
+# }}}
+
+# latex {{{
+[[plugins]]
+repo = 'lervag/vimtex'
+on_ft = ['bib', 'tex']
+hook_add='''
+  let g:vimtex_compiler_latexmk = {
+    \ 'continuous' : 1,
+    \ 'options' : [
+    \   '-pdfdvi',
+    \   '-verbose',
+    \   '-file-line-error',
+    \   '-synctex=1',
+    \   '-interaction=nonstopmode',
+    \ ],
+    \}
+  let g:vimtex_view_general_viewer = 'qpdfview'
+  let g:vimtex_view_general_options = '--unique @pdf\#src:@tex:@line:@col'
+  let g:vimtex_view_general_options_latexmk = '--unique'
+'''
+hook_post_source = '''
+  autocmd vimrc FileType tex let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
+'''
+
+# }}}
+
+# json {{{
+[[plugins]]
+repo = 'elzr/vim-json'
+on_ft = 'json'
+hook_add = '''
+  let g:vim_json_syntax_conceal = 0
+'''
+# }}}
+
+# plantuml {{{
+[[plugins]]
+repo = 'aklt/plantuml-syntax'
+on_ft = 'plantuml'
+# }}}
+
+# doc {{{
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+type__depth = 1
+hook_add = '''
+  set helplang=ja,en
+'''
+# }}}
+
+# appearance {{{
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+  nnoremap <silent> [LEADER]n :NERDTreeToggle<CR>
+  autocmd vimrc BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+'''
+
+[[plugins]]
+repo = 'ryanoasis/vim-devicons'
+
+[[plugins]]
+repo = 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+[[plugins]]
+repo = 'Xuyuanp/nerdtree-git-plugin'
+
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+hook_add = '''
+  let g:indentLine_fileTypeExclude = ['help', 'tagbar', 'git', '']
+'''
+
+[[plugins]]
+repo = 'vim-airline/vim-airline'
+hook_add = '''
+  let g:airline_powerline_fonts = 1
+  let g:airline#extensions#tabline#enabled = 1
+  let g:airline#extensions#tabline#buffer_nr_show = 1
+'''
+hook_post_source = '''
+  let g:airline_section_z = airline#section#create(["\uE0A1" . '%l/%L %P ' . "\uE0A3" . '%c'])
+'''
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
+hook_add = '''
+  let g:airline_theme='simple'
+'''
+
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+hook_add = '''
+  set background=dark
+  autocmd vimrc VimEnter * nested colorscheme hybrid
+'''
+
+[[plugins]]
+repo = 'lilydjwg/colorizer'
+
+[[plugins]]
+repo = 'junegunn/rainbow_parentheses.vim'
+on_ft = ['cpp']
+hook_source = '''
+  let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+  autocmd vimrc VimEnter * RainbowParentheses
+'''
+
+[[plugins]]
+repo = 'thinca/vim-zenspace'
+
+# }}}
+
+# git {{{
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+# }}}
+
+# editor {{{
+[[plugins]]
+repo = 'Valloric/YouCompleteMe'
+build = '/usr/bin/python3 install.py --clang-completer --system-libclang'
+hook_add = '''
+  let g:ycm_python_binary_path = executable('python3') ? 'python3' : 'python'
+  let g:ycm_global_ycm_extra_conf = expand('~/.ycm_extra_conf.py')
+  let g:ycm_autoclose_preview_window_after_completion = 1
+  let g:ycm_semantic_triggers = {}
+  autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust nnoremap <buffer> <CR> :<C-u>YcmCompleter GoTo<CR>
+'''
+
+[[plugins]]
+repo = 'majutsushi/tagbar'
+hook_add = '''
+  let g:tagbar_width = 30
+  let g:tagbar_show_visibility = 1
+  let g:tagbar_type_tex = {
+    \ 'ctagstype': 'latex',
+    \ 'kinds': [
+      \ 's:sections',
+      \ 'g:graphics:0:0',
+      \ 'l:labels',
+      \ 'r:refs:1:0',
+      \ 'p:pagerefs:1:0'
+    \ ],
+    \ 'sort': 0,
+  \ }
+  nnoremap <silent> [LEADER]t :<C-u>TagbarToggle<CR>
+  autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust :TagbarOpen
+'''
+
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'
+hook_add = '''
+  autocmd vimrc BufWritePre * FixWhitespace
+'''
+
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+  let g:ale_sign_column_always = 1
+  let g:ale_echo_msg_error_str = 'E'
+  let g:ale_echo_msg_warning_str = 'W'
+  let g:ale_cpp_cppcheck_options='--enable=all'
+  let g:ale_c_clangformat_options = '-fallback-style=Google -style=file -assume-filename=%s'
+  let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+  let g:ale_fix_on_save = 1
+  let g:ale_linters = { 'cpp': ['clangcheck', 'clangtidy_h', 'cppcheck', 'cpplint', 'clang-format'] }
+  let g:ale_fixers = { 'cpp':['clang-format'], 'python': ['yapf'] }
+  autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
+  nmap <silent> <C-Up> <Plug>(ale_previous_wrap)
+  nmap <silent> <C-Down> <Plug>(ale_next_wrap)
+'''
+
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+on_map = '<Plug>(EasyAlign'
+hook_add = '''
+  xmap ga <Plug>(EasyAlign)
+  nmap ga <Plug>(EasyAlign)
+  let g:easy_align_delimiters = {'t': {'pattern': "\<tab>", 'left_margin': 0, 'right_margin': 0}}
+'''
+
+[[plugins]]
+repo = 'kassio/neoterm'
+hook_add = '''
+  autocmd vimrc FileType python nnoremap <buffer> @p T python %<CR><Ctrl-W>j
+'''
+
+[[plugins]]
+repo = 'embear/vim-localvimrc'
+hook_add = '''
+  let g:localvimrc_persistent = 1
+'''
+
+[[plugins]]
+repo = 'tyru/caw.vim'
+merged = 0
+
+[[plugins]]
+repo = 'ctrlpvim/ctrlp.vim'
+hook_add = '''
+  let g:ctrlp_split_window = 0
+'''
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'itchyny/vim-cursorword'
+
+[[plugins]]
+repo = 'ciaranm/detectindent'
+hook_add = '''
+  let g:detectindent_preferred_expandtab = 1
+  "autocmd vimrc BufReadPost * DetectIndent
+'''
+
+[[plugins]]
+repo = 'easymotion/vim-easymotion'
+hook_add = '''
+  let g:EasyMotion_use_migemo = 1
+'''
+
+[[plugins]]
+repo = 'lilydjwg/fcitx.vim'
+on_if = 'has("unix")'
+
+[[plugins]]
+repo = 'vim-scripts/restore_view.vim'
+hook_add = '''
+  set viewoptions=cursor,folds,slash,unix
+'''
+
+[[plugins]]
+repo = 'haya14busa/incsearch.vim'
+on_map = '<Plug>'
+hook_add = '''
+  map /  <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  map g/ <Plug>(incsearch-stay)
+
+  set hlsearch
+  let g:incsearch#auto_nohlsearch = 1
+  map n  <Plug>(incsearch-nohl-n)
+  map N  <Plug>(incsearch-nohl-N)
+  map *  <Plug>(incsearch-nohl-*)
+  map #  <Plug>(incsearch-nohl-#)
+  map g* <Plug>(incsearch-nohl-g*)
+  map g# <Plug>(incsearch-nohl-g#)
+'''
+# }}}
+
