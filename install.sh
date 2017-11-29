@@ -9,9 +9,6 @@ fi
 if [ ! -f /usr/bin/nvim ]; then
   sudo apt-get install -y --no-install-recommends software-properties-common
   sudo add-apt-repository -y ppa:neovim-ppa/stable
-  sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
-  sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
-  sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
 fi
 if [ ! -f /etc/apt/sources.list.d/llvm.list ]; then
   sudo sh -c "echo deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main > /etc/apt/sources.list.d/llvm.list"
@@ -32,6 +29,10 @@ sudo /usr/bin/pip3 install -U \
   vim-vint \
   cmakelint
 
+sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
+sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+
 # update tmux
 TMUX_VER=$(tmux -V | cut -f 2 -d' ')
 TMUX_NEW_VER=$(printf "%s\n2.2" "$TMUX_VER" | sort -V | head -n 1)
@@ -46,7 +47,7 @@ if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then
   cd /tmp
   git clone https://github.com/fumiyas/wcwidth-cjk.git
   cd wcwidth-cjk
-  sudo apt-get install -y --no-install-recomends autoconf automake libtool
+  sudo apt-get install -y --no-install-recommends autoconf automake libtool
   autoreconf --install
   ./configure --prefix=/usr/local/
   make
