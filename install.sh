@@ -25,7 +25,7 @@ sudo /usr/bin/pip3 install -U \
   pip \
   neovim \
   compdb \
-  yapf \
+  isort yapf \
   vim-vint \
   cmakelint
 

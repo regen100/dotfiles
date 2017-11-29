@@ -218,7 +218,7 @@ hook_add = '''
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
   let g:ale_fix_on_save = 1
   let g:ale_linters = { 'cpp': ['clangcheck', 'clangtidy_h', 'cppcheck', 'cpplint', 'clang-format'] }
-  let g:ale_fixers = { 'cpp':['clang-format'], 'python': ['yapf'] }
+  let g:ale_fixers = { 'cpp':['clang-format'], 'python': ['isort', 'yapf'] }
   autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
   nmap <silent> <C-Up> <Plug>(ale_previous_wrap)
   nmap <silent> <C-Down> <Plug>(ale_next_wrap)
