@@ -14,13 +14,17 @@ if [ ! -f /etc/apt/sources.list.d/llvm.list ]; then
   sudo sh -c "echo deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main > /etc/apt/sources.list.d/llvm.list"
   wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
 fi
+if [ ! -f /etc/apt/sources.list.d/nodesource.list ]; then
+  curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+fi
 sudo apt-get update
 sudo apt-get install -y --no-install-recommends \
   neovim zsh byobu tmux \
   git cmake build-essential \
   python3-dev python3-pip python3-setuptools python3-wheel \
   llvm-5.0 clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck \
-  exuberant-ctags flake8 shellcheck chktex
+  exuberant-ctags flake8 shellcheck chktex \
+  nodejs
 sudo /usr/bin/pip3 install -U \
   pip \
   neovim \
@@ -28,6 +32,7 @@ sudo /usr/bin/pip3 install -U \
   isort yapf \
   vim-vint \
   cmakelint
+sudo npm -g install js-beautify
 
 sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
