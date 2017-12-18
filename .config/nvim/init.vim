@@ -44,7 +44,7 @@ set cursorline number nowrap
 set list listchars=tab:>-,eol:↲,extends:»,precedes:«
 set ambiwidth=double
 set virtualedit=block
-"set clipboard=unnamedplus
+set clipboard& clipboard^=unnamedplus
 set ignorecase smartcase incsearch
 set wildmenu
 set showmatch
