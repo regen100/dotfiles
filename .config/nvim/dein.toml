@@ -236,7 +236,7 @@ hook_add = '''
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
-  autocmd vimrc FileType python nnoremap <buffer> @p T python %<CR><Ctrl-W>j
+  autocmd vimrc FileType python nnoremap <buffer> @p :T python3 %<CR><Ctrl-W>j
 '''
 
 [[plugins]]
