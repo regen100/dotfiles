@@ -172,6 +172,7 @@ repo = 'tpope/vim-fugitive'
 # editor {{{
 [[plugins]]
 repo = 'Valloric/YouCompleteMe'
+type__depth = 1
 build = '/usr/bin/python3 install.py --clang-completer --system-libclang'
 hook_add = '''
   let g:ycm_python_binary_path = executable('python3') ? 'python3' : 'python'
