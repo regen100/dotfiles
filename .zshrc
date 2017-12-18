@@ -18,7 +18,7 @@ source ~/.zplug/init.zsh
 zplug "yous/vanilli.sh"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
-if [ $TERM != "linux" ]; then
+if [ $TERM != "linux" ] && [ ! -n "$MYVIMRC" ]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 fi
 
