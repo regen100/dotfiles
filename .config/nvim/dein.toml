@@ -263,6 +263,10 @@ merged = 0
 repo = 'ctrlpvim/ctrlp.vim'
 hook_add = '''
   let g:ctrlp_split_window = 0
+  if executable('ag')
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+    let g:ctrlp_use_caching = 0
+  endif
 '''
 
 [[plugins]]
@@ -321,6 +325,9 @@ hook_add = '''
 
 [[plugins]]
 repo = 'christoomey/vim-tmux-navigator'
+
+[[plugins]]
+repo = 'octref/RootIgnore'
 
 # }}}
 
