@@ -7,6 +7,54 @@ augroup vimrc
 augroup END
 " }}}
 
+" key {{{
+let g:mapleader = "\<Space>"
+
+" buffer move
+nnoremap <silent> <C-h> :<C-u>bp<CR>
+nnoremap <silent> <C-l> :<C-u>bn<CR>
+
+" exit from terminal insert mode
+tnoremap <silent> <ESC> <C-\><C-n>
+
+" ESC nohl
+nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
+
+" exit from help
+autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
+
+" sudo save
+cabbrev w!! w !sudo tee > /dev/null %
+
+" indent
+nnoremap <silent> <Tab> >>
+nnoremap <silent> <S-Tab> <<
+vnoremap <silent> <TAB> >gv
+vnoremap <silent> <S-TAB> <gv
+
+" window resize
+nnoremap <silent> <A-h> <C-w><
+nnoremap <silent> <A-l> <C-w>>
+nnoremap <silent> <A-k> <C-w>+
+nnoremap <silent> <A-j> <C-w>-
+
+" toggle
+nnoremap <silent> <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
+nnoremap <silent> <Leader>w :<C-u>setl wrap! wrap?<CR>
+nnoremap <silent> <Leader>s :<C-u>call <SID>toggle_syntax()<CR>
+function! s:toggle_syntax() abort
+  if exists('g:syntax_on')
+    syntax off
+    redraw
+    echo 'syntax off'
+  else
+    syntax on
+    redraw
+    echo 'syntax on'
+  endif
+endfunction
+" }}}
+
 " python {{{
 function! s:pick_executable(pathspecs) abort
   for l:pathspec in filter(a:pathspecs, '!empty(v:val)')
@@ -97,54 +145,6 @@ if has('win32') || has('win64') || has('mac')
 else
   set clipboard=unnamed,unnamedplus
 endif
-" }}}
-
-" key {{{
-let g:mapleader = "\<Space>"
-
-" buffer move
-nnoremap <silent> <C-h> :<C-u>bp<CR>
-nnoremap <silent> <C-l> :<C-u>bn<CR>
-
-" exit from terminal insert mode
-tnoremap <silent> <ESC> <C-\><C-n>
-
-" ESC nohl
-nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
-
-" exit from help
-autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
-
-" sudo save
-cabbrev w!! w !sudo tee > /dev/null %
-
-" indent
-nnoremap <silent> <Tab> >>
-nnoremap <silent> <S-Tab> <<
-vnoremap <silent> <TAB> >gv
-vnoremap <silent> <S-TAB> <gv
-
-" window resize
-nnoremap <silent> <A-h> <C-w><
-nnoremap <silent> <A-l> <C-w>>
-nnoremap <silent> <A-k> <C-w>+
-nnoremap <silent> <A-j> <C-w>-
-
-" toggle
-nnoremap <silent> <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
-nnoremap <silent> <Leader>w :<C-u>setl wrap! wrap?<CR>
-nnoremap <silent> <Leader>s :<C-u>call <SID>toggle_syntax()<CR>
-function! s:toggle_syntax() abort
-  if exists('g:syntax_on')
-    syntax off
-    redraw
-    echo 'syntax off'
-  else
-    syntax on
-    redraw
-    echo 'syntax on'
-  endif
-endfunction
 " }}}
 
 set secure
