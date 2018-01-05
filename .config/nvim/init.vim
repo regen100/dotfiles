@@ -101,13 +101,6 @@ if has('vim_starting') && dein#check_install()
 endif
 " }}}
 
-" vimball {{{
-let s:vimball_dir = s:cache_home . '/vimball'
-let &runtimepath = s:vimball_dir . ',' . &runtimepath
-"call mkdir(s:vimball_dir, 'p')
-"packadd vimball
-" }}}
-
 " set  {{{
 filetype plugin indent on
 syntax enable
