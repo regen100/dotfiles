@@ -148,3 +148,5 @@ function! s:toggle_syntax() abort
   endif
 endfunction
 " }}}
+
+set secure
