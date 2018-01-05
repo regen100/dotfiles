@@ -100,9 +100,7 @@ endif
 " }}}
 
 " key {{{
-" custom leader key
-nnoremap [LEADER] <Nop>
-nmap <Space> [LEADER]
+let g:mapleader = "\<Space>"
 
 " buffer move
 nnoremap <silent> <C-h> :<C-u>bp<CR>
@@ -133,9 +131,9 @@ nnoremap <silent> <A-k> <C-w>+
 nnoremap <silent> <A-j> <C-w>-
 
 " toggle
-nnoremap <silent> [LEADER]m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
-nnoremap <silent> [LEADER]w :<C-u>setl wrap! wrap?<CR>
-nnoremap <silent> [LEADER]s :<C-u>call <SID>toggle_syntax()<CR>
+nnoremap <silent> <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
+nnoremap <silent> <Leader>w :<C-u>setl wrap! wrap?<CR>
+nnoremap <silent> <Leader>s :<C-u>call <SID>toggle_syntax()<CR>
 function! s:toggle_syntax() abort
   if exists('g:syntax_on')
     syntax off
