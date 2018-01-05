@@ -52,9 +52,6 @@ if [ "$TMUX_NEW_VER" != 2.2 ]; then
   sudo dpkg -i /tmp/tmux.deb
   rm /tmp/tmux.deb
 fi
-if [ ! -d "$HOME/.config/byobu/plugins/tpm" ]; then
-  git clone https://github.com/tmux-plugins/tpm ~/.config/byobu/plugins/tpm
-fi
 
 # wcwidth-cjk
 if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then
