@@ -7,6 +7,32 @@ augroup vimrc
 augroup END
 " }}}
 
+" python {{{
+function! s:pick_executable(pathspecs) abort
+  for l:pathspec in filter(a:pathspecs, '!empty(v:val)')
+    for l:path in reverse(glob(l:pathspec, 0, 1))
+      if executable(l:path)
+        return l:path
+      endif
+    endfor
+  endfor
+  return ''
+endfunction
+
+if has('nvim')
+  let g:python_host_prog = s:pick_executable([
+  \ '/usr/local/bin/python2',
+  \ '/usr/bin/python2',
+  \ '/bin/python2',
+  \])
+  let g:python3_host_prog = s:pick_executable([
+  \ '/usr/local/bin/python3',
+  \ '/usr/bin/python3',
+  \ '/bin/python3',
+  \])
+endif
+" }}}
+
 "dein {{{
 let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.cache') : $XDG_CACHE_HOME
 let s:dein_dir = s:cache_home . '/dein'
