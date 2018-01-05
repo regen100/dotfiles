@@ -25,7 +25,7 @@ if [ ! -f /etc/apt/sources.list.d/nodesource.list ]; then
 fi
 sudo apt-get update
 sudo apt-get install -y --no-install-recommends \
-  neovim zsh byobu tmux \
+  neovim zsh byobu tmux silversearcher-ag \
   git cmake build-essential \
   python3-dev python3-pip python3-setuptools python3-wheel \
   llvm-5.0 clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck \
