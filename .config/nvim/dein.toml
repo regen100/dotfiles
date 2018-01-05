@@ -311,5 +311,13 @@ hook_add = '''
   map g* <Plug>(incsearch-nohl-g*)
   map g# <Plug>(incsearch-nohl-g#)
 '''
+
+[[plugins]]
+repo = 'kana/vim-altr'
+on_map = '<Plug>'
+hook_add = '''
+  nmap <Leader>a <Plug>(altr-forward)
+'''
+
 # }}}
 
