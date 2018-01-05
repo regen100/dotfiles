@@ -6,9 +6,15 @@
 if grep "//a" /etc/apt/sources.list > /dev/null; then
   sudo sed -ie "s#//a#//jp.a#g" /etc/apt/sources.list
 fi
+
+sudo apt-get update
+sudo apt-get install -y --no-install-recommends software-properties-common
+
 if [ ! -f /usr/bin/nvim ]; then
-  sudo apt-get install -y --no-install-recommends software-properties-common
   sudo add-apt-repository -y ppa:neovim-ppa/stable
+fi
+if [ ! -f /etc/apt/sources.list.d/byobu-ubuntu-ppa-xenial.list ]; then
+  sudo add-apt-repository -y ppa:byobu/ppa
 fi
 if [ ! -f /etc/apt/sources.list.d/llvm.list ]; then
   sudo sh -c "echo deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main > /etc/apt/sources.list.d/llvm.list"
@@ -45,6 +51,9 @@ if [ "$TMUX_NEW_VER" != 2.2 ]; then
   wget -O /tmp/tmux.deb http://launchpadlibrarian.net/263289132/tmux_2.2-3_amd64.deb
   sudo dpkg -i /tmp/tmux.deb
   rm /tmp/tmux.deb
+fi
+if [ ! -d "$HOME/.config/byobu/plugins/tpm" ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.config/byobu/plugins/tpm
 fi
 
 # wcwidth-cjk
