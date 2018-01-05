@@ -1,13 +1,3 @@
-case "$TERM" in
-  linux)
-    LANG=en_US.UTF-8
-    ;;
-  *)
-    LANG=en_US.UTF-8
-    TERM=xterm-256color
-    ;;
-esac
-
 # zplug
 if [ ! -d ~/.zplug ]; then
   git clone https://github.com/zplug/zplug ~/.zplug

@@ -11,8 +11,8 @@ augroup END
 let g:mapleader = "\<Space>"
 
 " buffer move
-nnoremap <silent> <C-h> :<C-u>bp<CR>
-nnoremap <silent> <C-l> :<C-u>bn<CR>
+nnoremap <silent> <C-Left> :<C-u>bp<CR>
+nnoremap <silent> <C-Right> :<C-u>bn<CR>
 
 " exit from terminal insert mode
 tnoremap <silent> <ESC> <C-\><C-n>
