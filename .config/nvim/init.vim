@@ -129,6 +129,7 @@ set autoread
 set autowrite
 set scrolloff=3
 set diffopt=filler,vertical
+set splitbelow
 
 autocmd vimrc QuickfixCmdPost make,grep,grepadd,vimgrep cwindow
 
