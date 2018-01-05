@@ -70,7 +70,6 @@ set cursorline number nowrap
 set list listchars=tab:>-,eol:↲,extends:»,precedes:«
 set ambiwidth=double
 set virtualedit=block
-set clipboard& clipboard^=unnamedplus
 set ignorecase smartcase incsearch
 set wildmenu
 set showmatch
@@ -92,36 +91,51 @@ if has('persistent_undo')
   set undofile
   call mkdir(&undodir, 'p')
 endif
+
+if has('win32') || has('win64') || has('mac')
+  set clipboard=unnamed
+else
+  set clipboard=unnamed,unnamedplus
+endif
 " }}}
 
 " key {{{
+" custom leader key
 nnoremap [LEADER] <Nop>
 nmap <Space> [LEADER]
 
-nnoremap <silent> <F3> :<C-u>bp<CR>
-nnoremap <silent> <F4> :<C-u>bn<CR>
+" buffer move
+nnoremap <silent> <C-h> :<C-u>bp<CR>
+nnoremap <silent> <C-l> :<C-u>bn<CR>
 
+" exit from terminal insert mode
 tnoremap <silent> <ESC> <C-\><C-n>
 
+" ESC nohl
+nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
+
+" exit from help
+autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
+
+" sudo save
+cabbrev w!! w !sudo tee > /dev/null %
+
+" indent
+nnoremap <silent> <Tab> >>
 nnoremap <silent> <S-Tab> <<
-inoremap <silent> <S-Tab> <C-d>
 vnoremap <silent> <TAB> >gv
 vnoremap <silent> <S-TAB> <gv
 
-nnoremap <silent> <S-Left> <C-w><
-nnoremap <silent> <S-Right> <C-w>>
-nnoremap <silent> <S-Up> <C-w>+
-nnoremap <silent> <S-Down> <C-w>-
+" window resize
+nnoremap <silent> <A-h> <C-w><
+nnoremap <silent> <A-l> <C-w>>
+nnoremap <silent> <A-k> <C-w>+
+nnoremap <silent> <A-j> <C-w>-
 
-nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
-
-autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
-
-cabbrev w!! w !sudo tee > /dev/null %
-
+" toggle
 nnoremap <silent> [LEADER]m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
 nnoremap <silent> [LEADER]w :<C-u>setl wrap! wrap?<CR>
-nnoremap <silent> [LEADER]s :call <SID>toggle_syntax()<CR>
+nnoremap <silent> [LEADER]s :<C-u>call <SID>toggle_syntax()<CR>
 function! s:toggle_syntax() abort
   if exists('g:syntax_on')
     syntax off
