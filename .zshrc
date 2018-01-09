@@ -8,6 +8,7 @@ source ~/.zplug/init.zsh
 zplug "yous/vanilli.sh"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
+zplug "chriskempson/base16-shell", hook-load:"base16_default-dark"
 if [ $TERM != "linux" ] && [ ! -n "$MYVIMRC" ]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 fi
@@ -22,6 +23,8 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs dir time)
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
 
+wget -nc -qO ~/.dircolors https://github.com/dotphiles/dotzsh/raw/master/themes/dotphiles/dircolors/dircolors.base16.dark
+
 zplug load
 
 # set
@@ -31,7 +34,6 @@ zstyle ':completion:*' use-cache true
 zstyle ':completion:*:default' menu select=2
 
 # color
-wget -nc -qO ~/.dircolors https://github.com/seebi/dircolors-solarized/raw/master/dircolors.256dark
 alias ls='ls --color=auto'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
