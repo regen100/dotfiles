@@ -1,3 +1,7 @@
+if [ $TERM = "linux" ]; then
+  export LANG=en_US.UTF-8
+fi
+
 # zplug
 if [ ! -d ~/.zplug ]; then
   git clone https://github.com/zplug/zplug ~/.zplug
