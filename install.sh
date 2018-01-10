@@ -5,9 +5,9 @@
 # repo
 if grep "//a" /etc/apt/sources.list > /dev/null; then
   sudo sed -ie "s#//a#//jp.a#g" /etc/apt/sources.list
+  sudo apt-get update
 fi
 
-sudo apt-get update
 sudo apt-get install -y --no-install-recommends software-properties-common
 
 if [ ! -f /usr/bin/nvim ]; then
@@ -45,13 +45,22 @@ sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
 
 # update tmux
-TMUX_VER=$(tmux -V | cut -f 2 -d' ')
-TMUX_NEW_VER=$(printf "%s\n2.2" "$TMUX_VER" | sort -V | head -n 1)
-if [ "$TMUX_NEW_VER" != 2.2 ]; then
-  wget -O /tmp/tmux.deb http://launchpadlibrarian.net/263289132/tmux_2.2-3_amd64.deb
-  sudo dpkg -i /tmp/tmux.deb
-  rm /tmp/tmux.deb
-fi
+TMUX_VER=$(dpkg -s tmux | grep ^Version: | cut -f 2 -d ' ')
+if [ "$TMUX_VER" != 2.6-3cjk ]; then (
+  cd /tmp
+  sudo apt-get install -y --no-install-recommends devscripts equivs
+  curl -fsSL http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6.orig.tar.gz | tar zx
+  curl -fsSL http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6-3.debian.tar.xz | tar Jx -C tmux-2.6
+  cd tmux-2.6
+  curl -fsSL https://gist.github.com/z80oolong/e65baf0d590f62fab8f4f7c358cbcc34/raw/a3b687808c8fd5b8ad67e9a9b81774bb189fa93c/tmux-2.6-fix.diff | patch -p1
+  dch -v 2.6-3cjk "CJK patch"
+  yes | sudo mk-build-deps -i
+  debuild -us -uc -b
+  cd ..
+  sudo apt purge -y --autoremove tmux-build-deps devscripts equivs
+  sudo dpkg -i tmux*.deb
+  rm -rf tmux*
+); fi
 
 # wcwidth-cjk
 if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then
