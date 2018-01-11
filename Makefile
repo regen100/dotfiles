@@ -96,6 +96,6 @@ config:
 	DOT_CONFIG_DIRECTORY=".config"; \
 	mkdir -p "$$HOME/$$DOT_CONFIG_DIRECTORY"; \
 	cd "$$DOT_DIRECTORY"; \
-	SRC=$$(find . -maxdepth 1 -name ".?*" ! -name $$DOT_CONFIG_DIRECTORY ! -name .git -printf "%P\n"); \
+	SRC=$$(find . -maxdepth 1 -name ".?*" ! -name $$DOT_CONFIG_DIRECTORY ! -name .git ! -name .gitignore -printf "%P\n"); \
 	SRC=$$SRC"\n"$$(find $$DOT_CONFIG_DIRECTORY -maxdepth 1 ! -path $$DOT_CONFIG_DIRECTORY); \
 	echo -ne "$$SRC" | xargs -i -d "\n" ln -snfv "$$DOT_DIRECTORY/{}" "$$HOME/{}"
