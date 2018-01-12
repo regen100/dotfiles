@@ -1,4 +1,4 @@
-.PHONY: root repo pip neovim clang python nodejs latex tmux byobu zsh wcwidth config
+.PHONY: root repo pip neovim clang python nodejs latex tmux byobu zsh wcwidth fbterm config
 
 SHELL = bash
 APT-INSTALL = apt-get install -y --no-install-recommends
@@ -98,6 +98,10 @@ wcwidth: repo
 		apt-get purge -y --autoremove autoconf automake libtool; \
 		rm -rf /tmp/wcwidth-cjk; \
 	fi
+
+fbterm: repo
+	@$(APT-INSTALL) fbterm fcitx-frontend-fbterm gpm
+	@chmod u+s /usr/bin/fbterm
 
 config:
 	@DOT_DIRECTORY="$$HOME/dotfiles"; \
