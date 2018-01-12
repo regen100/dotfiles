@@ -7,6 +7,7 @@ source ~/.zplug/init.zsh
 zplug "yous/vanilli.sh"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
 zplug "chriskempson/base16-shell", hook-load:"base16_default-dark"
 zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
@@ -14,6 +15,16 @@ zplug "b4b4r07/enhancd", use:init.sh
 zplug "modules/command-not-found", from:prezto
 zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
 zplug "docker/compose", use:contrib/completion/zsh, if:"(( $+commands[docker-compose] ))"
+
+zplug "caarlos0/zsh-mkc"
+zplug "marzocchi/zsh-notify", if:"(( $+commands[xdotool] )) && xdotool getactivewindow > /dev/null"
+
+zplug "plugins/colored-man-pages", from:oh-my-zsh
+zplug "plugins/common-aliases", from:oh-my-zsh
+zplug "plugins/python", from:oh-my-zsh
+zplug "plugins/pip", from:oh-my-zsh
+zplug "plugins/sudo", from:oh-my-zsh
+
 if [ $TERM != "linux" ] && [ ! -n "$MYVIMRC" ]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 else
