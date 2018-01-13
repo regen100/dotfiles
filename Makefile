@@ -1,56 +1,62 @@
-.PHONY: repo pip neovim clang python nodejs latex tmux byobu zsh wcwidth config
+.PHONY: root repo pip neovim clang python nodejs latex tmux byobu zsh wcwidth config
 
 SHELL = bash
 APT-INSTALL = apt-get install -y --no-install-recommends
 PIP-INSTALL = /usr/bin/pip3 install -U
+NPM-INSTALL = npm -g install
 
 all:
 
-repo:
-	if grep "//a" /etc/apt/sources.list > /dev/null; then \
+root:
+	@[ $$(id -u) -eq 0 ] || { echo "run as root"; exit 1; }
+
+repo: root
+	@if grep "//a" /etc/apt/sources.list > /dev/null; then \
 		sed -ie "s#//a#//jp.a#g" /etc/apt/sources.list; \
 		apt-get update; \
 	fi
-	$(APT-INSTALL) software-properties-common wget
+	@$(APT-INSTALL) software-properties-common wget
 
 pip: repo
-	$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
-	$(PIP-INSTALL) pip
+	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
+	@$(PIP-INSTALL) pip
 
 neovim: repo pip
-	add-apt-repository -y ppa:neovim-ppa/stable
-	apt-get update
-	$(APT-INSTALL) neovim silversearcher-ag git exuberant-ctags shellcheck xclip cmake
-	$(PIP-INSTALL) neovim vim-vint
-	update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
-	update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
-	update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-xenial.list]; then \
+		add-apt-repository -y ppa:neovim-ppa/stable; \
+		apt-get update; \
+	fi
+	@$(APT-INSTALL) neovim silversearcher-ag git exuberant-ctags shellcheck xclip cmake
+	@$(PIP-INSTALL) neovim vim-vint
+	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
+	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
+	@update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
 
 clang: repo pip
-	if [ ! -f /etc/apt/sources.list.d/llvm.list ]; then \
+	@if [ ! -f /etc/apt/sources.list.d/llvm.list ]; then \
 		echo deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main > /etc/apt/sources.list.d/llvm.list; \
 		wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -; \
 		apt-get update; \
 	fi
-	$(APT-INSTALL) cmake build-essential llvm-5.0 clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck
-	$(PIP-INSTALL) compdb cmakelint
+	@$(APT-INSTALL) cmake build-essential llvm-5.0 clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck
+	@$(PIP-INSTALL) compdb cmakelint
 
 python: pip
-	$(PIP-INSTALL) isort yapf flake8
+	@$(PIP-INSTALL) isort yapf flake8
 
 nodejs: repo
-	if [ ! -f /etc/apt/sources.list.d/nodesource.list ]; then \
+	@if [ ! -f /etc/apt/sources.list.d/nodesource.list ]; then \
 		wget -qO - https://deb.nodesource.com/setup_8.x | bash -; \
 	fi
-	$(APT-INSTALL) nodejs
-	npm -g install js-beautify
+	@$(APT-INSTALL) nodejs
+	@$(NPM-INSTALL) js-beautify
 
 latex: repo
-	$(APT-INSTALL) texlive texlive-latex-extra texlive-lang-japanese latexmk chktex
-	kanji-config-updmap-sys auto
+	@$(APT-INSTALL) texlive texlive-latex-extra texlive-lang-japanese latexmk chktex
+	@kanji-config-updmap-sys auto
 
 tmux: repo
-	TMUX_VER=$$(dpkg -s tmux 2> /dev/null | grep ^Version: | cut -f 2 -d ' '); \
+	@TMUX_VER=$$(dpkg -s tmux 2> /dev/null | grep ^Version: | cut -f 2 -d ' '); \
 	if [ "$$TMUX_VER" != 2.6-3cjk ]; then \
 		mkdir -p /tmp/tmux-build; \
 		cd /tmp/tmux-build; \
@@ -69,14 +75,17 @@ tmux: repo
 	fi
 
 byobu: repo tmux
-	add-apt-repository -y ppa:byobu/ppa
-	$(APT-INSTALL) byobu
+	@if [ ! -f /etc/apt/sources.list.d/byobu-ubuntu-ppa-xenial.list ]; then \
+		add-apt-repository -y ppa:byobu/ppa; \
+		apt-get update; \
+	fi
+	@$(APT-INSTALL) byobu
 
 zsh: repo
-	$(APT-INSTALL) zsh command-not-found
+	@$(APT-INSTALL) zsh command-not-found
 
 wcwidth: repo
-	if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then \
+	@if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then \
 		$(APT-INSTALL) git autoconf automake libtool build-essential; \
 		cd /tmp; \
 		git clone https://github.com/fumiyas/wcwidth-cjk.git; \
@@ -91,11 +100,11 @@ wcwidth: repo
 	fi
 
 config:
-	DOT_DIRECTORY="$$HOME/dotfiles"; \
+	@DOT_DIRECTORY="$$HOME/dotfiles"; \
 	DOT_CONFIG_DIRECTORY=".config"; \
 	mkdir -p "$$HOME/$$DOT_CONFIG_DIRECTORY"; \
 	cd "$$DOT_DIRECTORY"; \
 	SRC=$$(find . -maxdepth 1 -name ".?*" ! -name $$DOT_CONFIG_DIRECTORY ! -name .git ! -name .gitignore -printf "%P\n"); \
 	SRC=$$SRC"\n"$$(find $$DOT_CONFIG_DIRECTORY -maxdepth 1 ! -path $$DOT_CONFIG_DIRECTORY); \
 	echo -ne "$$SRC" | xargs -i -d "\n" ln -snfv "$$DOT_DIRECTORY/{}" "$$HOME/{}"
-	chsh -s /usr/bin/zsh
+	@[ "$$SHELL" = /usr/bin/zsh ] || chsh -s /usr/bin/zsh $$USER
