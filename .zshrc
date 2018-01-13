@@ -97,12 +97,5 @@ ls_abbrev() {
   fi
 }
 
-# path
-path+='~/bin'
-if [ -d /usr/lib/llvm-5.0 ]; then
-  path+='/usr/lib/llvm-5.0/bin/'
-fi
-export PATH
-
 # load custom file
 [ -f ${HOME}/.zshrc.mine ] && source ${HOME}/.zshrc.mine
