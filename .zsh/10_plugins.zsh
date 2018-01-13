@@ -15,6 +15,9 @@ zplug "modules/command-not-found", from:prezto
 zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
 if [ $TERM != "linux" ] && [ ! -n "$MYVIMRC" ]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
+else
+  zplug "mafredri/zsh-async"
+  zplug "sindresorhus/pure", use:pure.zsh, as:theme
 fi
 
 if ! zplug check --verbose; then
