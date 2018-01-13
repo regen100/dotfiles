@@ -12,6 +12,7 @@ zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
 zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
 zplug "b4b4r07/enhancd", use:init.sh
 zplug "modules/command-not-found", from:prezto
+zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
 if [ $TERM != "linux" ] && [ ! -n "$MYVIMRC" ]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 fi
