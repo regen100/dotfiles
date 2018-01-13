@@ -11,8 +11,9 @@ zstyle ':completion:*' show-completer true
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:messages' format '%F{green}%d%f'
-zstyle ':completion:*:warnings' format '%F{red}No matches for:%f %F{yellow}%d%f'
-zstyle ':completion:*:descriptions' format '%F{green}%U%B%d%b%u%f'
+zstyle ':completion:*:warnings' format '%F{red}No matches for:%f %F{green}%d%f'
+zstyle ':completion:*:descriptions' format '%U%F{green}%d%f%u'
+zstyle ':completion:*:corrections' format '%U%F{green}%d%f%u %F{red}(errors:%e)%f'
 
 if [ -f /usr/share/bash-completion/completions/lxc ]; then
   autoload bashcompinit
