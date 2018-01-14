@@ -11,3 +11,5 @@ alias -s txt='cat'
 (( $+commands[python] )) && alias -s py=python
 (( $+commands[ruby] )) && alias -s rb=ruby
 (( $+commands[aunpack] )) && alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=aunpack
+
+alias relogin='exec $SHELL -l'
