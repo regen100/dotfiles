@@ -32,7 +32,7 @@ else
   zplug "sindresorhus/pure", use:pure.zsh, as:theme
 fi
 
-if ! zplug check --verbose; then
+if ! zplug check; then
   zplug install
 fi
 
