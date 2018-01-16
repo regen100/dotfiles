@@ -1,4 +1,4 @@
-.PHONY: root repo pip neovim clang python nodejs latex tmux byobu zsh wcwidth fbterm config
+.PHONY: root repo pip neovim clang python nodejs latex tmux byobu zsh wcwidth fbterm xrdp config
 
 SHELL = bash
 APT-INSTALL = apt-get install -y --no-install-recommends
@@ -102,6 +102,12 @@ wcwidth: repo
 fbterm: repo
 	@$(APT-INSTALL) fbterm fcitx-frontend-fbterm gpm
 	@chmod u+s /usr/bin/fbterm
+
+xrdp: repo
+	@add-apt-repository ppa:hermlnx/xrdp
+	@apt-get update
+	@$(APT-INSTALL) xrdp
+	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
 
 config:
 	@DOT_DIRECTORY="$$HOME/dotfiles"; \
