@@ -13,3 +13,5 @@ alias -s txt='cat'
 (( $+commands[aunpack] )) && alias -s {gz,tgz,zip,lzh,bz2,tbz,Z,tar,arj,xz}=aunpack
 
 alias relogin='exec $SHELL -l'
+
+(( $+commands[xclip] )) && alias xclip='xclip -sel clip'
