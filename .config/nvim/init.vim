@@ -128,6 +128,8 @@ autocmd vimrc QuickfixCmdPost make,grep,grepadd,vimgrep cwindow
 
 autocmd vimrc BufReadPost /usr/include/c++/* if empty(&filetype) | set filetype=cpp | endif
 
+autocmd vimrc InsertLeave * set nopaste
+
 if has('persistent_undo')
   let &undodir = s:cache_home . '/undo'
   set undofile
