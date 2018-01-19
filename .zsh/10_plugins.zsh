@@ -4,6 +4,8 @@ if [ ! -d ~/.zplug ]; then
 fi
 source ~/.zplug/init.zsh
 
+zstyle ":zplug:tag" depth 1
+
 zplug "yous/vanilli.sh"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
@@ -15,6 +17,7 @@ zplug "b4b4r07/enhancd", use:init.sh
 zplug "modules/command-not-found", from:prezto
 zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
 zplug "docker/compose", use:contrib/completion/zsh, if:"(( $+commands[docker-compose] ))"
+zplug "rust-lang/zsh-config", use:src, if:"(( $+commands[rustc] ))"
 
 zplug "caarlos0/zsh-mkc"
 zplug "marzocchi/zsh-notify", if:"(( $+commands[xdotool] )) && xdotool getactivewindow > /dev/null"

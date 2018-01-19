@@ -1,4 +1,4 @@
-.PHONY: root repo pip neovim clang python nodejs latex tmux byobu zsh wcwidth fbterm xrdp config
+.PHONY: root repo pip neovim clang python nodejs rust latex tmux byobu zsh wcwidth fbterm xrdp config
 
 SHELL = bash
 APT-INSTALL = apt-get install -y --no-install-recommends
@@ -50,6 +50,10 @@ nodejs: repo
 	fi
 	@$(APT-INSTALL) nodejs
 	@$(NPM-INSTALL) js-beautify
+
+rust:
+	@curl https://sh.rustup.rs -sSf | sh -s -- -y
+	@rustup component add rust-src
 
 latex: repo
 	@$(APT-INSTALL) texlive texlive-latex-extra texlive-lang-japanese latexmk chktex

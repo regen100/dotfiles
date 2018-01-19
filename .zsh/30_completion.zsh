@@ -21,3 +21,7 @@ if [ -f /usr/share/bash-completion/completions/lxc ]; then
   export -f _have() { which $@ >/dev/null }
   source /usr/share/bash-completion/completions/lxc
 fi
+
+if (( $+commands[rustc] )); then
+  fpath=($(rustc --print sysroot)/share/zsh/site-functions $fpath)
+fi
