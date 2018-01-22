@@ -238,6 +238,7 @@ hook_add = '''
   let g:ale_echo_msg_warning_str = 'W'
   let g:ale_cpp_cppcheck_options='--enable=all'
   let g:ale_c_clangformat_options = '-fallback-style=Google -style=file -assume-filename=%s'
+  let g:ale_rust_rustfmt_options = '+nightly'
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
   let g:ale_fix_on_save = 1
   let g:ale_linters = { 'cpp': ['clangcheck', 'clangtidy_h', 'cppcheck', 'cpplint', 'clang-format'] }
@@ -249,7 +250,8 @@ hook_add = '''
   \ ],
   \ 'javascript': [
   \   {buffer, lines -> {'command': 'js-beautify %t'}}
-  \ ]
+  \ ],
+  \ 'rust': ['rustfmt']
   \}
   autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
   nmap <silent> <C-k> <Plug>(ale_previous_wrap)
