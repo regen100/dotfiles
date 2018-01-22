@@ -54,6 +54,8 @@ nodejs: repo
 rust:
 	@curl https://sh.rustup.rs -sSf | sh -s -- -y
 	@rustup component add rust-src
+	@rustup install nightly
+	@rustup component add rustfmt-preview --toolchain=nightly
 
 latex: repo
 	@$(APT-INSTALL) texlive texlive-latex-extra texlive-lang-japanese latexmk chktex
