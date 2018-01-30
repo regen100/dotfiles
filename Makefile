@@ -100,7 +100,6 @@ wcwidth: repo
 		./configure --prefix=/usr/local; \
 		make; \
 		make install; \
-		echo /usr/local/lib/wcwidth-cjk.so >> /etc/ld.so.preload; \
 		apt-get purge -y --autoremove autoconf automake libtool; \
 		rm -rf /tmp/wcwidth-cjk; \
 	fi
