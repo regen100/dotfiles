@@ -116,7 +116,7 @@ repo = 'osyo-manga/vim-precious'
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
-  nnoremap <silent> [LEADER]n :NERDTreeToggle<CR>
+  nnoremap <silent> <LEADER>n :NERDTreeToggle<CR>
   autocmd vimrc BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 '''
 
@@ -228,7 +228,7 @@ hook_add = '''
   \   'i:impls,trait implementations',
   \ ]
   \}
-  nnoremap <silent> [LEADER]t :<C-u>TagbarToggle<CR>
+  nnoremap <silent> <LEADER>t :<C-u>TagbarToggle<CR>
   autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust :TagbarOpen
 '''
 
