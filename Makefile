@@ -3,7 +3,6 @@
 SHELL = bash
 APT-INSTALL = apt-get install -y --no-install-recommends
 PIP-INSTALL = /usr/bin/pip3 install -U
-NPM-INSTALL = npm -g install
 
 all:
 
@@ -49,7 +48,6 @@ nodejs: repo
 		wget -qO - https://deb.nodesource.com/setup_8.x | bash -; \
 	fi
 	@$(APT-INSTALL) nodejs
-	@$(NPM-INSTALL) js-beautify
 
 rust:
 	@curl https://sh.rustup.rs -sSf | sh -s -- -y
