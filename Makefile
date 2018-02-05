@@ -87,6 +87,7 @@ byobu: repo tmux
 
 zsh: repo
 	@$(APT-INSTALL) zsh command-not-found
+	@[ "$$SHELL" = $$HOME/dotfiles/bin/zsh-cjk ] || chsh -s $$HOME/dotfiles/bin/zsh-cjk $${SUDO_USER:-$$USER}
 
 wcwidth: repo
 	@if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then \
@@ -120,4 +121,3 @@ config:
 	SRC=$$(find . -maxdepth 1 -name ".?*" ! -name $$DOT_CONFIG_DIRECTORY ! -name .git ! -name .gitignore -printf "%P\n"); \
 	SRC=$$SRC"\n"$$(find $$DOT_CONFIG_DIRECTORY -maxdepth 1 ! -path $$DOT_CONFIG_DIRECTORY); \
 	echo -ne "$$SRC" | xargs -i -d "\n" ln -snfv "$$DOT_DIRECTORY/{}" "$$HOME/{}"
-	@[ "$$SHELL" = /usr/bin/zsh ] || chsh -s /usr/bin/zsh $$USER
