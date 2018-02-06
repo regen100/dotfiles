@@ -21,7 +21,7 @@ pip: repo
 	@$(PIP-INSTALL) pip
 
 neovim: repo pip
-	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-xenial.list]; then \
+	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-xenial.list ]; then \
 		add-apt-repository -y ppa:neovim-ppa/stable; \
 		apt-get update; \
 	fi
