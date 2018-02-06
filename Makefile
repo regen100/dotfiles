@@ -45,7 +45,8 @@ clang: repo pip
 		dpkg -i ccache*.deb; \
 	fi
 
-python: pip
+python: repo pip
+	@$(APT-INSTALL) virtualenv direnv
 	@$(PIP-INSTALL) isort yapf flake8
 
 nodejs: repo
