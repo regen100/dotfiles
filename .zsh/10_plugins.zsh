@@ -1,4 +1,4 @@
-if [ ! -d ~/.zplug ]; then
+if [[ ! -d ~/.zplug ]]; then
   git clone https://github.com/zplug/zplug ~/.zplug
 fi
 source ~/.zplug/init.zsh
@@ -28,7 +28,7 @@ zplug "plugins/python", from:oh-my-zsh
 zplug "plugins/pip", from:oh-my-zsh
 zplug "plugins/sudo", from:oh-my-zsh
 
-if [ $TERM != "linux" ] && [ ! -n "$MYVIMRC" ]; then
+if [[ $TERM != "linux" && -z $MYVIMRC ]]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 else
   zplug "mafredri/zsh-async"
