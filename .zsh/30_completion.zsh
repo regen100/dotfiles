@@ -23,5 +23,7 @@ if [ -f /usr/share/bash-completion/completions/lxc ]; then
 fi
 
 if (( $+commands[rustc] )); then
-  fpath=($(rustc --print sysroot)/share/zsh/site-functions $fpath)
+  fpath+=$(rustc --print sysroot)/share/zsh/site-functions
 fi
+
+compinit
