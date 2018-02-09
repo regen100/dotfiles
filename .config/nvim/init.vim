@@ -124,6 +124,8 @@ set scrolloff=3
 set diffopt=filler,vertical
 set splitbelow
 
+set wildignore=*.pyc,*/__pycache__/,*.egg,*.egg-info/
+
 autocmd vimrc QuickfixCmdPost make,grep,grepadd,vimgrep cwindow
 
 autocmd vimrc BufReadPost /usr/include/c++/* if empty(&filetype) | set filetype=cpp | endif
