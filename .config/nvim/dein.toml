@@ -200,7 +200,6 @@ hook_add = '''
   let g:tagbar_width = 30
   let g:tagbar_show_visibility = 1
   nnoremap <silent> <LEADER>t :<C-u>TagbarToggle<CR>
-  autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust :TagbarOpen
 '''
 
 [[plugins]]
