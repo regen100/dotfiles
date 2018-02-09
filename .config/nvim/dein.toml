@@ -140,9 +140,6 @@ hook_add = '''
   let g:airline#extensions#tabline#enabled = 1
   let g:airline#extensions#tabline#buffer_nr_show = 1
 '''
-hook_post_source = '''
-  let g:airline_section_z = airline#section#create(["\uE0A1" . '%l/%L %P ' . "\uE0A3" . '%c'])
-'''
 
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
