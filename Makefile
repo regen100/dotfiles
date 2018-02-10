@@ -1,8 +1,10 @@
 .PHONY: root repo pip neovim clang python nodejs rust latex tmux byobu zsh wcwidth fbterm xrdp config
 
-SHELL = bash
-APT-INSTALL = apt-get install -y --no-install-recommends
-PIP-INSTALL = /usr/bin/pip3 install -U
+SHELL := bash
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
+APT-INSTALL := apt-get install -y --no-install-recommends
+PIP-INSTALL := /usr/bin/pip3 install -U
 
 all:
 
@@ -121,10 +123,8 @@ xrdp: repo
 	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
 
 config:
-	@DOT_DIRECTORY="$$HOME/dotfiles"; \
-	DOT_CONFIG_DIRECTORY=".config"; \
-	mkdir -p "$$HOME/$$DOT_CONFIG_DIRECTORY"; \
-	cd "$$DOT_DIRECTORY"; \
-	SRC=$$(find . -maxdepth 1 -name ".?*" ! -name $$DOT_CONFIG_DIRECTORY ! -name .git ! -name .gitignore -printf "%P\n"); \
-	SRC=$$SRC"\n"$$(find $$DOT_CONFIG_DIRECTORY -maxdepth 1 ! -path $$DOT_CONFIG_DIRECTORY); \
-	echo -ne "$$SRC" | xargs -i -d "\n" ln -snfv "$$DOT_DIRECTORY/{}" "$$HOME/{}"
+	@mkdir -p "$$HOME/.config"; \
+	cd "$(DOTFILES_DIR)"; \
+	SRC=$$(find . -maxdepth 1 -name ".?*" ! -name .config ! -name .git ! -name .gitignore -printf "%P\n"); \
+	SRC=$$SRC"\n"$$(find .config -maxdepth 1 ! -path .config); \
+	echo -ne "$$SRC" | xargs -i -d "\n" ln -snfv "$(DOTFILES_DIR){}" "$$HOME/{}"
