@@ -131,10 +131,11 @@ fbterm: repo
 
 .PHONY: xrdp
 xrdp: repo
-	@add-apt-repository ppa:hermlnx/xrdp
+	@add-apt-repository -y ppa:hermlnx/xrdp
 	@apt-get update
-	@$(APT-INSTALL) xrdp
+	@$(APT-INSTALL) xrdp xscreensaver
 	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
+	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 
 .PHONY: config
 config:
