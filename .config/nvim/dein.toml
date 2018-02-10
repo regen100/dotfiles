@@ -226,6 +226,12 @@ hook_add = '''
   \   'i:impls,trait implementations',
   \ ]
   \}
+  let g:tagbar_type_make = {
+  \ 'kinds':[
+  \   'm:macros',
+  \   't:targets'
+  \ ]
+  \}
   nnoremap <silent> <LEADER>t :<C-u>TagbarToggle<CR>
   autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust :TagbarOpen
 '''
