@@ -24,13 +24,26 @@ pip: repo
 	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
 	@$(PIP-INSTALL) pip
 
+.PHONY: ctags
+ctags: repo
+	@if [ ! -f /usr/bin/ctags ]; then \
+		set -x; \
+		mkdir -p /tmp/build; \
+		cd /tmp/build; \
+		git clone --depth=1 https://github.com/universal-ctags/ctags.git universal-ctags-0.0.0; \
+		cd universal-ctags-0.0.0; \
+		cp -r $(DOTFILES_DIR)extras/universal-ctags/debian .; \
+		$(DOTFILES_DIR)extras/install_deb.sh; \
+		rm -rf /tmp/build; \
+	fi
+
 .PHONY: neovim
-neovim: repo pip
+neovim: repo pip ctags
 	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-xenial.list ]; then \
 		add-apt-repository -y ppa:neovim-ppa/stable; \
 		apt-get update; \
 	fi
-	@$(APT-INSTALL) neovim silversearcher-ag git exuberant-ctags shellcheck xclip cmake
+	@$(APT-INSTALL) neovim silversearcher-ag git shellcheck xclip cmake
 	@$(PIP-INSTALL) neovim vim-vint
 	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
