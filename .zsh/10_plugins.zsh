@@ -18,9 +18,9 @@ zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
 zplug "docker/compose", use:contrib/completion/zsh, if:"(( $+commands[docker-compose] ))"
 zplug "rust-lang/zsh-config", use:src, if:"(( $+commands[rustc] ))"
 zplug "lukechilds/zsh-better-npm-completion", if:"(( $+commands[npm] ))"
-
 zplug "caarlos0/zsh-mkc"
 zplug "marzocchi/zsh-notify", if:"(( $+commands[xdotool] )) && xdotool getactivewindow > /dev/null"
+zplug 'endaaman/lxd-completion-zsh'
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh

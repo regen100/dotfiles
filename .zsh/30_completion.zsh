@@ -27,8 +27,3 @@ if (( $+commands[rustc] )); then
 fi
 
 autoload -U compinit && compinit
-
-if [[ -f /usr/share/bash-completion/completions/lxc ]]; then
-  source /usr/share/bash-completion/completions/lxc
-fi
-
