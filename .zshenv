@@ -1,6 +1,7 @@
 # path
 if [[ -z $ZSHENV_LOADED ]]; then
-  path=($HOME/bin(N-/) $HOME/dotfiles/bin(N-/) /opt/VirtualGL/bin(N-/) ./node_modules/.bin $path)
+  path=($HOME/bin(N-/) $HOME/dotfiles/bin(N-/) /opt/VirtualGL/bin(N-/) /snap/bin(N-/) $path)
+  path=(./node_modules/.bin $path)
 
   llvm_dirs=(/usr/lib/llvm-*(N-/))
   if [[ -n $llvm_dirs ]]; then
