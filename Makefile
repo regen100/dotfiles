@@ -24,8 +24,16 @@ pip: repo
 	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
 	@$(PIP-INSTALL) pip
 
+.PHONY: deb
+deb:
+	@$(APT-INSTALL) devscripts equivs
+
+.PHONY: clean
+clean:
+	@apt-get purge -y --autoremove devscripts equivs
+
 .PHONY: ctags
-ctags: repo
+ctags: deb
 	@if [ ! -f /usr/bin/ctags ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
@@ -89,23 +97,19 @@ latex: repo
 	@kanji-config-updmap-sys auto
 
 .PHONY: tmux
-tmux: repo
+tmux: deb
 	@TMUX_VER=$$(dpkg -s tmux 2> /dev/null | grep ^Version: | cut -f 2 -d ' '); \
 	if [ "$$TMUX_VER" != 2.6-3cjk ]; then \
-		mkdir -p /tmp/tmux-build; \
-		cd /tmp/tmux-build; \
-		$(APT-INSTALL) devscripts equivs; \
-		wget -qO - http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6.orig.tar.gz | tar zx; \
-		wget -qO - http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6-3.debian.tar.xz | tar Jx -C tmux-2.6; \
+		mkdir -p /tmp/build; \
+		cd /tmp/build; \
+		wget -O - http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6.orig.tar.gz | tar zx; \
+		wget -O - http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6-3.debian.tar.xz | tar Jx -C tmux-2.6; \
 		cd tmux-2.6; \
-		wget -qO - https://gist.github.com/z80oolong/e65baf0d590f62fab8f4f7c358cbcc34/raw/a3b687808c8fd5b8ad67e9a9b81774bb189fa93c/tmux-2.6-fix.diff | patch -p1; \
+		wget -qO debian/patches/cjk.diff https://gist.github.com/z80oolong/e65baf0d590f62fab8f4f7c358cbcc34/raw/a3b687808c8fd5b8ad67e9a9b81774bb189fa93c/tmux-2.6-fix.diff; \
+		echo cjk.diff >> debian/patches/series; \
 		dch -v 2.6-3cjk "CJK patch"; \
-		yes | mk-build-deps -i; \
-		debuild -us -uc -b; \
-		cd ..; \
-		apt-get purge -y --autoremove tmux-build-deps devscripts equivs; \
-		dpkg -i tmux*.deb || apt-get -fy install; \
-		rm -rf /tmp/tmux-build; \
+		$(DOTFILES_DIR)extras/install_deb.sh; \
+		rm -rf /tmp/build; \
 	fi
 
 .PHONY: byobu
@@ -122,7 +126,7 @@ zsh: repo
 	@[ "$$SHELL" = $$HOME/dotfiles/bin/zsh-cjk ] || chsh -s $$HOME/dotfiles/bin/zsh-cjk $${SUDO_USER:-$$USER}
 
 .PHONY: wcwidth
-wcwidth: repo
+wcwidth: deb
 	@if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
