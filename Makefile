@@ -27,7 +27,6 @@ pip: repo
 .PHONY: ctags
 ctags: repo
 	@if [ ! -f /usr/bin/ctags ]; then \
-		set -x; \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
 		git clone --depth=1 https://github.com/universal-ctags/ctags.git universal-ctags-0.0.0; \
@@ -125,16 +124,13 @@ zsh: repo
 .PHONY: wcwidth
 wcwidth: repo
 	@if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then \
-		$(APT-INSTALL) git autoconf automake libtool build-essential; \
-		cd /tmp; \
-		git clone https://github.com/fumiyas/wcwidth-cjk.git; \
-		cd wcwidth-cjk; \
-		autoreconf --install; \
-		./configure --prefix=/usr/local; \
-		make; \
-		make install; \
-		apt-get purge -y --autoremove autoconf automake libtool; \
-		rm -rf /tmp/wcwidth-cjk; \
+		mkdir -p /tmp/build; \
+		cd /tmp/build; \
+		git clone --depth=1 https://github.com/fumiyas/wcwidth-cjk.git wcwidth-cjk-0.0.0; \
+		cd wcwidth-cjk-0.0.0; \
+		cp -r $(DOTFILES_DIR)extras/wcwidth-cjk/debian .; \
+		$(DOTFILES_DIR)extras/install_deb.sh; \
+		rm -rf /tmp/build; \
 	fi
 
 .PHONY: fbterm

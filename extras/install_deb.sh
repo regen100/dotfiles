@@ -4,7 +4,7 @@ set -e
 package=$(basename "$(pwd)")
 name=${package%-*}
 
-apt-get install --no-install-recommends devscripts equivs
+apt-get install -y --no-install-recommends devscripts equivs
 yes | mk-build-deps -i
 debuild -us -uc -b
 cd ..
