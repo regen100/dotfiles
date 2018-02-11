@@ -202,36 +202,6 @@ repo = 'majutsushi/tagbar'
 hook_add = '''
   let g:tagbar_width = 30
   let g:tagbar_show_visibility = 1
-  let g:tagbar_type_tex = {
-  \ 'ctagstype': 'latex',
-  \ 'kinds': [
-  \   's:sections',
-  \   'g:graphics:0:0',
-  \   'l:labels',
-  \   'r:refs:1:0',
-  \   'p:pagerefs:1:0'
-  \ ],
-  \ 'sort': 0,
-  \}
-  let g:tagbar_type_rust = {
-  \ 'ctagstype' : 'rust',
-  \ 'kinds' : [
-  \   'T:types,type definitions',
-  \   'f:functions,function definitions',
-  \   'g:enum,enumeration names',
-  \   's:structure names',
-  \   'm:modules,module names',
-  \   'c:consts,static constants',
-  \   't:traits',
-  \   'i:impls,trait implementations',
-  \ ]
-  \}
-  let g:tagbar_type_make = {
-  \ 'kinds':[
-  \   'm:macros',
-  \   't:targets'
-  \ ]
-  \}
   nnoremap <silent> <LEADER>t :<C-u>TagbarToggle<CR>
   autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust :TagbarOpen
 '''
