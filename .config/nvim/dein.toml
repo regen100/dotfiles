@@ -293,7 +293,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'lilydjwg/fcitx.vim'
-on_if = 'has("unix")'
+on_if = 'glob("/tmp/fcitx-socket-*")'
 
 [[plugins]]
 repo = 'vim-scripts/restore_view.vim'
