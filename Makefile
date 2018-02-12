@@ -24,6 +24,10 @@ pip: repo
 	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
 	@$(PIP-INSTALL) pip
 
+.PHONY: utils
+utils:
+	@$(APT-INSTALL) git-extras git-cola
+
 .PHONY: deb
 deb:
 	@$(APT-INSTALL) devscripts equivs
