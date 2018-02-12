@@ -38,6 +38,9 @@ nnoremap <silent> <A-l> <C-w>>
 nnoremap <silent> <A-k> <C-w>+
 nnoremap <silent> <A-j> <C-w>-
 
+" register
+nnoremap <leader>d "_d
+
 " toggle
 nnoremap <silent> <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
 nnoremap <silent> <Leader>w :<C-u>setl wrap! wrap?<CR>
