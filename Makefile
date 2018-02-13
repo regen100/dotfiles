@@ -1,8 +1,16 @@
+ifdef SUDO_USER
+	CHNAGE_USER := sudo -u "$$SUDO_USER"
+else
+	CHANGE_USER :=
+endif
+
 SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
 APT-INSTALL := apt-get install -y --no-install-recommends
 PIP-INSTALL := /usr/bin/pip3 install -U
+STOW-INSTALL := $(CHNAGE_USER) stow -d $(DOTFILES_DIR) -t $(HOME)
+
 
 .PHONY: all
 all:
@@ -36,6 +44,10 @@ deb:
 clean:
 	@apt-get purge -y --autoremove devscripts equivs
 
+.PHONY: stow
+stow: root
+	@$(APT-INSTALL) STOW
+
 .PHONY: ctags
 ctags: deb
 	@if [ ! -f /usr/bin/ctags ]; then \
@@ -43,13 +55,13 @@ ctags: deb
 		cd /tmp/build; \
 		git clone --depth=1 https://github.com/universal-ctags/ctags.git universal-ctags-0.0.0; \
 		cd universal-ctags-0.0.0; \
-		cp -r $(DOTFILES_DIR)extras/universal-ctags/debian .; \
-		$(DOTFILES_DIR)extras/install_deb.sh; \
+		cp -r $(DOTFILES_DIR).extras/universal-ctags/debian .; \
+		$(DOTFILES_DIR).extras/install_deb.sh; \
 		rm -rf /tmp/build; \
 	fi
 
-.PHONY: neovim
-neovim: repo pip ctags
+.PHONY: nvim
+nvim: repo pip ctags stow
 	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-xenial.list ]; then \
 		add-apt-repository -y ppa:neovim-ppa/stable; \
 		apt-get update; \
@@ -59,6 +71,7 @@ neovim: repo pip ctags
 	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+	@$(STOW-INSTALL) nvim
 
 .PHONY: clang
 clang: repo pip
@@ -89,11 +102,10 @@ nodejs: repo
 
 .PHONY: rust
 rust:
-	@curl https://sh.rustup.rs -sSf | sh -s -- -y
-	@$$HOME/.cargo/bin/rustup component add rust-src
-	@$$HOME/.cargo/bin/rustup install nightly
-	@$$HOME/.cargo/bin/rustup component add rustfmt-preview --toolchain=nightly
-	@[ -n "$$SUDO_USER" ] || chown -R $$SUDO_UID:$$SUDO_GID $$HOME/.cargo $$HOME/.rustup
+	@$(CHANGE_USER) curl https://sh.rustup.rs -sSf | sh -s -- -y
+	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rust-src
+	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup install nightly
+	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rustfmt-preview --toolchain=nightly
 
 .PHONY: latex
 latex: repo
@@ -112,21 +124,23 @@ tmux: deb
 		wget -qO debian/patches/cjk.diff https://gist.github.com/z80oolong/e65baf0d590f62fab8f4f7c358cbcc34/raw/a3b687808c8fd5b8ad67e9a9b81774bb189fa93c/tmux-2.6-fix.diff; \
 		echo cjk.diff >> debian/patches/series; \
 		dch -v 2.6-3cjk "CJK patch"; \
-		$(DOTFILES_DIR)extras/install_deb.sh; \
+		$(DOTFILES_DIR).extras/install_deb.sh; \
 		rm -rf /tmp/build; \
 	fi
 
 .PHONY: byobu
-byobu: repo tmux
+byobu: repo tmux stow
 	@if [ ! -f /etc/apt/sources.list.d/byobu-ubuntu-ppa-xenial.list ]; then \
 		add-apt-repository -y ppa:byobu/ppa; \
 		apt-get update; \
 	fi
 	@$(APT-INSTALL) byobu
+	@$(STOW-INSTALL) byobu
 
 .PHONY: zsh
-zsh: repo
+zsh: repo stow
 	@$(APT-INSTALL) zsh command-not-found
+	@$(STOW-INSTALL) zsh
 	@[ "$$SHELL" = $$HOME/dotfiles/bin/zsh-cjk ] || chsh -s $$HOME/dotfiles/bin/zsh-cjk $${SUDO_USER:-$$USER}
 
 .PHONY: wcwidth
@@ -136,28 +150,23 @@ wcwidth: deb
 		cd /tmp/build; \
 		git clone --depth=1 https://github.com/fumiyas/wcwidth-cjk.git wcwidth-cjk-0.0.0; \
 		cd wcwidth-cjk-0.0.0; \
-		cp -r $(DOTFILES_DIR)extras/wcwidth-cjk/debian .; \
-		$(DOTFILES_DIR)extras/install_deb.sh; \
+		cp -r $(DOTFILES_DIR).extras/wcwidth-cjk/debian .; \
+		$(DOTFILES_DIR).extras/install_deb.sh; \
 		rm -rf /tmp/build; \
 	fi
 
 .PHONY: fbterm
-fbterm: repo
+fbterm: repo stow
 	@$(APT-INSTALL) fbterm fcitx-frontend-fbterm gpm
 	@chmod u+s /usr/bin/fbterm
+	@$(STOW-INSTALL) fbterm
 
 .PHONY: xrdp
-xrdp: repo
+xrdp: repo stow
 	@add-apt-repository -y ppa:hermlnx/xrdp
 	@apt-get update
 	@$(APT-INSTALL) xrdp xscreensaver
 	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
 	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
+	@$(STOW-INSTALL) xsession
 
-.PHONY: config
-config:
-	@mkdir -p "$$HOME/.config"; \
-	cd "$(DOTFILES_DIR)"; \
-	SRC=$$(find . -maxdepth 1 -name ".?*" ! -name .config ! -name .git ! -name .gitignore -printf "%P\n"); \
-	SRC=$$SRC"\n"$$(find .config -maxdepth 1 ! -path .config); \
-	echo -ne "$$SRC" | xargs -i -d "\n" ln -snfv "$(DOTFILES_DIR){}" "$$HOME/{}"

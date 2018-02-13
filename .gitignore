@@ -1,4 +1,4 @@
-.config/byobu/.metadata_available
-.config/byobu/.ssh-agent
-.config/byobu/plugins
-.config/byobu/layouts
+byobu/.config/byobu/.metadata_available
+byobu/.config/byobu/.ssh-agent
+byobu/.config/byobu/plugins
+byobu/.config/byobu/layouts
