@@ -145,7 +145,7 @@ zsh: repo stow
 
 .PHONY: wcwidth
 wcwidth: deb
-	@if [ ! -f /usr/local/lib/wcwidth-cjk.so ]; then \
+	@if [ ! -f /usr/lib/wcwidth-cjk.so ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
 		git clone --depth=1 https://github.com/fumiyas/wcwidth-cjk.git wcwidth-cjk-0.0.0; \
