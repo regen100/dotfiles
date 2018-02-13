@@ -11,5 +11,7 @@ if [[ -z $ZSHENV_LOADED ]]; then
 
   [[ -f $HOME/.cargo/env ]] && source $HOME/.cargo/env
 
+  export CCACHE_SLOPPINESS=pch_defines,time_macros
+
   export ZSHENV_LOADED=1
 fi
