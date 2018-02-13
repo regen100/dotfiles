@@ -33,11 +33,11 @@ pip: repo
 	@$(PIP-INSTALL) pip
 
 .PHONY: utils
-utils:
+utils: root
 	@$(APT-INSTALL) git-extras git-cola
 
 .PHONY: deb
-deb:
+deb: root
 	@$(APT-INSTALL) devscripts equivs
 
 .PHONY: clean
