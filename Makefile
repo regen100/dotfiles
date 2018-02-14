@@ -46,7 +46,7 @@ clean:
 
 .PHONY: stow
 stow: root
-	@$(APT-INSTALL) STOW
+	@$(APT-INSTALL) stow
 
 .PHONY: ctags
 ctags: deb
@@ -141,7 +141,7 @@ byobu: repo tmux stow
 zsh: repo stow
 	@$(APT-INSTALL) zsh command-not-found
 	@$(STOW-INSTALL) zsh
-	@[ "$$SHELL" = $$HOME/dotfiles/bin/zsh-cjk ] || chsh -s $$HOME/dotfiles/bin/zsh-cjk $${SUDO_USER:-$$USER}
+	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || chsh -s $$HOME/bin/zsh-cjk $${SUDO_USER:-$$USER}
 
 .PHONY: wcwidth
 wcwidth: deb
