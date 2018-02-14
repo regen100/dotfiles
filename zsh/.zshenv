@@ -1,3 +1,6 @@
+# profiling
+[[ -n $ZPROF ]] && zmodload zsh/zprof && zprof
+
 # path
 if [[ -z $ZSHENV_LOADED ]]; then
   path=($HOME/bin(N-/) $HOME/dotfiles/bin(N-/) /opt/VirtualGL/bin(N-/) /snap/bin(N-/) $path)

@@ -5,3 +5,6 @@ done
 
 # load custom file
 [[ -f $HOME/.zshrc.mine ]] && source $HOME/.zshrc.mine
+
+# profiling
+(( $+modules[zsh/zprof] )) && zprof
