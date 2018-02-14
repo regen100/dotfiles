@@ -1,5 +1,6 @@
 zstyle ':completion:*' use-cache true
 zstyle ':completion:*:default' menu select=2
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Z}{a-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 zstyle ':completion:*' ignore-parents parent pwd ..
 zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
@@ -25,5 +26,3 @@ fi
 if (( $+commands[rustc] )); then
   fpath+=$(rustc --print sysroot)/share/zsh/site-functions
 fi
-
-autoload -U compinit && compinit

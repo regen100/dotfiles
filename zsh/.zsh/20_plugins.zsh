@@ -5,7 +5,6 @@ source ~/.zplug/init.zsh
 
 zstyle ":zplug:tag" depth 1
 
-zplug "yous/vanilli.sh"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
@@ -35,8 +34,12 @@ else
   zplug "sindresorhus/pure", use:pure.zsh, as:theme
 fi
 
-if ! zplug check; then
-  zplug install
+installed=$HOME/.zplug_installed
+if [[ ! -f $installed || $0 -nt $installed ]]; then
+  if ! zplug check; then
+    zplug install
+  fi
+  touch $installed
 fi
 
 POWERLEVEL9K_MODE='nerdfont-complete'
@@ -44,7 +47,5 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(detect_virt ssh context dir_writable nodeenv 
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs dir time)
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
-
-wget -nc -qO ~/.dircolors https://github.com/dotphiles/dotzsh/raw/master/themes/dotphiles/dircolors/dircolors.base16.dark
 
 zplug load
