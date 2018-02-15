@@ -107,8 +107,8 @@ rust: root
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup install nightly
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rustfmt-preview --toolchain=nightly
 	@$(APT-INSTALL) libssl-dev
-	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo install cargo-tree cargo-edit
-	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install clippy
+	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo install -f cargo-tree cargo-edit
+	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install -f clippy
 
 .PHONY: latex
 latex: repo
