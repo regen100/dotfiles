@@ -101,11 +101,14 @@ nodejs: repo
 	@$(APT-INSTALL) nodejs
 
 .PHONY: rust
-rust:
+rust: root
 	@$(CHANGE_USER) curl https://sh.rustup.rs -sSf | sh -s -- -y
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rust-src
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup install nightly
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rustfmt-preview --toolchain=nightly
+	@$(APT-INSTALL) libssl-dev
+	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo install cargo-tree cargo-edit
+	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install clippy
 
 .PHONY: latex
 latex: repo
