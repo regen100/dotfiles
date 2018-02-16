@@ -89,7 +89,7 @@ clang: repo pip
 	fi
 
 .PHONY: python
-python: repo pip
+python: root pip
 	@$(APT-INSTALL) virtualenv direnv
 	@$(PIP-INSTALL) isort yapf flake8
 
@@ -111,7 +111,7 @@ rust: root
 	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install -f clippy
 
 .PHONY: latex
-latex: repo
+latex: root
 	@$(APT-INSTALL) texlive texlive-latex-extra texlive-lang-japanese latexmk chktex
 	@kanji-config-updmap-sys auto
 
@@ -141,7 +141,7 @@ byobu: repo tmux stow
 	@$(STOW-INSTALL) byobu
 
 .PHONY: zsh
-zsh: repo stow
+zsh: root stow
 	@$(APT-INSTALL) zsh command-not-found
 	@$(STOW-INSTALL) zsh
 	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || chsh -s $$HOME/bin/zsh-cjk $${SUDO_USER:-$$USER}
@@ -159,7 +159,7 @@ wcwidth: deb
 	fi
 
 .PHONY: fbterm
-fbterm: repo stow
+fbterm: root stow
 	@$(APT-INSTALL) fbterm fcitx-frontend-fbterm gpm
 	@chmod u+s /usr/bin/fbterm
 	@$(STOW-INSTALL) fbterm
