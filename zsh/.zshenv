@@ -17,6 +17,8 @@ if [[ -z $ZSHENV_LOADED ]]; then
   export VISUAL=vim
   eval "$(lesspipe)"
 
+  [[ -f $HOME/.pythonrc.py ]] && export PYTHONSTARTUP=$HOME/.pythonrc.py
+
   [[ -f $HOME/.cargo/env ]] && source $HOME/.cargo/env
 
   export CCACHE_SLOPPINESS=pch_defines,time_macros

@@ -28,8 +28,8 @@ repo: root
 	@$(APT-INSTALL) software-properties-common wget
 
 .PHONY: pip
-pip: repo
-	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
+pip: repo stow
+	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel python3-colorama
 	@$(PIP-INSTALL) pip
 
 .PHONY: utils
@@ -92,6 +92,7 @@ clang: repo pip
 python: root pip
 	@$(APT-INSTALL) virtualenv direnv
 	@$(PIP-INSTALL) isort yapf flake8
+	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
 nodejs: repo
