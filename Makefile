@@ -141,8 +141,9 @@ byobu: repo tmux stow
 	@$(STOW-INSTALL) byobu
 
 .PHONY: zsh
-zsh: root stow
+zsh: root pip stow
 	@$(APT-INSTALL) zsh command-not-found
+	@$(PIP-INSTALL) pygments pygments-base16
 	@$(STOW-INSTALL) zsh
 	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || chsh -s $$HOME/bin/zsh-cjk $${SUDO_USER:-$$USER}
 

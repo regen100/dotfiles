@@ -12,6 +12,11 @@ if [[ -z $ZSHENV_LOADED ]]; then
     path=($LLVM_DIR/bin(N-/) $path)
   fi
 
+  export LESS='-giMRSW -z-4 -x4 -j4'
+  export LESSOPEN="| $HOME/bin/lesspipe %s"
+  export EDITOR=vim
+  export VISUAL=vim
+
   [[ -f $HOME/.cargo/env ]] && source $HOME/.cargo/env
 
   export CCACHE_SLOPPINESS=pch_defines,time_macros

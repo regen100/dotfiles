@@ -6,6 +6,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 (( $+commands[python3] )) && alias python=python3
+(( $+commands[pygmentize] )) && alias pygmentize='pygmentize -f 256 -O style=$BASE16_THEME'
 
 alias -s txt=cat
 (( $+commands[python] )) && alias -s py=python
