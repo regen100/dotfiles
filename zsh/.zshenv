@@ -13,9 +13,9 @@ if [[ -z $ZSHENV_LOADED ]]; then
   fi
 
   export LESS='-giMRSW -z-4 -x4 -j4'
-  export LESSOPEN="| $HOME/bin/lesspipe %s"
   export EDITOR=vim
   export VISUAL=vim
+  eval "$(lesspipe)"
 
   [[ -f $HOME/.cargo/env ]] && source $HOME/.cargo/env
 
