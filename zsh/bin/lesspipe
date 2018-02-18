@@ -1,3 +1,0 @@
-#!/bin/sh
-
-pygmentize -f 256 -O "style=$BASE16_THEME" "$1" 2>/dev/null || /bin/lesspipe "$1"
