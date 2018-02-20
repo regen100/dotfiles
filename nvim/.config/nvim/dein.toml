@@ -216,7 +216,6 @@ hook_add = '''
   let g:ale_echo_msg_warning_str = 'W'
   let g:ale_cpp_cppcheck_options='--enable=all'
   let g:ale_c_clangformat_options = '-fallback-style=Google -style=file -assume-filename=%s'
-  let g:ale_rust_rustfmt_options = '+nightly'
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
   let g:ale_fix_on_save = 1
   let g:ale_linters = { 'cpp': ['clangcheck', 'clangtidy_h', 'cppcheck', 'cpplint', 'clang-format'] }
