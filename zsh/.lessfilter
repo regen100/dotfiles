@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 mime=$(file -Lbi "$1")
 case $mime in
   text/* )
-    pygmentize -f 256 -O "style=base16-$BASE16_THEME" "$1" 2>/dev/null
+    pygmentize -f 256 -O "style=base16-${BASE16_THEME#base16-}" "$1" 2>/dev/null
     ;;
   * )
     exit 1
