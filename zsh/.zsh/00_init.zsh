@@ -14,18 +14,6 @@ setopt complete_in_word
 unsetopt list_beep
 WORDCHARS=''
 
-if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-  function zle-line-init() {
-    echoti smkx
-  }
-
-  function zle-line-finish() {
-    echoti rmkx
-  }
-  zle -N zle-line-init
-  zle -N zle-line-finish
-fi
-
 [[ -f $HOME/.dircolors ]] || wget -qO $HOME/.dircolors https://github.com/dotphiles/dotzsh/raw/master/themes/dotphiles/dircolors/dircolors.base16.dark
 if (( $+commands[dircolors] )); then
   eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
