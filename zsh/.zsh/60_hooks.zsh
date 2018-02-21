@@ -1,8 +1,19 @@
-chpwd() {
-  ls_abbrev
+autoload -Uz add-zsh-hook
+
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+
+[[ -z $TMUX && -n $DISPLAY ]] && echo $DISPLAY > ~/.display
+add-zsh-hook preexec update_display
+update_display() {
+  [[ -f ~/.display ]] && export DISPLAY="$(cat ~/.display)"
 }
 
+add-zsh-hook chpwd ls_abbrev
 ls_abbrev() {
+  # see: https://qiita.com/yuyuchu3333/items/b10542db482c3ac8b059
+  if [[ ! -r $PWD ]]; then
+    return
+  fi
   # -a : Do not ignore entries starting with ..
   # -C : Force multi-column output.
   # -F : Append indicator (one of */=>@|) to entries.
