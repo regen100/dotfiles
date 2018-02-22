@@ -9,8 +9,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf
-zplug "junegunn/fzf", as:command, use:bin/fzf-tmux
+zplug "junegunn/fzf", use:~/.fzf.zsh, hook-build:"./install --key-bindings --completion --no-update-rc"
 zplug "b4b4r07/enhancd", use:init.sh
 zplug "modules/command-not-found", from:prezto
 zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
