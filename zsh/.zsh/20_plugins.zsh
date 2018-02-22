@@ -18,7 +18,7 @@ zplug "docker/compose", use:contrib/completion/zsh, if:"(( $+commands[docker-com
 zplug "rust-lang/zsh-config", if:"(( $+commands[rustc] ))"
 zplug "lukechilds/zsh-better-npm-completion", if:"(( $+commands[npm] ))"
 zplug "caarlos0/zsh-mkc"
-zplug "marzocchi/zsh-notify", if:"(( $+commands[xdotool] )) && xdotool getactivewindow > /dev/null"
+zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >/dev/null 2>&1"
 zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
