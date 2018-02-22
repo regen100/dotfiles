@@ -9,7 +9,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
-zplug "junegunn/fzf", use:"", hook-build:"./install --key-bindings --completion --no-update-rc"
+zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
 zplug "b4b4r07/enhancd", use:init.sh
 zplug "modules/command-not-found", from:prezto
 zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
@@ -36,9 +36,8 @@ fi
 installed=$HOME/.zplug_installed
 if [[ ! -f $installed || $0 -nt $installed ]]; then
   if ! zplug check; then
-    zplug install
+    zplug install && touch $installed
   fi
-  touch $installed
 fi
 
 POWERLEVEL9K_MODE='nerdfont-complete'
@@ -49,9 +48,5 @@ POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
 
 zplug load
 
-export MANPATH="$ZPLUG_ROOT/doc/man:$MANPATH"
-
-if [[ -f ~/.fzf.zsh ]]; then
-  export MANPATH="$ZPLUG_ROOT/repos/junegunn/fzf/man:$MANPATH"
-  source ~/.fzf.zsh
-fi
+typeset -x MANPATH
+manpath=($ZPLUG_ROOT/doc/man $ZPLUG_ROOT/repos/junegunn/fzf/man "")
