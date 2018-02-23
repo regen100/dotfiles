@@ -83,7 +83,7 @@ clang: repo pip
 	@$(APT-INSTALL) cmake build-essential llvm-5.0 clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck gdb lldb-5.0
 	@$(PIP-INSTALL) compdb cmakelint gdbgui
 	@if ! which ccache >/dev/null; then \
-		wget http://mirrors.kernel.org/ubuntu/pool/main/c/ccache/ccache_3.3.6-1_amd64.deb -O /tmp/ccache.deb; \
+		wget http://mirrors.kernel.org/ubuntu/pool/main/c/ccache/ccache_3.4.1-1_amd64.deb -O /tmp/ccache.deb; \
 		dpkg -i /tmp/ccache.deb; \
 		rm /tmp/ccache.deb; \
 	fi
