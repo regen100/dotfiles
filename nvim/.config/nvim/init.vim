@@ -135,6 +135,8 @@ autocmd vimrc BufReadPost /usr/include/c++/* if empty(&filetype) | set filetype=
 
 autocmd vimrc InsertLeave * set nopaste
 
+autocmd vimrc BufNewFile,BufRead *.tmux setf tmux
+
 if has('persistent_undo')
   let &undodir = s:cache_home . '/undo'
   set undofile
