@@ -36,3 +36,6 @@ default-enter() {
 }
 zle -N default-enter
 bindkey ^m default-enter
+
+autoload -Uz smart-insert-last-word
+zle -N insert-last-word smart-insert-last-word
