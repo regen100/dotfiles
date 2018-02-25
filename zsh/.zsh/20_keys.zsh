@@ -2,6 +2,7 @@ bindkey -e
 
 bindkey '^P' history-beginning-search-backward
 bindkey '^N' history-beginning-search-forward
+bindkey '^[[Z' reverse-menu-complete
 
 rationalise-dot() {
   if [[ $LBUFFER = *.. ]]; then
