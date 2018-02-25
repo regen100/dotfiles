@@ -1,11 +1,33 @@
 #!/bin/bash
 
-mime=$(file -Lbi "$1")
-case $mime in
-  text/* )
-    pygmentize -f 256 -O "style=base16-${BASE16_THEME#base16-}" "$1" 2>/dev/null
-    ;;
-  * )
-    exit 1
-    ;;
+if [[ ! -f $1 ]]; then
+  exit 1
+fi
+
+mime=$(file -Lbz --mime-type "$1")
+if [[ $mime != text/* ]]; then
+  exit 1
+fi
+
+case $(file -Lb --mime-type "$1") in
+  application/x-gzip | application/gzip) concat=zcat;;
+  application/x-bzip2) concat=bzcat;;
+  application/x-xz) concat=xzcat;;
+  application/x-lz4) concat=lz4cat;;
+  text/*) concat=cat;;
+  *) exit 1;;
 esac
+
+if [[ $1 = *.log || $1 = *.log.* ]]; then
+  exec $concat "$1" | ccze -A
+fi
+
+style=base16-${BASE16_THEME#base16-}
+if [[ $concat = cat ]]; then
+  exec pygmentize -f 256 -O style="$style" "$1" 2>/dev/null
+else
+  lexer=$(pygmentize -N "${1%.*}")
+  exec $concat "$1" | pygmentize -f 256 -O style="$style" -l "$lexer" 2>/dev/null
+fi
+
+exit 1
