@@ -4,12 +4,21 @@ if [[ ! -f $1 ]]; then
   exit 1
 fi
 
-mime=$(file -Lbz --mime-type "$1")
-if [[ $mime != text/* ]]; then
-  exit 1
-fi
+mime_inner=$(file -Lbz --mime-type "$1")
+mime_outer=$(file -Lb --mime-type "$1")
+case $mime_inner in
+  text/x-shellscript) lexer=sh;;
+  text/*) lexer=;;
+  *)
+    # binary
+    case $mime_outer in
+      application/x-executable) exec objdump -x "$1";;
+    esac
+    exit 1
+    ;;
+esac
 
-case $(file -Lb --mime-type "$1") in
+case $mime_outer in
   application/x-gzip | application/gzip) concat=zcat;;
   application/x-bzip2) concat=bzcat;;
   application/x-xz) concat=xzcat;;
@@ -22,12 +31,15 @@ if [[ $1 = *.log || $1 = *.log.* ]]; then
   exec $concat "$1" | ccze -A
 fi
 
-style=base16-${BASE16_THEME#base16-}
-if [[ $concat = cat ]]; then
-  exec pygmentize -f 256 -O style="$style" "$1" 2>/dev/null
-else
+if [[ $concat != cat && -z $lexer ]]; then
   lexer=$(pygmentize -N "${1%.*}")
+fi
+
+style=base16-${BASE16_THEME#base16-}
+if [[ -n $lexer ]]; then
   exec $concat "$1" | pygmentize -f 256 -O style="$style" -l "$lexer" 2>/dev/null
+else
+  exec pygmentize -f 256 -O style="$style" "$1" 2>/dev/null
 fi
 
 exit 1
