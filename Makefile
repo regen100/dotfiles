@@ -71,6 +71,7 @@ nvim: repo pip ctags stow
 	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+	@$(CHANGE_USER) mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
 
 .PHONY: clang
@@ -139,12 +140,14 @@ byobu: repo tmux stow
 		apt-get update; \
 	fi
 	@$(APT-INSTALL) byobu
+	@$(CHANGE_USER) mkdir -p ~/.config
 	@$(STOW-INSTALL) byobu
 
 .PHONY: zsh
 zsh: root pip stow
 	@$(APT-INSTALL) zsh command-not-found ccze
 	@$(PIP-INSTALL) pygments pygments-base16
+	@$(CHANGE_USER) mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh
 	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || chsh -s $$HOME/bin/zsh-cjk $${SUDO_USER:-$$USER}
 
