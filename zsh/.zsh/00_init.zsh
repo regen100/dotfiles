@@ -38,3 +38,5 @@ SAVEHIST=10000
 unsetopt flow_control
 
 setopt interactivecomments
+
+REPORTTIME=3
