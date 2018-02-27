@@ -76,12 +76,11 @@ nvim: repo pip ctags stow
 
 .PHONY: clang
 clang: repo pip
-	@if [ ! -f /etc/apt/sources.list.d/llvm.list ]; then \
-		echo deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-5.0 main > /etc/apt/sources.list.d/llvm.list; \
-		wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -; \
+	@if [ ! -f /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-xenial.list ]; then \
+		add-apt-repository -y ppa:ubuntu-toolchain-r/test; \
 		apt-get update; \
 	fi
-	@$(APT-INSTALL) cmake build-essential llvm-5.0 clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck gdb lldb-5.0
+	@$(APT-INSTALL) cmake make clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck gdb libstdc++-7-dev
 	@$(PIP-INSTALL) compdb cmakelint gdbgui
 	@if ! which ccache >/dev/null; then \
 		wget http://mirrors.kernel.org/ubuntu/pool/main/c/ccache/ccache_3.4.1-1_amd64.deb -O /tmp/ccache.deb; \
