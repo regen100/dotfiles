@@ -11,3 +11,8 @@ bind h if-shell "$is_remote" "run-shell \"tmux split-window -h '$($last_cmd)'\""
 bind v if-shell "$is_remote" "run-shell \"tmux split-window -v '$($last_cmd)'\""
 
 bind r last-pane \; send-keys Up Enter\; last-pane
+
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
+bind-key -T root MouseDown2Pane if-shell -Ft= '#{mouse_any_flag}' \
+  "send-keys -M" \
+  "run 'xclip -selection clipboard -o | tmux load-buffer - && tmux paste-buffer'"
