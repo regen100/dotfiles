@@ -1,6 +1,7 @@
-import os
 import json
+import os
 import subprocess
+
 import ycm_core
 
 flags = [
@@ -66,15 +67,10 @@ def FindDatabase(filename):
 def FlagsForFile(filename, **kwargs):
     database = FindDatabase(filename)
     if not database:
-        return {
-            'flags': flags,
-        }
+        return {'flags': flags}
 
     compilation_info = database.GetCompilationInfoForFile(filename)
-    if not compilation_info:
-        return None
-
-    final_flags = list(compilation_info.compiler_flags_)
+    final_flags = list(compilation_info.compiler_flags_) or flags
     return {
         'flags': final_flags,
         'include_paths_relative_to_dir': compilation_info.compiler_working_dir_
