@@ -171,11 +171,26 @@ fbterm: root stow
 	@$(STOW-INSTALL) fbterm
 
 .PHONY: xrdp
-xrdp: repo stow
-	@add-apt-repository -y ppa:hermlnx/xrdp
-	@apt-get update
+xrdp: deb repo stow
+	@if [ ! -f /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list ]; then \
+		add-apt-repository -y ppa:hermlnx/xrdp; \
+		apt-get update; \
+	fi
 	@$(APT-INSTALL) xrdp xscreensaver
 	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
 	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 	@$(STOW-INSTALL) xsession
+	@if [ ! -f a ]; then \
+		mkdir -p /tmp/build; \
+		cd /tmp/build; \
+		apt-get source pulseaudio xrdp; \
+		cd pulseaudio-*; \
+		yes | mk-build-deps -i; \
+		debian/rules configure/pulseaudio; \
+		cd ../xrdp-*/sesman/chansrv/pulse; \
+		make PULSE_DIR=../../../../pulseaudio-8.0; \
+		install -s -m 644 *.so /usr/lib/pulse-8.0/modules; \
+		apt-get purge -y --autoremove pulseaudio-build-deps; \
+		rm -rf /ymp/build; \
+	fi
 
