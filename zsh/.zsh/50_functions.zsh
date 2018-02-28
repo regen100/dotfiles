@@ -5,6 +5,12 @@ wttr() {
 lxce() {
   lxc exec "$1" -- sudo --login --user ubuntu
 }
+_lxce() {
+  local -a _containers
+  _containers=(${(@f)"$(_call_program repositories lxc list --format csv -c ns | grep ,RUNNING | cut -d, -f1)"})
+  _describe -t containers 'Running Containers' _containers
+}
+compdef _lxce lxce
 
 get_tty() {
   local tty
