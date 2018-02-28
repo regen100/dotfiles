@@ -141,6 +141,8 @@ byobu: repo tmux stow
 	@$(APT-INSTALL) byobu
 	@$(CHANGE_USER) mkdir -p ~/.config
 	@$(STOW-INSTALL) byobu
+	@sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
+	@sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
 zsh: root pip stow
