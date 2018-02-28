@@ -178,7 +178,6 @@ xrdp: deb repo stow
 	fi
 	@$(APT-INSTALL) xrdp xscreensaver
 	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
-	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 	@$(STOW-INSTALL) xsession
 	@if [ ! -f a ]; then \
 		mkdir -p /tmp/build; \
@@ -193,4 +192,5 @@ xrdp: deb repo stow
 		apt-get purge -y --autoremove pulseaudio-build-deps; \
 		rm -rf /ymp/build; \
 	fi
+	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 
