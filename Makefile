@@ -174,12 +174,14 @@ fbterm: root stow
 xrdp: deb repo stow
 	@if [ ! -f /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list ]; then \
 		add-apt-repository -y ppa:hermlnx/xrdp; \
+		sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list
+		sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list
 		apt-get update; \
 	fi
 	@$(APT-INSTALL) xrdp xscreensaver
 	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
 	@$(STOW-INSTALL) xsession
-	@if [ ! -f a ]; then \
+	@if [ ! -f /usr/lib/pulse-8.0/modules/module-xrdp-sink.so ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
 		apt-get source pulseaudio xrdp; \
