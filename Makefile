@@ -194,3 +194,35 @@ xrdp: deb repo stow
 	fi
 	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 
+.PHONY: font
+font: repo
+	@if [ ! -f /etc/apt/sources.list.d/fontforge-ubuntu-fontforge-xenial.list ]; then \
+		add-apt-repository ppa:fontforge/fontforge; \
+		apt-get update; \
+	fi
+	@$(APT-INSTALL) fontforge python-configparser
+	@mkdir -p /tmp/build; \
+		cd /tmp/build; \
+		mkdir nerd-fonts; \
+		cd nerd-fonts; \
+		git init; \
+		git config core.sparsecheckout true; \
+		git remote add origin https://github.com/ryanoasis/nerd-fonts.git; \
+		echo font-patcher >> .git/info/sparse-checkout; \
+		echo src/glyphs >> .git/info/sparse-checkout; \
+		git pull --depth=1 origin master; \
+		cd ..; \
+		mkdir data; \
+		cd data; \
+		wget http://www.rs.tus.ac.jp/yyusa/ricty/ricty_generator.sh; \
+		wget https://github.com/google/fonts/raw/master/ofl/inconsolata/Inconsolata-Bold.ttf; \
+		wget https://github.com/google/fonts/raw/master/ofl/inconsolata/Inconsolata-Regular.ttf; \
+		wget http://dl.osdn.jp/mix-mplus-ipa/63545/migu-1m-20150712.zip; \
+		unzip migu-1m-*; \
+		ln -s migu-1m-*/*.ttf .; \
+		sh ricty_generator.sh auto; \
+		cd ..; \
+		ls data/Ricty* | xargs -L1 fontforge -script nerd-fonts/font-patcher --complete --no-progressbars --quiet; \
+		cp *.ttf /usr/local/share/fonts/ ;\
+		fc-cache -fv; \
+		rm -rf /tmp/build
