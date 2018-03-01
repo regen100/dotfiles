@@ -197,14 +197,16 @@ xrdp: deb repo stow
 	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 
 .PHONY: font
-font: repo
+font: repo deb
 	@if [ ! -f /etc/apt/sources.list.d/fontforge-ubuntu-fontforge-xenial.list ]; then \
 		add-apt-repository ppa:fontforge/fontforge; \
 		apt-get update; \
 	fi
-	@$(APT-INSTALL) fontforge python-configparser
 	@mkdir -p /tmp/build; \
 		cd /tmp/build; \
+		echo -e "Package: build-deps\nDepends: fontforge (>= 20141231), python-configparser" > build-deps; \
+		equivs-build build-deps; \
+		dpkg -i build-deps_1.0_all.deb || $(APT-INSTALL) -f; \
 		mkdir nerd-fonts; \
 		cd nerd-fonts; \
 		git init; \
@@ -227,4 +229,5 @@ font: repo
 		ls data/Ricty* | xargs -L1 fontforge -script nerd-fonts/font-patcher --complete --no-progressbars --quiet; \
 		cp *.ttf /usr/local/share/fonts/ ;\
 		fc-cache -fv; \
-		rm -rf /tmp/build
+		rm -rf /tmp/build; \
+		apt-get purge -y --autoremove build-deps
