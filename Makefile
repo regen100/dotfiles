@@ -108,14 +108,13 @@ nodejs: repo
 	@$(APT-INSTALL) nodejs
 
 .PHONY: rust
-rust: root
-	@$(CHANGE_USER) curl https://sh.rustup.rs -sSf | sh -s -- -y
-	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rust-src
+rust: stow
+	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | $(CHANGE_USER) sh -s -- -y
+	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup update stable
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup install nightly
-	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rustfmt-preview
-	@$(APT-INSTALL) libssl-dev
-	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo install -f cargo-tree cargo-edit
-	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install -f clippy
+	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview
+	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install clippy || echo "clippy installed"
+	@$(STOW-INSTALL) rust
 
 .PHONY: latex
 latex: root
