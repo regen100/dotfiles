@@ -49,7 +49,7 @@ stow: root
 	@$(APT-INSTALL) stow
 
 .PHONY: ctags
-ctags: deb
+ctags: deb stow
 	@if [ ! -f /usr/bin/ctags ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
@@ -59,6 +59,7 @@ ctags: deb
 		$(DOTFILES_DIR).extras/install_deb.sh; \
 		rm -rf /tmp/build; \
 	fi
+	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
 nvim: repo pip ctags stow

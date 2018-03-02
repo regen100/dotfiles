@@ -203,6 +203,25 @@ repo = 'majutsushi/tagbar'
 hook_add = '''
   let g:tagbar_width = 30
   let g:tagbar_show_visibility = 1
+  let g:tagbar_type_bib = {
+    \ 'ctagstype' : 'bib',
+    \ 'kinds'     : [
+      \ 'a:Articles',
+      \ 'b:Books',
+      \ 'L:Booklets',
+      \ 'c:Conferences',
+      \ 'B:Inbook',
+      \ 'C:Incollection',
+      \ 'P:Inproceedings',
+      \ 'm:Manuals',
+      \ 'T:Masterstheses',
+      \ 'M:Misc',
+      \ 't:Phdtheses',
+      \ 'p:Proceedings',
+      \ 'r:Techreports',
+      \ 'u:Unpublished',
+    \ ]
+  \ }
   nnoremap <silent> <LEADER>t :<C-u>TagbarToggle<CR>
 '''
 
@@ -292,7 +311,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'lilydjwg/fcitx.vim'
-on_if = 'glob("/tmp/fcitx-socket-*")'
+on_if = '!empty(glob("/tmp/fcitx-socket-*"))'
 
 [[plugins]]
 repo = 'vim-scripts/restore_view.vim'
