@@ -113,7 +113,7 @@ rust: root
 
 .PHONY: latex
 latex: root
-	@$(APT-INSTALL) texlive texlive-latex-extra texlive-lang-japanese latexmk chktex
+	@$(APT-INSTALL) texlive texlive-latex-extra texlive-bibtex-extra texlive-lang-japanese latexmk chktex qpdfview
 	@kanji-config-updmap-sys auto
 
 .PHONY: tmux
