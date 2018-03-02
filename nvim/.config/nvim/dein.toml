@@ -62,9 +62,11 @@ hook_add='''
     \   '-interaction=nonstopmode',
     \ ],
     \}
-  let g:vimtex_view_general_viewer = 'qpdfview'
-  let g:vimtex_view_general_options = '--unique @pdf\#src:@tex:@line:@col'
-  let g:vimtex_view_general_options_latexmk = '--unique'
+  if executable('qpdfview')
+    let g:vimtex_view_general_viewer = 'qpdfview'
+    let g:vimtex_view_general_options = '--unique @pdf\#src:@tex:@line:@col'
+    let g:vimtex_view_general_options_latexmk = '--unique'
+  endif
 '''
 hook_post_source = '''
   autocmd vimrc FileType tex let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
