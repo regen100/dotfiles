@@ -4,7 +4,14 @@ autoload -Uz add-zsh-hook
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 
 # display switch
-if [[ $(tty) != "not a tty" ]]; then
+if [[ $(tty) = "not a tty" ]]; then
+  add-zsh-hook preexec update_display
+  update_display() {
+    [[ -d ~/.display ]] || return 1
+    local tty=$(ls -t ~/.display | head -1)
+    [[ -n $tty ]] && export DISPLAY="$(cat ~/.display/$tty)"
+  }
+else
   [ -d ~/.display ] || mkdir ~/.display
   echo $DISPLAY > ~/.display/$(get_tty)
   add-zsh-hook preexec update_display
