@@ -116,6 +116,15 @@ rust: stow
 	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install clippy || echo "clippy installed"
 	@$(STOW-INSTALL) rust
 
+.PHONY: plantuml
+plantuml: root
+	@$(APT-INSTALL) default-jre graphviz
+	@if ! which plantuml >/dev/null; then \
+		cat <(echo -e '#!/bin/sh\nexec /usr/bin/env java -jar "$$0" "$$@"') /tmp/plantuml > /usr/local/bin/plantuml; \
+		chmod +x /usr/local/bin/plantuml; \
+		rm /tmp/plantuml
+	fi
+
 .PHONY: latex
 latex: root
 	@$(APT-INSTALL) texlive texlive-latex-extra texlive-bibtex-extra texlive-lang-japanese latexmk chktex qpdfview
