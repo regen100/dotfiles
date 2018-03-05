@@ -1,0 +1,6 @@
+[include]
+	path = ~/.gitconfig.mime
+[core]
+	excludesfile = ~/.gitignore_global
+[push]
+	default = simple
