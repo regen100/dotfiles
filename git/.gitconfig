@@ -1,5 +1,5 @@
 [include]
-	path = ~/.gitconfig.mime
+	path = ~/.gitconfig.mine
 [core]
 	excludesfile = ~/.gitignore_global
 [push]
