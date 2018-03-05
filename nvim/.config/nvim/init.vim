@@ -126,6 +126,7 @@ set autowrite
 set scrolloff=3
 set diffopt=filler,vertical
 set splitbelow
+set showbreak=↳\ 
 
 set wildignore=*.pyc,*/__pycache__/,*.egg,*.egg-info/
 
