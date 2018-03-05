@@ -67,13 +67,18 @@ nvim: repo pip ctags stow
 		add-apt-repository -y ppa:neovim-ppa/stable; \
 		apt-get update; \
 	fi
-	@$(APT-INSTALL) neovim silversearcher-ag git shellcheck xclip cmake
+	@$(APT-INSTALL) neovim git shellcheck xclip cmake
 	@$(PIP-INSTALL) neovim vim-vint
 	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
 	@$(CHANGE_USER) mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim git
+	@if ! which ag >/dev/null; then \
+		wget http://mirrors.kernel.org/ubuntu/pool/universe/s/silversearcher-ag/silversearcher-ag_2.1.0-1_amd64.deb -O /tmp/silversearcher-ag.deb; \
+		dpkg -i /tmp/silversearcher-ag.deb; \
+		rm /tmp/silversearcher-ag.deb; \
+	fi
 
 .PHONY: clang
 clang: repo pip
