@@ -350,5 +350,6 @@ repo = 'christoomey/vim-tmux-navigator'
 [[plugins]]
 repo = 'octref/RootIgnore'
 
+[[plugins]]
+repo = 'ludovicchabant/vim-gutentags'
 # }}}
-
