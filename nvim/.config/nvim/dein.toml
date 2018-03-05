@@ -119,6 +119,7 @@ repo = 'osyo-manga/vim-precious'
 [[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
+  let NERDTreeRespectWildIgnore = 1
   nnoremap <silent> <LEADER>n :NERDTreeToggle<CR>
   autocmd vimrc BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 '''
@@ -284,10 +285,6 @@ merged = 0
 repo = 'ctrlpvim/ctrlp.vim'
 hook_add = '''
   let g:ctrlp_split_window = 0
-  if executable('ag')
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-    let g:ctrlp_use_caching = 0
-  endif
 '''
 
 [[plugins]]
@@ -349,6 +346,9 @@ repo = 'christoomey/vim-tmux-navigator'
 
 [[plugins]]
 repo = 'octref/RootIgnore'
+hook_add = '''
+  let g:RootIgnoreAgignore = 1
+'''
 
 [[plugins]]
 repo = 'ludovicchabant/vim-gutentags'
