@@ -128,15 +128,16 @@ set diffopt=filler,vertical
 set splitbelow
 set showbreak=↳\ 
 
-set wildignore=*.pyc,*/__pycache__/,*.egg,*.egg-info/
-
 autocmd vimrc QuickfixCmdPost make,grep,grepadd,vimgrep cwindow
-
-autocmd vimrc BufReadPost /usr/include/c++/* if empty(&filetype) | set filetype=cpp | endif
 
 autocmd vimrc InsertLeave * set nopaste
 
-autocmd vimrc BufNewFile,BufRead *.tmux setf tmux
+autocmd vimrc FileType * setlocal formatoptions-=ro
+
+autocmd vimrc BufRead /usr/include/c++/* setfiletype cpp
+autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
+autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
+
 
 if has('persistent_undo')
   let &undodir = s:cache_home . '/undo'
