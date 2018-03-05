@@ -1,8 +1,6 @@
-set -g prefix F12
-unbind-key -n C-a
-
 set -g prefix C-Space
-set -g prefix2 C-Space
+set -g prefix2 F12
+unbind-key -n C-a
 bind Space send-prefix
 
 is_remote="ps -t '#{pane_tty}' -o comm -h --sort start_time | tail -1 | grep -e lxc -e ssh"
