@@ -1,5 +1,5 @@
 ifdef SUDO_USER
-	CHNAGE_USER := sudo -u "$$SUDO_USER"
+	CHANGE_USER := sudo -u "$$SUDO_USER"
 else
 	CHANGE_USER :=
 endif
