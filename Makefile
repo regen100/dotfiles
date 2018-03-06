@@ -127,7 +127,7 @@ plantuml: root
 
 .PHONY: latex
 latex: root
-	@$(APT-INSTALL) texlive texlive-latex-extra texlive-bibtex-extra texlive-lang-japanese latexmk chktex qpdfview
+	@$(APT-INSTALL) texlive texlive-latex-extra texlive-bibtex-extra texlive-lang-japanese latexmk chktex qpdfview fonts-ipafont fonts-ipaexfont
 	@kanji-config-updmap-sys auto
 
 .PHONY: tmux
