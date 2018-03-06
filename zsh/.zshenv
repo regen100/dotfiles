@@ -23,5 +23,7 @@ if [[ -z $ZSHENV_LOADED ]]; then
 
   export CCACHE_SLOPPINESS=pch_defines,time_macros
 
+  export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
+
   export ZSHENV_LOADED=1
 fi
