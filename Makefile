@@ -68,7 +68,7 @@ nvim: repo pip ctags stow
 		apt-get update; \
 	fi
 	@$(APT-INSTALL) neovim git shellcheck xclip cmake
-	@$(PIP-INSTALL) neovim vim-vint
+	@$(PIP-INSTALL) neovim vim-vint neovim-remote
 	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
