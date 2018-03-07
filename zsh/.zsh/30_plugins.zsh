@@ -7,7 +7,7 @@ zstyle ":zplug:tag" depth 1
 
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-autosuggestions", hook-load:"ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter"
 zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
 zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
 zplug "b4b4r07/enhancd", use:init.sh
