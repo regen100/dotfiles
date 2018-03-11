@@ -37,6 +37,7 @@ on_ft = 'toml'
 repo = 'artur-shaik/vim-javacomplete2'
 on_ft = 'java'
 hook_add = '''
+  let g:JavaComplete_UsePython3 = 1
   autocmd vimrc FileType java setlocal omnifunc=javacomplete#Complete
 '''
 # }}}
@@ -249,7 +250,8 @@ hook_add = '''
   \ 'css': ['prettier', 'stylelint'],
   \ 'javascript': ['prettier', 'eslint'],
   \ 'json': ['prettier'],
-  \ 'rust': ['rustfmt']
+  \ 'rust': ['rustfmt'],
+  \ 'java': ['clang-format']
   \}
   autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
   nmap <silent> <C-k> <Plug>(ale_previous_wrap)
