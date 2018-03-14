@@ -101,6 +101,11 @@ hook_add = '''
 '''
 # }}}
 
+# verilog {{{
+[[plugins]]
+repo = 'vhda/verilog_systemverilog.vim'
+# }}}
+
 # doc {{{
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
@@ -253,6 +258,7 @@ hook_add = '''
   \ 'rust': ['rustfmt'],
   \ 'java': ['clang-format']
   \}
+  let g:ale_linter_aliases = { 'verilog_systemverilog': ['verilog'] }
   autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
   nmap <silent> <C-k> <Plug>(ale_previous_wrap)
   nmap <silent> <C-j> <Plug>(ale_next_wrap)
