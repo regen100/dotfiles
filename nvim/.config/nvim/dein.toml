@@ -256,9 +256,15 @@ hook_add = '''
   \ 'javascript': ['prettier', 'eslint'],
   \ 'json': ['prettier'],
   \ 'rust': ['rustfmt'],
-  \ 'java': ['clang-format']
+  \ 'java': ['clang-format'],
+  \ 'verilog': [
+  \   {buffer, lines -> {'command': 'iStyle --style=ansi -s2 -p -n %t', 'read_temporary_file': 1}}
+  \ ]
   \}
-  let g:ale_linter_aliases = { 'verilog_systemverilog': ['verilog'] }
+  let g:ale_fixers.verilog_systemverilog = g:ale_fixers.verilog
+  let g:ale_linter_aliases = {
+  \ 'verilog_systemverilog': ['verilog']
+  \}
   autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
   nmap <silent> <C-k> <Plug>(ale_previous_wrap)
   nmap <silent> <C-j> <Plug>(ale_next_wrap)
