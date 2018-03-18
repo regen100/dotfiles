@@ -360,4 +360,13 @@ hook_add = '''
 
 [[plugins]]
 repo = 'ludovicchabant/vim-gutentags'
+
+[[plugins]]
+repo = 'SirVer/ultisnips'
+hook_add = '''
+  let g:UltiSnipsExpandTrigger='<c-j>'
+'''
+
+[[plugins]]
+repo = 'honza/vim-snippets'
 # }}}
