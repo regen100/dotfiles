@@ -353,6 +353,10 @@ repo = 'kana/vim-altr'
 on_map = '<Plug>'
 hook_add = '''
   nmap <Leader>a <Plug>(altr-forward)
+  nmap <Leader>A <Plug>(altr-back)
+'''
+hook_post_source = '''
+  call altr#define('%/include/%.hpp', '%/include/*/%.hpp', '%/include/*/*/%.hpp', '%/include/*/*/%.inl.hpp', '%/src/%.hpp', '%/src/%.cpp', '%/test/%Test.cpp', '%/test/%_test.cpp')
 '''
 
 [[plugins]]
