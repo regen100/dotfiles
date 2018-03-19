@@ -19,6 +19,7 @@ zplug "lukechilds/zsh-better-npm-completion", if:"(( $+commands[npm] ))"
 zplug "caarlos0/zsh-mkc"
 zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >/dev/null 2>&1"
 zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
+zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-build:"make install PREFIX=$HOME/.local"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh
@@ -49,4 +50,4 @@ POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
 zplug load
 
 typeset -x MANPATH
-manpath=($ZPLUG_ROOT/doc/man $ZPLUG_ROOT/repos/junegunn/fzf/man "")
+manpath=($ZPLUG_ROOT/doc/man(N-/) $ZPLUG_ROOT/repos/junegunn/fzf/man(N-/) $ZPLUG_ROOT/repos/tj/git-extras/man(N-/) $HOME/.local/share/man(N-/) "")

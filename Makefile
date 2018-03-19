@@ -34,7 +34,7 @@ pip: repo stow
 
 .PHONY: utils
 utils: root
-	@$(APT-INSTALL) git-extras git-cola htop
+	@$(APT-INSTALL) git-cola htop
 
 .PHONY: deb
 deb: root
