@@ -26,3 +26,5 @@ fi
 if (( $+commands[rustc] )); then
   fpath+=$(rustc --print sysroot)/share/zsh/site-functions
 fi
+
+fpath=(~/.zsh/functions $fpath)

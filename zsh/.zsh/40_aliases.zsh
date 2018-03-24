@@ -8,6 +8,12 @@ alias egrep='egrep --color=auto'
 (( $+commands[python3] )) && alias python=python3
 (( $+commands[pygmentize] )) && alias pygmentize='pygmentize -f 256 -O style=base16-${BASE16_THEME#base16-}'
 
+if (( $+commands[rlwrap] )); then
+  alias rlwrap='rlwrap -pyellow'
+  for cmd (nc jjs)
+    (( $+commands[$cmd] )) && alias $cmd="rlwrap $cmd"
+fi
+
 alias -s txt=cat
 (( $+commands[python] )) && alias -s py=python
 (( $+commands[ruby] )) && alias -s rb=ruby
