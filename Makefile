@@ -160,10 +160,10 @@ byobu: repo tmux stow
 
 .PHONY: zsh
 zsh: root pip stow
-	@$(APT-INSTALL) zsh command-not-found ccze
+	@$(APT-INSTALL) zsh command-not-found ccze rlwrap
 	@$(PIP-INSTALL) pygments pygments-base16
 	@$(CHANGE_USER) mkdir -p ~/bin
-	@$(STOW-INSTALL) zsh git
+	@$(STOW-INSTALL) zsh git readline
 	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || chsh -s $$HOME/bin/zsh-cjk $${SUDO_USER:-$$USER}
 
 .PHONY: wcwidth
