@@ -26,6 +26,9 @@ autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
 " sudo save
 cabbrev w!! w !sudo tee > /dev/null %
 
+" open {}
+nnoremap <C-O> ^f}i<CR><CR><UP>
+
 " indent
 nnoremap <silent> <Tab> >>
 nnoremap <silent> <S-Tab> <<
