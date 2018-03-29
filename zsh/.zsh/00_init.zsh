@@ -39,4 +39,6 @@ unsetopt flow_control
 
 setopt interactivecomments
 
+autoload -Uz zmv
+
 REPORTTIME=3
