@@ -16,3 +16,5 @@ alias -s txt=cat
 alias relogin='unset ZSHENV_LOADED; exec $SHELL -l'
 
 (( $+commands[xclip] )) && alias xclip='xclip -sel clip'
+
+alias mmv='noglob zmv -W'
