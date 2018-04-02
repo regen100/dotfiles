@@ -1,0 +1,4 @@
+snippet discpy "disable copy"
+${1:`!p snip.rv = snip.basename or "ClassName"`}(const $1&) = delete;
+$1& operator=(const $1&) = delete;
+endsnippet
