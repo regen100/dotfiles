@@ -44,6 +44,9 @@ nnoremap <silent> <A-j> <C-w>-
 " register
 nnoremap <leader>d "_d
 
+" quick replace
+nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+
 " toggle
 nnoremap <silent> <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
 nnoremap <silent> <Leader>w :<C-u>setl wrap! wrap?<CR>
