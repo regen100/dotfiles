@@ -8,6 +8,7 @@ mime_inner=$(file -Lbz --mime-type "$1")
 mime_outer=$(file -Lb --mime-type "$1")
 case $mime_inner in
   text/x-shellscript) lexer=sh;;
+  application/xml) lexer=xml;;
   text/*) lexer=;;
   *)
     # binary
@@ -23,7 +24,7 @@ case $mime_outer in
   application/x-bzip2) concat=bzcat;;
   application/x-xz) concat=xzcat;;
   application/x-lz4) concat=lz4cat;;
-  text/*) concat=cat;;
+  $mime_inner) concat=cat;;
   *) exit 1;;
 esac
 
