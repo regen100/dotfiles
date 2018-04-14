@@ -296,9 +296,14 @@ repo = 'tyru/caw.vim'
 merged = 0
 
 [[plugins]]
-repo = 'ctrlpvim/ctrlp.vim'
+repo = 'junegunn/fzf'
+merged = 0
+
+[[plugins]]
+repo = 'junegunn/fzf.vim'
+depends = 'fzf'
 hook_add = '''
-  let g:ctrlp_split_window = 0
+  noremap <Leader>f :<C-u>Files<CR>
 '''
 
 [[plugins]]
@@ -361,12 +366,6 @@ hook_post_source = '''
 
 [[plugins]]
 repo = 'christoomey/vim-tmux-navigator'
-
-[[plugins]]
-repo = 'octref/RootIgnore'
-hook_add = '''
-  let g:RootIgnoreAgignore = 1
-'''
 
 [[plugins]]
 repo = 'ludovicchabant/vim-gutentags'
