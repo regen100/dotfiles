@@ -51,3 +51,10 @@ zplug load
 
 typeset -x MANPATH
 manpath=($ZPLUG_ROOT/doc/man(N-/) $ZPLUG_ROOT/repos/junegunn/fzf/man(N-/) $ZPLUG_ROOT/repos/tj/git-extras/man(N-/) $HOME/.local/share/man(N-/) "")
+
+# FZF
+if (( $+commands[ag] )); then
+  export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
