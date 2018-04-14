@@ -1,7 +1,6 @@
-# cpp {{{
+# syntax {{{
 [[plugins]]
-repo = 'octol/vim-cpp-enhanced-highlight'
-on_ft = ['c','cpp']
+repo = 'sheerun/vim-polyglot'
 hook_add='''
   let g:cpp_class_scope_highlight = 1
   let g:cpp_member_variable_highlight = 1
@@ -9,27 +8,17 @@ hook_add='''
   let g:cpp_experimental_simple_template_highlight = 1
   let g:cpp_concepts_highlight = 1
   let g:cpp_no_function_highlight = 1
-'''
-# }}}
 
-# python {{{
-[[plugins]]
-repo = 'Vimjas/vim-python-pep8-indent'
+  let g:vim_json_syntax_conceal = 0
+
+  autocmd vimrc BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
+'''
 
 [[plugins]]
 repo = 'anntzer/vim-cython'
-# }}}
 
-# cmake {{{
 [[plugins]]
-repo = 'pboettch/vim-cmake-syntax'
-on_ft = 'cmake'
-#}}}
-
-# toml {{{
-[[plugins]]
-repo = 'cespare/vim-toml'
-on_ft = 'toml'
+repo = 'vhda/verilog_systemverilog.vim'
 # }}}
 
 # java {{{
@@ -40,12 +29,6 @@ hook_add = '''
   let g:JavaComplete_UsePython3 = 1
   autocmd vimrc FileType java setlocal omnifunc=javacomplete#Complete
 '''
-# }}}
-
-# rust {{{
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-on_ft = 'rust'
 # }}}
 
 # latex {{{
@@ -76,34 +59,6 @@ hook_add='''
   autocmd vimrc FileType tex let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 '''
 
-# }}}
-
-# json {{{
-[[plugins]]
-repo = 'elzr/vim-json'
-on_ft = 'json'
-hook_add = '''
-  let g:vim_json_syntax_conceal = 0
-'''
-# }}}
-
-# plantuml {{{
-[[plugins]]
-repo = 'aklt/plantuml-syntax'
-on_ft = 'plantuml'
-# }}}
-
-# js {{{
-[[plugins]]
-repo = 'posva/vim-vue'
-hook_add = '''
-  autocmd vimrc BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
-'''
-# }}}
-
-# verilog {{{
-[[plugins]]
-repo = 'vhda/verilog_systemverilog.vim'
 # }}}
 
 # doc {{{
