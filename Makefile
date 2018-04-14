@@ -248,12 +248,12 @@ font: repo deb
 
 .PHONY: verilog
 verilog: root
-		@$(APT-INSTALL) iverilog gtkwave
-		@if ! which iStyle >/dev/null; then \
-			cd /tmp; \
-			git clone -b v1.21 https://github.com/thomasrussellmurphy/istyle-verilog-formatter.git; \
-			cd istyle-verilog-formatter; \
-			make; \
-			cp bin/release/iStyle /usr/local/bin; \
-			rm -rf $$(pwd); \
-		fi
+	@$(APT-INSTALL) iverilog gtkwave
+	@if ! which iStyle >/dev/null; then \
+		cd /tmp; \
+		git clone -b v1.21 https://github.com/thomasrussellmurphy/istyle-verilog-formatter.git; \
+		cd istyle-verilog-formatter; \
+		make; \
+		cp bin/release/iStyle /usr/local/bin; \
+		rm -rf $$(pwd); \
+	fi
