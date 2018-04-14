@@ -380,4 +380,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'honza/vim-snippets'
+
+[[plugins]]
+repo = 'tpope/vim-unimpaired'
 # }}}

@@ -10,10 +10,6 @@ augroup END
 " key {{{
 let g:mapleader = "\<Space>"
 
-" buffer move
-nnoremap <silent> <C-Left> :<C-u>bp<CR>
-nnoremap <silent> <C-Right> :<C-u>bn<CR>
-
 " exit from terminal insert mode
 tnoremap <silent> <ESC> <C-\><C-n>
 
