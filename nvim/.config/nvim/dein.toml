@@ -126,7 +126,7 @@ repo = 'osyo-manga/vim-precious'
 repo = 'scrooloose/nerdtree'
 hook_add = '''
   let NERDTreeRespectWildIgnore = 1
-  nnoremap <silent> <LEADER>n :NERDTreeToggle<CR>
+  nnoremap <silent> <Leader>n :<C-u>NERDTreeToggle<CR>
   autocmd vimrc BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 '''
 
@@ -266,8 +266,8 @@ hook_add = '''
   \ 'verilog_systemverilog': ['verilog']
   \}
   autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
-  nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-  nmap <silent> <C-j> <Plug>(ale_next_wrap)
+  nmap <silent> [w <Plug>(ale_previous_wrap)
+  nmap <silent> ]w <Plug>(ale_next_wrap)
 '''
 
 [[plugins]]
