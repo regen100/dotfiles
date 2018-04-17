@@ -2,5 +2,6 @@
 	path = ~/.gitconfig.mine
 [core]
 	excludesfile = ~/.gitignore_global
+	pager = less -R -F
 [push]
 	default = simple
