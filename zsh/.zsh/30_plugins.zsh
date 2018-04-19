@@ -11,7 +11,7 @@ zplug "zsh-users/zsh-autosuggestions", hook-load:"ZSH_AUTOSUGGEST_CLEAR_WIDGETS+
 zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
 zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
 zplug "b4b4r07/enhancd", use:init.sh
-zplug "modules/command-not-found", from:prezto
+zplug "modules/command-not-found", from:prezto, hook-load:"export COMMAND_NOT_FOUND_INSTALL_PROMPT=1"
 zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
 zplug "docker/compose", use:contrib/completion/zsh, if:"(( $+commands[docker-compose] ))"
 zplug "rust-lang/zsh-config", if:"(( $+commands[rustc] ))"
