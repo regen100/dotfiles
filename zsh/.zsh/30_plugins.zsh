@@ -20,6 +20,7 @@ zplug "caarlos0/zsh-mkc"
 zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >/dev/null 2>&1"
 zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
 zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-build:"make install PREFIX=$HOME/.local"
+zplug "mollifier/cd-gitroot", hook-load:"alias cdu=cd-gitroot"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh
