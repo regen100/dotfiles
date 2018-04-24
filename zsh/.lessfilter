@@ -14,6 +14,7 @@ case $mime_inner in
     # binary
     case $mime_outer in
       application/x-executable) exec objdump -x "$1";;
+      application/x-sharedlib) exec objdump -x "$1";;
     esac
     exit 1
     ;;
