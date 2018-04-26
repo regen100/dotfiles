@@ -338,4 +338,13 @@ repo = 'honza/vim-snippets'
 
 [[plugins]]
 repo = 'tpope/vim-unimpaired'
+
+[[plugins]]
+repo = 'tpope/vim-speeddating'
+on_map = ['<C-A>', '<C-X>']
+
+[[plugins]]
+repo = 'tpope/vim-repeat'
+on_map = '.'
+
 # }}}
