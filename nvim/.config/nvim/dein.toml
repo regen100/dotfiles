@@ -329,8 +329,8 @@ repo = 'ludovicchabant/vim-gutentags'
 repo = 'SirVer/ultisnips'
 hook_add = '''
   let g:UltiSnipsExpandTrigger = '<C-S>'
-  let g:UltiSnipsJumpForwardTrigger = '<C-Down>'
-  let g:UltiSnipsJumpBackwardTrigger = '<C-Up>'
+  let g:UltiSnipsJumpForwardTrigger = ']s'
+  let g:UltiSnipsJumpBackwardTrigger = '[s'
 '''
 
 [[plugins]]
