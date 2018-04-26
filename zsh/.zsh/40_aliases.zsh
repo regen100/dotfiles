@@ -26,3 +26,5 @@ alias relogin='unset ZSHENV_LOADED; exec $SHELL -l'
 alias mmv='noglob zmv -W'
 
 alias -g CMAKE_DEV='-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="-fcolor-diagnostics -march=native" -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=gold -DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install'
+
+(( $+commands[ag] )) && alias todo='ag "//\s*(TODO|FIXME)\b"'
