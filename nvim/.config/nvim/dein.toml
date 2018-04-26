@@ -199,7 +199,7 @@ hook_add = '''
   let g:ale_sign_column_always = 1
   let g:ale_echo_msg_error_str = 'E'
   let g:ale_echo_msg_warning_str = 'W'
-  let g:ale_cpp_cppcheck_options='--enable=all'
+  let g:ale_cpp_cppcheck_options='--enable=all --suppress=unusedFunction'
   let g:ale_c_clangformat_options = '-fallback-style=Google -style=file -assume-filename=%s'
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
   let g:ale_fix_on_save = 1
