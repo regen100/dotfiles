@@ -184,6 +184,14 @@ hook_add = '''
       \ 'u:Unpublished',
     \ ]
   \ }
+  augroup TagbarProjects
+    autocmd User dein.toml let b:tagbar_type = {
+      \ 'ctagstype' : 'dein',
+      \ 'kinds'     : [
+        \ 'r:Repo',
+      \ ]
+    \ }
+  augroup END
   nnoremap <silent> <LEADER>t :<C-u>TagbarToggle<CR>
 '''
 
