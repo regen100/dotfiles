@@ -73,6 +73,12 @@ hook_add = '''
 # appearance {{{
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
+hook_add = '''
+  if !exists('g:context_filetype#filetypes')
+    let g:context_filetype#filetypes = {}
+  endif
+  let g:context_filetype#filetypes.gdb = [{'filetype': 'python', 'start' : '^python$', 'end' : '^end$'}]
+'''
 
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
