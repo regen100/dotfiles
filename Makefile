@@ -86,8 +86,8 @@ clang: repo pip
 		add-apt-repository -y ppa:ubuntu-toolchain-r/test; \
 		apt-get update; \
 	fi
-	@$(APT-INSTALL) cmake make ninja-build clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck gdb libstdc++-7-dev
-	@$(PIP-INSTALL) compdb cmakelint gdbgui
+	@$(APT-INSTALL) cmake make ninja-build clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck libstdc++-7-dev
+	@$(PIP-INSTALL) compdb cmakelint
 	@if ! which ccache >/dev/null; then \
 		wget http://mirrors.kernel.org/ubuntu/pool/main/c/ccache/ccache_3.4.1-1_amd64.deb -O /tmp/ccache.deb; \
 		dpkg -i /tmp/ccache.deb; \
@@ -257,3 +257,13 @@ verilog: root
 		cp bin/release/iStyle /usr/local/bin; \
 		rm -rf $$(pwd); \
 	fi
+
+.PHONY: gotty
+gotty:
+	@mkdir -p ~/bin
+	@wget -O - https://github.com/yudai/gotty/releases/download/v2.0.0-alpha.3/gotty_2.0.0-alpha.3_linux_amd64.tar.gz | tar -zxC ~/bin
+
+.PHONY: gdb
+gdb: stow
+	@$(APT-INSTALL) gdb
+	@$(STOW-INSTALL) gdb
