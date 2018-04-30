@@ -1,7 +1,7 @@
-ifdef SUDO_USER
-	CHANGE_USER := sudo -u "$$SUDO_USER"
-else
+ifeq "$(SUDO_USER)" "root"
 	CHANGE_USER :=
+else
+	CHANGE_USER := sudo -u "$$SUDO_USER"
 endif
 
 SHELL := bash
@@ -9,7 +9,7 @@ MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
 APT-INSTALL := apt-get install -y --no-install-recommends
 PIP-INSTALL := /usr/bin/pip3 install -U
-STOW-INSTALL := $(CHNAGE_USER) stow -d $(DOTFILES_DIR) -t $(HOME)
+STOW-INSTALL := $(CHANGE_USER) stow -d $(DOTFILES_DIR) -t $(HOME)
 
 
 .PHONY: all
