@@ -84,6 +84,7 @@ nvim: repo pip ctags stow git
 		dpkg -i /tmp/silversearcher-ag.deb; \
 		rm /tmp/silversearcher-ag.deb; \
 	fi
+	@vi --headless "+call dein#install()" +qa
 
 .PHONY: clang
 clang: repo pip
