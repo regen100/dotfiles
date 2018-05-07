@@ -48,8 +48,13 @@ clean:
 stow: root
 	@$(APT-INSTALL) stow
 
+.PHONY: git
+git: root stow
+	@$(APT-INSTALL) git
+	@$(STOW-INSTALL) git
+
 .PHONY: ctags
-ctags: deb stow
+ctags: deb stow git
 	@if [ ! -f /usr/bin/ctags ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
@@ -62,18 +67,18 @@ ctags: deb stow
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
-nvim: repo pip ctags stow
+nvim: repo pip ctags stow git
 	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-xenial.list ]; then \
 		add-apt-repository -y ppa:neovim-ppa/stable; \
 		apt-get update; \
 	fi
-	@$(APT-INSTALL) neovim git shellcheck xclip cmake
+	@$(APT-INSTALL) neovim shellcheck xclip cmake
 	@$(PIP-INSTALL) neovim vim-vint neovim-remote
 	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 	@update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
 	@$(CHANGE_USER) mkdir -p ~/.config
-	@$(STOW-INSTALL) nvim git
+	@$(STOW-INSTALL) nvim
 	@if ! which ag >/dev/null; then \
 		wget http://mirrors.kernel.org/ubuntu/pool/universe/s/silversearcher-ag/silversearcher-ag_2.1.0-1_amd64.deb -O /tmp/silversearcher-ag.deb; \
 		dpkg -i /tmp/silversearcher-ag.deb; \
@@ -159,15 +164,15 @@ byobu: repo tmux stow
 	@sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
-zsh: root pip stow
+zsh: root pip stow git
 	@$(APT-INSTALL) zsh command-not-found ccze rlwrap
 	@$(PIP-INSTALL) pygments pygments-base16
 	@$(CHANGE_USER) mkdir -p ~/bin
-	@$(STOW-INSTALL) zsh git readline
+	@$(STOW-INSTALL) zsh readline
 	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || chsh -s $$HOME/bin/zsh-cjk $${SUDO_USER:-$$USER}
 
 .PHONY: wcwidth
-wcwidth: deb
+wcwidth: deb git
 	@if [ ! -f /usr/lib/wcwidth-cjk.so ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
@@ -211,7 +216,7 @@ xrdp: deb repo stow
 	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 
 .PHONY: font
-font: repo deb
+font: repo deb git
 	@if [ ! -f /etc/apt/sources.list.d/fontforge-ubuntu-fontforge-xenial.list ]; then \
 		add-apt-repository ppa:fontforge/fontforge; \
 		apt-get update; \
@@ -247,7 +252,7 @@ font: repo deb
 		apt-get purge -y --autoremove build-deps
 
 .PHONY: verilog
-verilog: root
+verilog: root git
 	@$(APT-INSTALL) iverilog gtkwave
 	@if ! which iStyle >/dev/null; then \
 		cd /tmp; \
