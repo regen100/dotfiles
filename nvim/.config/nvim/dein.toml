@@ -235,8 +235,8 @@ hook_add = '''
   \ 'verilog_systemverilog': ['verilog']
   \}
   autocmd vimrc FileType cpp if exists('g:build_dir') | let g:ale_c_build_dir = g:build_dir | endif
-  nmap <silent> [w <Plug>(ale_previous_wrap)
-  nmap <silent> ]w <Plug>(ale_next_wrap)
+  nmap [w <Plug>(ale_previous_wrap)
+  nmap ]w <Plug>(ale_next_wrap)
 '''
 
 [[plugins]]
