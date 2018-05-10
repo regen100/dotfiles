@@ -29,6 +29,9 @@ nnoremap <Leader>o ^f{a<CR><CR><UP>
 vnoremap <silent> <TAB> >gv
 vnoremap <silent> <S-TAB> <gv
 
+" copy mouse selection
+vnoremap <LeftRelease> y<CR>gv<LeftRelease>
+
 " window resize
 nnoremap <silent> <A-h> <C-w><
 nnoremap <silent> <A-l> <C-w>>
