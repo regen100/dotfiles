@@ -273,3 +273,22 @@ gotty:
 gdb: stow
 	@$(APT-INSTALL) gdb
 	@$(STOW-INSTALL) gdb
+
+.PHONY: apt-proxy
+apt-proxy: root
+	@$(APT-INSTALL) squid-deb-proxy squid-deb-proxy-client
+	@# squid
+	@systemctl stop squid.service
+	@systemctl disable squid.service 2>/dev/null
+	@# squid-deb-proxy
+	@cnf=/etc/squid-deb-proxy/squid-deb-proxy.conf; \
+		grep -q "http_port 8001" $$cnf || sed -i "/http_port /a http_port 8001 intercept" $$cnf; \
+		sed -i "s/^\(http_access deny !to_archive_mirrors\)/#\1/" $$cnf
+	@sed -i 's/^#\(\w\)/\1/' /etc/squid-deb-proxy/mirror-dstdomain.acl.d/10-default
+	@wget -qO- http://mirrors.ubuntu.com/mirrors.txt | grep -oP '(?<=://).+?(?=/)' > /etc/squid-deb-proxy/mirror-dstdomain.acl.d/20-mirrors
+	@systemctl reload squid-deb-proxy.service
+	@# DNAT
+	@cp -f $(DOTFILES_DIR).extras/apt-proxy/systemd/apt-proxy.service /etc/systemd/system
+	@systemctl daemon-reload
+	@systemctl enable apt-proxy.service
+	@systemctl start apt-proxy.service
