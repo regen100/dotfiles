@@ -190,7 +190,11 @@ hook_add = '''
       \ 'u:Unpublished',
     \ ]
   \ }
+  function! s:nop()
+  endfunction
   augroup TagbarProjects
+    autocmd!
+    autocmd User * call s:nop()
     autocmd User dein.toml let b:tagbar_type = {
       \ 'ctagstype' : 'dein',
       \ 'kinds'     : [
