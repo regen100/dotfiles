@@ -11,7 +11,7 @@ augroup END
 let g:mapleader = "\<Space>"
 
 " exit from terminal insert mode
-tnoremap <silent> <ESC> <C-\><C-n>
+tnoremap <ESC> <C-\><C-n>
 
 " ESC nohl
 nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
@@ -26,28 +26,28 @@ cabbrev w!! w !sudo tee > /dev/null %
 nnoremap <Leader>o ^f{a<CR><CR><UP>
 
 " indent
-vnoremap <silent> <TAB> >gv
-vnoremap <silent> <S-TAB> <gv
+vnoremap <TAB> >gv
+vnoremap <S-TAB> <gv
 
 " copy mouse selection
 vnoremap <LeftRelease> y<CR>gv<LeftRelease>
 
 " window resize
-nnoremap <silent> <A-h> <C-w><
-nnoremap <silent> <A-l> <C-w>>
-nnoremap <silent> <A-k> <C-w>+
-nnoremap <silent> <A-j> <C-w>-
+nnoremap <A-h> <C-w><
+nnoremap <A-l> <C-w>>
+nnoremap <A-k> <C-w>+
+nnoremap <A-j> <C-w>-
 
 " register
-nnoremap <leader>d "_d
+nnoremap <Leader>d "_d
 
 " quick replace
 nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 " toggle
-nnoremap <silent> <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
-nnoremap <silent> <Leader>w :<C-u>setl wrap! wrap?<CR>
-nnoremap <silent> <Leader>s :<C-u>call <SID>toggle_syntax()<CR>
+nnoremap <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>
+nnoremap <Leader>w :<C-u>setl wrap! wrap?<CR>
+nnoremap <Leader>s :<C-u>call <SID>toggle_syntax()<CR>
 function! s:toggle_syntax() abort
   if exists('g:syntax_on')
     syntax off
