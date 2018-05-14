@@ -93,7 +93,7 @@ clang: repo pip stow
 		apt-get update; \
 	fi
 	@$(APT-INSTALL) cmake make ninja-build clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck libstdc++-7-dev
-	@$(PIP-INSTALL) compdb cmakelint
+	@$(PIP-INSTALL) compdb==0.1.1 cmakelint
 	@if ! which ccache >/dev/null; then \
 		wget http://mirrors.kernel.org/ubuntu/pool/main/c/ccache/ccache_3.4.1-1_amd64.deb -O /tmp/ccache.deb; \
 		dpkg -i /tmp/ccache.deb; \
