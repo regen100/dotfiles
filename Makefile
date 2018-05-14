@@ -87,7 +87,7 @@ nvim: repo pip ctags stow git
 	@vi --headless "+call dein#install()" +qa
 
 .PHONY: clang
-clang: repo pip
+clang: repo pip stow
 	@if [ ! -f /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-xenial.list ]; then \
 		add-apt-repository -y ppa:ubuntu-toolchain-r/test; \
 		apt-get update; \
@@ -99,6 +99,7 @@ clang: repo pip
 		dpkg -i /tmp/ccache.deb; \
 		rm /tmp/ccache.deb; \
 	fi
+	@$(STOW-INSTALL) clang
 
 .PHONY: python
 python: root pip
