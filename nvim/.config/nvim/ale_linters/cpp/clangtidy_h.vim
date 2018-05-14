@@ -3,7 +3,7 @@ function ale_linters#cpp#clangtidy_h#GetCommand(buffer)
     return ''
   endif
 
-  return ale_linters#cpp#clangtidy#GetCommand(a:buffer)
+  return ale_linters#cpp#clangtidy#GetCommand(a:buffer) . ' -extra-arg=-D__clang_analyzer__'
 endfunction
 
 call ale#linter#Define('cpp', {

@@ -141,6 +141,7 @@ autocmd vimrc BufRead /usr/include/c++/* setfiletype cpp
 autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
 autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
 autocmd vimrc BufNewFile,BufRead *.nspawn setfiletype systemd
+autocmd vimrc BufNewFile,BufRead .clang-tidy,.clang-format setfiletype yaml
 
 
 if has('persistent_undo')
