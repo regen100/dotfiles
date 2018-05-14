@@ -1,4 +1,19 @@
-snippet discpy "disable copy"
+snippet discopy "disable copy"
 ${1:`!p snip.rv = snip.basename or "ClassName"`}(const $1&) = delete;
 $1& operator=(const $1&) = delete;
+endsnippet
+
+snippet encopy "enable copy"
+${1:`!p snip.rv = snip.basename or "ClassName"`}(const $1&) = default;
+$1& operator=(const $1&) = default;
+endsnippet
+
+snippet dismove "disable move"
+${1:`!p snip.rv = snip.basename or "ClassName"`}($1&&) = default;
+$1& operator=($1&&) = delete;
+endsnippet
+
+snippet enmove "enable move"
+${1:`!p snip.rv = snip.basename or "ClassName"`}($1&&) = default;
+$1& operator=($1&&) = default;
 endsnippet
