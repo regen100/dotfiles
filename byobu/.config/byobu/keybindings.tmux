@@ -8,7 +8,7 @@ last_cmd="ps -t '#{pane_tty}' -o cmd -h --sort start_time | tail -1"
 bind h if-shell "$is_remote" "run-shell \"tmux split-window -h '$($last_cmd)'\""
 bind v if-shell "$is_remote" "run-shell \"tmux split-window -v '$($last_cmd)'\""
 
-bind r last-pane \; send-keys Up Enter\; last-pane
+bind r last-pane \; if-shell -Ft= '#{pane_in_mode}' 'send-keys -X cancel; send-keys Up Enter; last-pane' 'send-keys Up Enter; last-pane'
 
 bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -selection clipboard"
 bind-key -T root MouseDown2Pane if-shell -Ft= '#{mouse_any_flag}' \
