@@ -367,4 +367,6 @@ on_map = ['<C-A>', '<C-X>']
 repo = 'tpope/vim-repeat'
 on_map = '.'
 
+[[plugins]]
+repo = 'johnsyweb/vim-makeshift'
 # }}}

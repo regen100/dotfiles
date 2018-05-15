@@ -6,7 +6,7 @@ while 1
     for s:build_dir in [s:root_dir . '/build', s:root_dir . '/../build']
       if isdirectory(s:build_dir)
         let g:build_dir = fnamemodify(s:build_dir, ':p:h')
-        let &l:makeprg = 'make -C ' . g:build_dir
+        let &l:makeprg = 'cmake --build ' . shellescape(g:build_dir) . ' --target'
         let s:found = 1
         break
       endif
