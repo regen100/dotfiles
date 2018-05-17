@@ -8,7 +8,7 @@ SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
 APT-INSTALL := apt-get install -y --no-install-recommends
-PIP-INSTALL := /usr/bin/pip3 install -U
+PIP-INSTALL := python3 -m pip install -U
 STOW-INSTALL := $(CHANGE_USER) stow -d $(DOTFILES_DIR) -t $(HOME)
 
 
@@ -29,8 +29,7 @@ repo: root
 
 .PHONY: pip
 pip: repo stow
-	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel python3-colorama
-	@$(PIP-INSTALL) pip
+	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
 
 .PHONY: utils
 utils: root
@@ -103,7 +102,7 @@ clang: repo pip stow
 
 .PHONY: python
 python: root pip
-	@$(APT-INSTALL) virtualenv direnv
+	@$(APT-INSTALL) virtualenv direnv python3-colorama
 	@$(PIP-INSTALL) isort yapf flake8
 	@$(STOW-INSTALL) python readline
 
