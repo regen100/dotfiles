@@ -369,4 +369,8 @@ on_map = '.'
 
 [[plugins]]
 repo = 'johnsyweb/vim-makeshift'
+
+[[plugins]]
+repo = 'vim-scripts/DoxygenToolkit.vim'
+on_ft = ['c', 'cpp', 'python']
 # }}}
