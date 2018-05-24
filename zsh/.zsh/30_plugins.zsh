@@ -21,6 +21,7 @@ zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >
 zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
 zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-build:"make install PREFIX=$HOME/.local"
 zplug "mollifier/cd-gitroot", hook-load:"alias cdu=cd-gitroot"
+zplug "takaaki-kasai/git-foresta", as:command
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh
@@ -47,6 +48,11 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(detect_virt ssh context dir_writable nodeenv 
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs vcs dir time)
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
+
+_git-foresta() _git-log
+zstyle -g existing_user_commands ':completion:*:*:git:*' user-commands
+zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
+  foresta:'show commit graph'
 
 zplug load
 
