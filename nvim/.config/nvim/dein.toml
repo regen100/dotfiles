@@ -373,4 +373,14 @@ repo = 'johnsyweb/vim-makeshift'
 [[plugins]]
 repo = 'vim-scripts/DoxygenToolkit.vim'
 on_ft = ['c', 'cpp', 'python']
+
+[[plugins]]
+repo = 'sjl/gundo.vim'
+on_cmd = ['GundoToggle']
+hook_add = '''
+  let g:gundo_close_on_revert = 1
+  let g:gundo_auto_preview = 0
+  let g:gundo_prefer_python3 = 1
+  nnoremap <Leader>u :<C-u>GundoToggle<CR>
+'''
 # }}}
