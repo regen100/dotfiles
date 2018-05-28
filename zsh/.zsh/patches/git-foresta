@@ -1,0 +1,13 @@
+diff --git a/git-foresta b/git-foresta
+index da3b2c3..05a9600 100755
+--- a/git-foresta
++++ b/git-foresta
+@@ -728,6 +728,8 @@ sub vis_xfrm
+     $s =~ tr/ABD.efg.IKm.xyz/┣┫━.┏┳┓.┃╋━.┗┻┛/;
+   }
+ 
++  $s =~ s/ /  /g;
++
+   return $Graph_symbol_tr->($s);
+ }
+ 

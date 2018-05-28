@@ -1,3 +1,5 @@
+PATCH_DIR=$(dirname $0)/patches
+
 if [[ ! -d ~/.zplug ]]; then
   git clone https://github.com/zplug/zplug ~/.zplug
 fi
@@ -21,7 +23,7 @@ zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >
 zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
 zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-build:"make install PREFIX=$HOME/.local"
 zplug "mollifier/cd-gitroot", hook-load:"alias cdu=cd-gitroot"
-zplug "takaaki-kasai/git-foresta", as:command
+zplug "takaaki-kasai/git-foresta", as:command, hook-build:"patch -p1 <$PATCH_DIR/git-foresta"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh
@@ -65,3 +67,5 @@ if (( $+commands[ag] )); then
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
+
+unset PATCH_DIR
