@@ -24,6 +24,7 @@ zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
 zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-build:"make install PREFIX=$HOME/.local"
 zplug "mollifier/cd-gitroot", hook-load:"alias cdu=cd-gitroot"
 zplug "takaaki-kasai/git-foresta", as:command, hook-build:"patch -p1 <$PATCH_DIR/git-foresta"
+zplug "simonwhitaker/gibo", use:gibo, as:command, hook-build:"ln -sf gibo-completion.zsh shell-completions/_gibo", hook-load:"fpath=($ZPLUG_REPOS/simonwhitaker/gibo/shell-completions $fpath)"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh
