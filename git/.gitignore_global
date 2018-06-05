@@ -3,3 +3,4 @@ tags
 .gdb_history
 .envrc
 .direnv
+.lvimrc
