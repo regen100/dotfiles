@@ -25,6 +25,7 @@ zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-bui
 zplug "mollifier/cd-gitroot", hook-load:"alias cdu=cd-gitroot"
 zplug "takaaki-kasai/git-foresta", as:command, hook-build:"git apply $PATCH_DIR/git-foresta.patch"
 zplug "simonwhitaker/gibo", use:gibo, as:command, hook-build:"ln -sf gibo-completion.zsh shell-completions/_gibo", hook-load:"fpath=($ZPLUG_REPOS/simonwhitaker/gibo/shell-completions $fpath)"
+zplug "kwhrtsk/docker-fzf-completion", if:"(( $+commands[docker] ))"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
 zplug "plugins/common-aliases", from:oh-my-zsh
