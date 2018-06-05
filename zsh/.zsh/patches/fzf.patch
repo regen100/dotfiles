@@ -1,0 +1,26 @@
+diff --git a/shell/completion.zsh b/shell/completion.zsh
+index 3c083aa..a5e4e26 100644
+--- a/shell/completion.zsh
++++ b/shell/completion.zsh
+@@ -55,7 +55,7 @@ __fzf_generic_path_completion() {
+       [ -z "$dir" ] && dir='.'
+       [ "$dir" != "/" ] && dir="${dir/%\//}"
+       dir=${~dir}
+-      matches=$(eval "$compgen $(printf %q "$dir")" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" ${=fzf} ${=fzf_opts} -q "$leftover" | while read item; do
++      matches=$(eval "$compgen $(printf %q "$dir")" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_COMPLETION_OPTS" ${=fzf} ${=fzf_opts} -q "$leftover" | cat | while read item; do
+         echo -n "${(q)item}$suffix "
+       done)
+       matches=${matches% }
+diff --git a/shell/key-bindings.zsh b/shell/key-bindings.zsh
+index c25368c..4333845 100644
+--- a/shell/key-bindings.zsh
++++ b/shell/key-bindings.zsh
+@@ -9,7 +9,7 @@ __fsel() {
+     -o -type d -print \
+     -o -type l -print 2> /dev/null | cut -b3-"}"
+   setopt localoptions pipefail 2> /dev/null
+-  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | while read item; do
++  eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS" $(__fzfcmd) -m "$@" | cat | while read item; do
+     echo -n "${(q)item} "
+   done
+   local ret=$?
