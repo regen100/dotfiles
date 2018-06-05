@@ -11,7 +11,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions", hook-load:"ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter"
 zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
-zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
+zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"git apply $PATCH_DIR/fzf.patch; ./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
 zplug "b4b4r07/enhancd", use:init.sh
 zplug "modules/command-not-found", from:prezto, hook-load:"export COMMAND_NOT_FOUND_INSTALL_PROMPT=1"
 zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
@@ -23,7 +23,7 @@ zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >
 zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
 zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-build:"make install PREFIX=$HOME/.local"
 zplug "mollifier/cd-gitroot", hook-load:"alias cdu=cd-gitroot"
-zplug "takaaki-kasai/git-foresta", as:command, hook-build:"patch -p1 <$PATCH_DIR/git-foresta"
+zplug "takaaki-kasai/git-foresta", as:command, hook-build:"git apply $PATCH_DIR/git-foresta.patch"
 zplug "simonwhitaker/gibo", use:gibo, as:command, hook-build:"ln -sf gibo-completion.zsh shell-completions/_gibo", hook-load:"fpath=($ZPLUG_REPOS/simonwhitaker/gibo/shell-completions $fpath)"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
