@@ -119,7 +119,6 @@ rust: stow
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup update stable
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup install nightly
 	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview
-	@$(CHANGE_USER) $$HOME/.cargo/bin/cargo +nightly install clippy || echo "clippy installed"
 	@$(STOW-INSTALL) rust
 
 .PHONY: plantuml
