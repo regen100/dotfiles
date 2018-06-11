@@ -183,12 +183,6 @@ wcwidth: deb git
 		rm -rf /tmp/build; \
 	fi
 
-.PHONY: fbterm
-fbterm: root stow
-	@$(APT-INSTALL) fbterm fcitx-frontend-fbterm gpm
-	@chmod u+s /usr/bin/fbterm
-	@$(STOW-INSTALL) fbterm
-
 .PHONY: xrdp
 xrdp: deb repo stow
 	@if [ ! -f /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list ]; then \
