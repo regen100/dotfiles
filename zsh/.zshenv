@@ -15,7 +15,8 @@ if [[ -z $ZSHENV_LOADED ]]; then
   export LESS='-giMRSW -z-4 -x4 -j4'
   export EDITOR=vim
   export VISUAL=vim
-  eval "$(lesspipe)"
+  (( $+commands[lesspipe] )) && eval "$(lesspipe)"
+  (( $+commands[lesspipe.sh] )) && eval "$(lesspipe.sh)"
 
   [[ -f $HOME/.pythonrc.py ]] && export PYTHONSTARTUP=$HOME/.pythonrc.py
 
