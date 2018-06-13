@@ -1,4 +1,4 @@
-if [[ $TERM == "linux" ]]; then
+if [[ $TERM == "linux" || $LANG == "C.UTF-8" ]]; then
   export LANG=en_US.UTF-8
 fi
 if [[ -n $FBTERM ]]; then

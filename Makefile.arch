@@ -1,0 +1,171 @@
+SHELL := bash
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
+PKG-INSTALL := sudo aura --noconfirm --needed
+PIP-INSTALL := sudo python3 -m pip install -U
+STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
+
+
+.PHONY: all
+all:
+
+.PHONY: repo
+repo:
+	@which git >/dev/null || sudo pacman --noconfirm -S git
+	@if ! which aura >/dev/null; then \
+		cd /tmp; \
+		git clone https://aur.archlinux.org/aura-bin.git; \
+		cd aura-bin; \
+		makepkg --noconfirm -si; \
+		rm -rf /tmp/aura-bin; \
+	fi
+	@if ! systemctl is-active --quiet reflector.timer; then \
+		$(PKG-INSTALL) -A reflector-timer; \
+		sudo mkdir -p /etc/conf.d; \
+		echo COUNTRY=Japan | sudo tee /etc/conf.d/reflector.conf >/dev/null; \
+		sudo systemctl enable --now reflector.timer; \
+	fi
+
+.PHONY: pip
+pip: repo
+	@$(PKG-INSTALL) -S python python-pip python-wheel
+
+.PHONY: utils
+utils: repo
+	@$(PKG-INSTALL) -S htop
+	@$(PKG-INSTALL) -A git-cola
+
+.PHONY: stow
+stow:
+	@$(PKG-INSTALL) -S stow
+
+.PHONY: git
+git: stow
+	@$(PKG-INSTALL) -S git
+	@$(STOW-INSTALL) git
+
+.PHONY: ctags
+ctags: repo stow
+	@if ! which ctags > /dev/null; then \
+		cd /tmp; \
+		aura -Aw universal-ctags-git; \
+		tar xf universal-ctags-git.tar.gz; \
+		cd universal-ctags-git; \
+		cp $(DOTFILES_DIR).extras/universal-ctags/debian/patches/tex.diff .;\
+		sed -i "s/source=(/source=('tex.diff' /; s/md5sums=(/md5sums=('SKIP' /" PKGBUILD; \
+		echo -e "prepare() {\ncd ctags; patch -Np1 -i ../tex.diff\n}" >> PKGBUILD; \
+		makepkg --noconfirm -si; \
+		rm -rf /tmp/universal-ctags-git*; \
+	fi
+	@$(STOW-INSTALL) ctags
+
+.PHONY: nvim
+nvim: repo pip ctags stow git
+	@! pacman -Qiq vi >/dev/null 2>&1 || sudo pacman --noconfirm -R vi
+	@$(PKG-INSTALL) -S neovim shellcheck xclip cmake python-neovim the_silver_searcher
+	@$(PKG-INSTALL) -A python-vint neovim-remote neovim-drop-in
+	@mkdir -p ~/.config
+	@$(STOW-INSTALL) nvim
+	@vi --headless "+call dein#install()" +qa
+
+.PHONY: clang
+clang: repo pip stow
+	@$(PKG-INSTALL) -S cmake ninja clang cppcheck ccache
+	@$(PKG-INSTALL) -A compdb
+	@$(PIP-INSTALL) cmakelint
+	@$(STOW-INSTALL) clang
+
+.PHONY: python
+python: repo
+	@$(PKG-INSTALL) -S python-virtualenv python-colorama python-isort yapf flake8
+	@$(PKG-INSTALL) -A direnv
+	@$(STOW-INSTALL) python readline
+
+.PHONY: nodejs
+nodejs: repo
+	@$(PKG-INSTALL) -S nodejs npm
+
+.PHONY: rust
+rust: stow
+	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | sh -s -- -y
+	@$$HOME/.cargo/bin/rustup update stable
+	@$$HOME/.cargo/bin/rustup install nightly
+	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview
+	@$(STOW-INSTALL) rust
+
+.PHONY: plantuml
+plantuml: repo
+	@$(PKG-INSTALL) -S jdk8-openjdk
+	@$(PKG-INSTALL) -A plantuml
+
+.PHONY: latex
+latex: repo font
+	@$(PKG-INSTALL) -S texlive-most texlive-langjapanese qpdfview poppler-data
+	@kanji-config-updmap-sys auto
+
+.PHONY: tmux
+tmux: git
+	@if ! which tmux >/dev/null; then \
+		cd /tmp; \
+		git clone https://git.archlinux.org/svntogit/community.git --single-branch -b packages/tmux; \
+		cd /tmp/community/trunk; \
+		sed -i "s#source=(#source=('https://github.com/z80oolong/diffs/archive/master.zip' #; s/sha256sums=(/sha256sums=('SKIP' /" PKGBUILD; \
+		echo -e "prepare() {\ncd tmux-2.7; patch -Np1 -i ../diffs-master/tmux/tmux-2.7-fix.diff\n}" >> PKGBUILD; \
+		makepkg --noconfirm -si; \
+		rm -rf /tmp/community; \
+	fi
+
+.PHONY: byobu
+byobu: repo tmux stow
+	@$(PKG-INSTALL) -A byobu
+	@$(CHANGE_USER) mkdir -p ~/.config
+	@$(STOW-INSTALL) byobu
+	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
+	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
+
+.PHONY: zsh
+zsh: repo stow
+	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe
+	@$(PKG-INSTALL) -A pygments-base16
+	@mkdir -p ~/bin
+	@$(STOW-INSTALL) zsh readline
+	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || sudo chsh -s $$HOME/bin/zsh-cjk $$USER
+
+.PHONY: wcwidth
+wcwidth:
+	@if [ ! -f /usr/lib/wcwidth-cjk.so ]; then \
+		cp -r $(DOTFILES_DIR).extras/wcwidth-cjk/arch /tmp/wcwidth-cjk; \
+		cd /tmp/wcwidth-cjk; \
+		makepkg --noconfirm -si; \
+		rm -rf /tmp/wcwidth-cjk; \
+	fi
+
+.PHONY: xrdp
+xrdp: repo stow
+	@$(PKG-INSTALL) -A xrdp xorgxrdp-git
+	@$(STOW-INSTALL) xsession
+
+.PHONY: font
+font: repo
+	@$(PKG-INSTALL) -A ttf-cica otf-ipaexfont
+
+.PHONY: verilog
+verilog: repo git
+	@$(PKG-INSTALL) -S iverilog gtkwave
+	@if ! which iStyle >/dev/null; then \
+		cd /tmp; \
+		git clone -b v1.21 https://github.com/thomasrussellmurphy/istyle-verilog-formatter.git; \
+		cd istyle-verilog-formatter; \
+		make; \
+		cp bin/release/iStyle /usr/local/bin; \
+		rm -rf $$(pwd); \
+	fi
+
+.PHONY: gotty
+gotty: repo
+	@$(PKG-INSTALL) -A gotty
+
+.PHONY: gdb
+gdb: repo stow
+	@$(PKG-INSTALL) -S gdb
+	@$(STOW-INSTALL) gdb
