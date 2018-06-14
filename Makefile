@@ -103,7 +103,7 @@ clang: repo pip stow
 .PHONY: python
 python: root pip
 	@$(APT-INSTALL) virtualenv direnv python3-colorama
-	@$(PIP-INSTALL) isort yapf flake8
+	@$(PIP-INSTALL) isort yapf flake8 hacking flake8-docstrings
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs

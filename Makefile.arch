@@ -77,8 +77,8 @@ clang: repo pip stow
 
 .PHONY: python
 python: repo
-	@$(PKG-INSTALL) -S python-virtualenv python-colorama python-isort yapf flake8
-	@$(PKG-INSTALL) -A direnv
+	@$(PKG-INSTALL) -S python-virtualenv python-colorama python-isort yapf flake8 python-hacking
+	@$(PKG-INSTALL) -A direnv flake8-docstrings
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
