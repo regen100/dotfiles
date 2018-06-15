@@ -26,5 +26,7 @@ if [[ -z $ZSHENV_LOADED ]]; then
 
   export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 
+  export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp'
+
   export ZSHENV_LOADED=1
 fi
