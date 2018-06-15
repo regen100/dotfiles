@@ -4,8 +4,8 @@ set -e
 package=$(basename "$(pwd)")
 name=${package%-*}
 
-yes | mk-build-deps -i
+yes | sudo mk-build-deps -i
 debuild -us -uc -b
 cd ..
-apt-get purge -y --autoremove "$name-build-deps"
-dpkg -i "$name"*.deb || apt-get -fy install
+sudo apt-get purge -y --autoremove "$name-build-deps"
+sudo dpkg -i "$name"*.deb || sudo apt-get -fy install
