@@ -176,29 +176,14 @@ wcwidth: deb git
 	fi
 
 .PHONY: xrdp
-xrdp: deb repo stow
+xrdp: repo stow
 	@if [ ! -f /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list ]; then \
 		sudo add-apt-repository -y ppa:hermlnx/xrdp; \
-		sudo sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list; \
-		sudo sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list; \
 		sudo apt-get update; \
 	fi
 	@$(APT-INSTALL) xrdp xscreensaver
 	@sudo sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
 	@$(STOW-INSTALL) xsession
-	@if [ ! -f /usr/lib/pulse-8.0/modules/module-xrdp-sink.so ]; then \
-		mkdir -p /tmp/build; \
-		cd /tmp/build; \
-		apt-get source pulseaudio xrdp; \
-		cd pulseaudio-*; \
-		yes | mk-build-deps -i; \
-		debian/rules configure/pulseaudio; \
-		cd ../xrdp-*/sesman/chansrv/pulse; \
-		make PULSE_DIR=../../../../pulseaudio-8.0; \
-		sudo install -s -m 644 *.so /usr/lib/pulse-8.0/modules; \
-		sudo apt-get purge -y --autoremove pulseaudio-build-deps; \
-		rm -rf /ymp/build; \
-	fi
 	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 
 .PHONY: font
