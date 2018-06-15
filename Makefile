@@ -1,29 +1,19 @@
-ifeq "$(SUDO_USER)" "root"
-	CHANGE_USER :=
-else
-	CHANGE_USER := sudo -u "$$SUDO_USER"
-endif
-
 SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
-APT-INSTALL := apt-get install -y --no-install-recommends
-PIP-INSTALL := python3 -m pip install -U
-STOW-INSTALL := $(CHANGE_USER) stow -d $(DOTFILES_DIR) -t $(HOME)
+APT-INSTALL := sudo apt-get install -y --no-install-recommends
+PIP-INSTALL := sudo python3 -m pip install -U
+STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 
 
 .PHONY: all
 all:
 
-.PHONY: root
-root:
-	@[ $$(id -u) -eq 0 ] || { echo "run as root"; exit 1; }
-
 .PHONY: repo
-repo: root
+repo:
 	@if grep "//a" /etc/apt/sources.list > /dev/null; then \
-		sed -ie "s#//a#//jp.a#g" /etc/apt/sources.list; \
-		apt-get update; \
+		sudo sed -ie "s#//a#//jp.a#g" /etc/apt/sources.list; \
+		sudo apt-get update; \
 	fi
 	@$(APT-INSTALL) software-properties-common wget
 
@@ -32,23 +22,23 @@ pip: repo stow
 	@$(APT-INSTALL) python3-dev python3-pip python3-setuptools python3-wheel
 
 .PHONY: utils
-utils: root
+utils:
 	@$(APT-INSTALL) git-cola htop
 
 .PHONY: deb
-deb: root
+deb:
 	@$(APT-INSTALL) devscripts equivs
 
 .PHONY: clean
 clean:
-	@apt-get purge -y --autoremove devscripts equivs
+	@sudo apt-get purge -y --autoremove devscripts equivs
 
 .PHONY: stow
-stow: root
+stow:
 	@$(APT-INSTALL) stow
 
 .PHONY: git
-git: root stow
+git: stow
 	@$(APT-INSTALL) git
 	@$(STOW-INSTALL) git
 
@@ -68,19 +58,19 @@ ctags: deb stow git
 .PHONY: nvim
 nvim: repo pip ctags stow git
 	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-stable-xenial.list ]; then \
-		add-apt-repository -y ppa:neovim-ppa/stable; \
-		apt-get update; \
+		sudo add-apt-repository -y ppa:neovim-ppa/stable; \
+		sudo apt-get update; \
 	fi
 	@$(APT-INSTALL) neovim shellcheck xclip cmake
 	@$(PIP-INSTALL) neovim vim-vint neovim-remote
-	@update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
-	@update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
-	@update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
-	@$(CHANGE_USER) mkdir -p ~/.config
+	@sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
+	@sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
+	@sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
+	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
 	@if ! which ag >/dev/null; then \
 		wget http://mirrors.kernel.org/ubuntu/pool/universe/s/silversearcher-ag/silversearcher-ag_2.1.0-1_amd64.deb -O /tmp/silversearcher-ag.deb; \
-		dpkg -i /tmp/silversearcher-ag.deb; \
+		sudo dpkg -i /tmp/silversearcher-ag.deb; \
 		rm /tmp/silversearcher-ag.deb; \
 	fi
 	@vi --headless "+call dein#install()" +qa
@@ -88,20 +78,20 @@ nvim: repo pip ctags stow git
 .PHONY: clang
 clang: repo pip stow
 	@if [ ! -f /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-xenial.list ]; then \
-		add-apt-repository -y ppa:ubuntu-toolchain-r/test; \
-		apt-get update; \
+		sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; \
+		sudo apt-get update; \
 	fi
 	@$(APT-INSTALL) cmake make ninja-build clang-5.0 libclang-5.0-dev clang-tidy-5.0 clang-format-5.0 cppcheck libstdc++-7-dev
 	@$(PIP-INSTALL) compdb==0.1.1 cmakelint
 	@if ! which ccache >/dev/null; then \
 		wget http://mirrors.kernel.org/ubuntu/pool/main/c/ccache/ccache_3.4.1-1_amd64.deb -O /tmp/ccache.deb; \
-		dpkg -i /tmp/ccache.deb; \
+		sudo dpkg -i /tmp/ccache.deb; \
 		rm /tmp/ccache.deb; \
 	fi
 	@$(STOW-INSTALL) clang
 
 .PHONY: python
-python: root pip
+python: pip
 	@$(APT-INSTALL) virtualenv direnv python3-colorama
 	@$(PIP-INSTALL) isort yapf flake8 hacking flake8-docstrings
 	@$(STOW-INSTALL) python readline
@@ -109,31 +99,33 @@ python: root pip
 .PHONY: nodejs
 nodejs: repo
 	@if [ ! -f /etc/apt/sources.list.d/nodesource.list ]; then \
-		wget -qO - https://deb.nodesource.com/setup_8.x | bash -; \
+		wget -qO - https://deb.nodesource.com/setup_8.x | sudo bash -; \
 	fi
 	@$(APT-INSTALL) nodejs
 
 .PHONY: rust
 rust: stow
-	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | $(CHANGE_USER) sh -s -- -y
-	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup update stable
-	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup install nightly
-	@$(CHANGE_USER) $$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview
+	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | sh -s -- -y
+	@$$HOME/.cargo/bin/rustup update stable
+	@$$HOME/.cargo/bin/rustup install nightly
+	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview
 	@$(STOW-INSTALL) rust
 
 .PHONY: plantuml
-plantuml: root
+plantuml:
 	@$(APT-INSTALL) default-jre graphviz
 	@if ! which plantuml >/dev/null; then \
-		cat <(echo -e '#!/bin/sh\nexec /usr/bin/env java -jar "$$0" "$$@"') /tmp/plantuml > /usr/local/bin/plantuml; \
-		chmod +x /usr/local/bin/plantuml; \
-		rm /tmp/plantuml
+		wget -P /tmp http://sourceforge.net/projects/plantuml/files/plantuml.jar; \
+		cat <(echo -e '#!/bin/sh\nexec /usr/bin/env java -jar "$$0" "$$@"') /tmp/plantuml.jar > /tmp/plantuml.new; \
+		sudo cp -f /tmp/plantuml.new /usr/local/bin/plantuml; \
+		sudo chmod +x /usr/local/bin/plantuml; \
+		rm /tmp/plantuml.{jar,new}; \
 	fi
 
 .PHONY: latex
-latex: root
+latex:
 	@$(APT-INSTALL) texlive texlive-latex-extra texlive-bibtex-extra texlive-lang-japanese latexmk chktex qpdfview fonts-ipafont fonts-ipaexfont
-	@kanji-config-updmap-sys auto
+	@sudo kanji-config-updmap-sys auto
 
 .PHONY: tmux
 tmux: deb
@@ -141,8 +133,8 @@ tmux: deb
 	if [ "$$TMUX_VER" != 2.6-3cjk ]; then \
 		mkdir -p /tmp/build; \
 		cd /tmp/build; \
-		wget -O - http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6.orig.tar.gz | tar zx; \
-		wget -O - http://http.debian.net/debian/pool/main/t/tmux/tmux_2.6-3.debian.tar.xz | tar Jx -C tmux-2.6; \
+		wget -O - http://archive.ubuntu.com/ubuntu/pool/main/t/tmux/tmux_2.6.orig.tar.gz | tar zx; \
+		wget -O - http://archive.ubuntu.com/ubuntu/pool/main/t/tmux/tmux_2.6-3.debian.tar.xz | tar Jx -C tmux-2.6; \
 		cd tmux-2.6; \
 		wget -qO debian/patches/cjk.diff https://gist.github.com/z80oolong/e65baf0d590f62fab8f4f7c358cbcc34/raw/a3b687808c8fd5b8ad67e9a9b81774bb189fa93c/tmux-2.6-fix.diff; \
 		echo cjk.diff >> debian/patches/series; \
@@ -154,22 +146,22 @@ tmux: deb
 .PHONY: byobu
 byobu: repo tmux stow
 	@if [ ! -f /etc/apt/sources.list.d/byobu-ubuntu-ppa-xenial.list ]; then \
-		add-apt-repository -y ppa:byobu/ppa; \
-		apt-get update; \
+		sudo add-apt-repository -y ppa:byobu/ppa; \
+		sudo apt-get update; \
 	fi
 	@$(APT-INSTALL) byobu
-	@$(CHANGE_USER) mkdir -p ~/.config
+	@mkdir -p ~/.config
 	@$(STOW-INSTALL) byobu
-	@sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
-	@sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
+	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
+	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
-zsh: root pip stow git
+zsh: pip stow git
 	@$(APT-INSTALL) zsh command-not-found ccze rlwrap
 	@$(PIP-INSTALL) pygments pygments-base16
-	@$(CHANGE_USER) mkdir -p ~/bin
+	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline
-	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || chsh -s $$HOME/bin/zsh-cjk $${SUDO_USER:-$$USER}
+	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || sudo chsh -s $$HOME/bin/zsh-cjk $$USER
 
 .PHONY: wcwidth
 wcwidth: deb git
@@ -186,13 +178,13 @@ wcwidth: deb git
 .PHONY: xrdp
 xrdp: deb repo stow
 	@if [ ! -f /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list ]; then \
-		add-apt-repository -y ppa:hermlnx/xrdp; \
-		sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list
-		sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list
-		apt-get update; \
+		sudo add-apt-repository -y ppa:hermlnx/xrdp; \
+		sudo sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list; \
+		sudo sed -i "s/^# *deb-src/deb-src/" /etc/apt/sources.list.d/hermlnx-ubuntu-xrdp-xenial.list; \
+		sudo apt-get update; \
 	fi
 	@$(APT-INSTALL) xrdp xscreensaver
-	@sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
+	@sudo sed -ie "s/allowed_users=console/allowed_users=anybody/" /etc/X11/Xwrapper.config
 	@$(STOW-INSTALL) xsession
 	@if [ ! -f /usr/lib/pulse-8.0/modules/module-xrdp-sink.so ]; then \
 		mkdir -p /tmp/build; \
@@ -203,30 +195,30 @@ xrdp: deb repo stow
 		debian/rules configure/pulseaudio; \
 		cd ../xrdp-*/sesman/chansrv/pulse; \
 		make PULSE_DIR=../../../../pulseaudio-8.0; \
-		install -s -m 644 *.so /usr/lib/pulse-8.0/modules; \
-		apt-get purge -y --autoremove pulseaudio-build-deps; \
+		sudo install -s -m 644 *.so /usr/lib/pulse-8.0/modules; \
+		sudo apt-get purge -y --autoremove pulseaudio-build-deps; \
 		rm -rf /ymp/build; \
 	fi
 	@echo -e "\e[31mPlease disable light-locker and enable XScreenSaver!\e[m"
 
 .PHONY: font
-font: repo
+font:
 	@$(APT-INSTALL) fonts-ipaexfont
 	@wget https://github.com/miiton/Cica/releases/download/v3.0.0-rc1/Cica_v3.0.0-rc1.zip -O /tmp/cica.zip
 	@unzip /tmp/cica.zip -d /tmp/cica
-	@cp /tmp/cica/*.ttf /usr/local/share/fonts/
+	@sudo cp /tmp/cica/*.ttf /usr/local/share/fonts/
 	@rm -rf /tmp/cica.zip /tmp/cica
 	@sudo fc-cache -fv
 
 .PHONY: verilog
-verilog: root git
+verilog: git
 	@$(APT-INSTALL) iverilog gtkwave
 	@if ! which iStyle >/dev/null; then \
 		cd /tmp; \
 		git clone -b v1.21 https://github.com/thomasrussellmurphy/istyle-verilog-formatter.git; \
 		cd istyle-verilog-formatter; \
 		make; \
-		cp bin/release/iStyle /usr/local/bin; \
+		sudo cp bin/release/iStyle /usr/local/bin; \
 		rm -rf $$(pwd); \
 	fi
 
@@ -241,20 +233,20 @@ gdb: stow
 	@$(STOW-INSTALL) gdb
 
 .PHONY: apt-proxy
-apt-proxy: root
+apt-proxy:
 	@$(APT-INSTALL) squid-deb-proxy squid-deb-proxy-client
 	@# squid
-	@systemctl stop squid.service
-	@systemctl disable squid.service 2>/dev/null
+	@sudo systemctl stop squid.service
+	@sudo systemctl disable squid.service 2>/dev/null
 	@# squid-deb-proxy
 	@cnf=/etc/squid-deb-proxy/squid-deb-proxy.conf; \
-		grep -q "http_port 8001" $$cnf || sed -i "/http_port /a http_port 8001 intercept" $$cnf; \
-		sed -i "s/^\(http_access deny !to_archive_mirrors\)/#\1/" $$cnf
-	@sed -i 's/^#\(\w\)/\1/' /etc/squid-deb-proxy/mirror-dstdomain.acl.d/10-default
-	@wget -qO- http://mirrors.ubuntu.com/mirrors.txt | grep -oP '(?<=://).+?(?=/)' | grep -v archive.ubuntu.com > /etc/squid-deb-proxy/mirror-dstdomain.acl.d/20-mirrors
-	@systemctl reload squid-deb-proxy.service
+		grep -q "http_port 8001" $$cnf || sudo sed -i "/http_port /a http_port 8001 intercept" $$cnf; \
+		sudo sed -i "s/^\(http_access deny !to_archive_mirrors\)/#\1/" $$cnf
+	@sudo sed -i 's/^#\(\w\)/\1/' /etc/squid-deb-proxy/mirror-dstdomain.acl.d/10-default
+	@wget -qO- http://mirrors.ubuntu.com/mirrors.txt | grep -oP '(?<=://).+?(?=/)' | grep -v archive.ubuntu.com | sudo tee /etc/squid-deb-proxy/mirror-dstdomain.acl.d/20-mirrors >/dev/null
+	@sudo systemctl reload squid-deb-proxy.service
 	@# DNAT
-	@cp -f $(DOTFILES_DIR).extras/apt-proxy/systemd/apt-proxy.service /etc/systemd/system
-	@systemctl daemon-reload
-	@systemctl enable apt-proxy.service
-	@systemctl start apt-proxy.service
+	@sudo cp -f $(DOTFILES_DIR).extras/apt-proxy/systemd/apt-proxy.service /etc/systemd/system
+	@sudo systemctl daemon-reload
+	@sudo systemctl enable apt-proxy.service
+	@sudo systemctl start apt-proxy.service
