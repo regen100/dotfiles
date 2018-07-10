@@ -75,11 +75,13 @@ endfunction
 
 if has('nvim')
   let g:python_host_prog = s:pick_executable([
+  \ '~/.linuxbrew/bin/python2',
   \ '/usr/local/bin/python2',
   \ '/usr/bin/python2',
   \ '/bin/python2',
   \])
   let g:python3_host_prog = s:pick_executable([
+  \ '~/.linuxbrew/bin/python3',
   \ '/usr/local/bin/python3',
   \ '/usr/bin/python3',
   \ '/bin/python3',
