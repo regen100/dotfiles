@@ -13,6 +13,13 @@ flags = [
     '-Werror',
 ]
 
+configfile = os.path.expanduser('~/.ycm_systemflags.txt')
+if os.path.exists(configfile):
+    with open(configfile) as fp:
+        systemflags = [l.strip() for l in fp.readlines()]
+else:
+    systemflags = []
+
 BUILD_DIRECTORIES = ['build']
 
 
@@ -50,15 +57,13 @@ def FindDatabase(filename):
             "compdb", "-c", "compdb.complementers=headerdb", "-p", builddir,
             "update"
         ])
-        buf = os.path.join(builddir, 'compile_commands.tmp.json')
-        with open(buf, 'w') as f:
-            subprocess.call(
-                [
-                    "compdb", "-c", "compdb.complementers=headerdb", "-p",
-                    builddir, "list"
-                ],
-                stdout=f)
-        os.rename(buf, dbname)
+        buf = subprocess.check_output([
+            "compdb", "-c", "compdb.complementers=headerdb", "-p", builddir,
+            "list"
+        ])
+        dbfile = os.path.join(builddir, 'compile_commands.json')
+        with open(dbfile, 'wb') as f:
+            f.write(buf)
 
         return ycm_core.CompilationDatabase(builddir)
     return None
@@ -72,6 +77,6 @@ def FlagsForFile(filename, **kwargs):
     compilation_info = database.GetCompilationInfoForFile(filename)
     final_flags = list(compilation_info.compiler_flags_) or flags
     return {
-        'flags': final_flags,
+        'flags': final_flags + systemflags,
         'include_paths_relative_to_dir': compilation_info.compiler_working_dir_
     }
