@@ -25,6 +25,8 @@ alias relogin='unset ZSHENV_LOADED; exec $SHELL -l'
 
 alias mmv='noglob zmv -W'
 
-alias -g CMAKE_DEV='-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="-fcolor-diagnostics -march=native" -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=gold -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=gold -DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install'
+CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -Wall -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-zero-as-null-pointer-constant -Wno-padded"
+alias -g CMAKE_DEV='-DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install'
+alias -g CMAKE_DEV_ZAPCC='-DCMAKE_CXX_COMPILER=zapcc++ -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install'
 
 (( $+commands[ag] )) && alias todo='ag "//\s*(TODO|FIXME)\b"'
