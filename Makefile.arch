@@ -125,8 +125,9 @@ byobu: repo tmux stow
 
 .PHONY: zsh
 zsh: repo stow
-	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe
+	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe pkgfile
 	@$(PKG-INSTALL) -A pygments-base16
+	@sudo pkgfile --update
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline
 	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || sudo chsh -s $$HOME/bin/zsh-cjk $$USER
