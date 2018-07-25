@@ -218,7 +218,7 @@ hook_add = '''
   let g:ale_echo_msg_error_str = 'E'
   let g:ale_echo_msg_warning_str = 'W'
   let g:ale_cpp_clangcheck_options='-extra-arg=-D__clang_analyzer__'
-  let g:ale_cpp_cppcheck_options='--enable=all --suppress=unusedFunction'
+  let g:ale_cpp_cppcheck_options='--enable=all --suppress=unusedFunction --suppress=syntaxError'
   let g:ale_cpp_clangtidy_checks=[]
   let g:ale_c_clangformat_options = '-fallback-style=Google -style=file -assume-filename=%s'
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
