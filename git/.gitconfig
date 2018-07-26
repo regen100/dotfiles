@@ -5,3 +5,6 @@
 	pager = less -R -F -X
 [push]
 	default = simple
+[cola]
+	spellcheck = true
+	fontdiff = Cica,10,-1,5,50,0,0,0,0,0
