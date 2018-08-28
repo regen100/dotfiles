@@ -19,7 +19,7 @@ repo:
 		makepkg --noconfirm -si; \
 		rm -rf /tmp/aura-bin; \
 	fi
-	@if ! systemctl is-active --quiet reflector.timer; then \
+	@if systemctl >/dev/null && ! systemctl is-active --quiet reflector.timer; then \
 		$(PKG-INSTALL) -A reflector-timer; \
 		sudo mkdir -p /etc/conf.d; \
 		echo COUNTRY=Japan | sudo tee /etc/conf.d/reflector.conf >/dev/null; \
@@ -78,7 +78,7 @@ clang: repo pip stow
 .PHONY: python
 python: repo
 	@$(PKG-INSTALL) -S python-virtualenv python-colorama python-isort yapf flake8 python-hacking
-	@$(PKG-INSTALL) -A direnv flake8-docstrings
+	@$(PKG-INSTALL) -A direnv python-flake8-docstrings
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
