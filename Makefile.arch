@@ -62,7 +62,7 @@ ctags: repo stow
 .PHONY: nvim
 nvim: repo pip ctags stow git
 	@! pacman -Qiq vi >/dev/null 2>&1 || sudo pacman --noconfirm -R vi
-	@$(PKG-INSTALL) -S neovim shellcheck xclip cmake python-neovim the_silver_searcher
+	@$(PKG-INSTALL) -S neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher
 	@$(PKG-INSTALL) -A python-vint neovim-remote neovim-drop-in
 	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
