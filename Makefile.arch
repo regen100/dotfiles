@@ -124,13 +124,13 @@ byobu: repo tmux stow
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
-zsh: repo stow
-	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe pkgfile
+zsh: repo stow wcwidth
+	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe pkgfile wget
 	@$(PKG-INSTALL) -A pygments-base16
 	@sudo pkgfile --update
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline
-	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || sudo chsh -s $$HOME/bin/zsh-cjk $$USER
+	@wcwidth-cjk zsh -ic exit </dev/null
 
 .PHONY: wcwidth
 wcwidth:

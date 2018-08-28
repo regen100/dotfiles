@@ -156,12 +156,12 @@ byobu: repo tmux stow
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
-zsh: pip stow git
-	@$(APT-INSTALL) zsh command-not-found ccze rlwrap
+zsh: pip stow git wcwidth
+	@$(APT-INSTALL) zsh command-not-found ccze rlwrap wget
 	@$(PIP-INSTALL) pygments pygments-base16
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline
-	@[ "$$SHELL" = $$HOME/bin/zsh-cjk ] || sudo chsh -s $$HOME/bin/zsh-cjk $$USER
+	@wcwidth-cjk zsh -ic exit </dev/null
 
 .PHONY: wcwidth
 wcwidth: deb git

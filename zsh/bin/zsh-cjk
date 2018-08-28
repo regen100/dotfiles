@@ -1,4 +1,0 @@
-#!/bin/sh
-
-[ -f /usr/lib/wcwidth-cjk.so ] && export LD_PRELOAD=/usr/lib/wcwidth-cjk.so
-exec /usr/bin/zsh "$@"
