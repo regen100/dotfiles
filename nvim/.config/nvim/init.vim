@@ -139,7 +139,6 @@ autocmd vimrc InsertLeave * set nopaste
 
 autocmd vimrc FileType * setlocal formatoptions-=ro
 
-autocmd vimrc BufRead /usr/include/c++/* setfiletype cpp
 autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
 autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
 autocmd vimrc BufNewFile,BufRead *.nspawn setfiletype systemd
