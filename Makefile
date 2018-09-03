@@ -41,6 +41,10 @@ stow:
 git: stow
 	@$(APT-INSTALL) git
 	@$(STOW-INSTALL) git
+	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
+		echo "[include]" >> ~/.gitconfig; \
+		echo "	path = ~/.gitconfig_global" >> ~/.gitconfig; \
+	fi
 
 .PHONY: ctags
 ctags: deb stow git
