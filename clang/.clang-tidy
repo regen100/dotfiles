@@ -1,5 +1,5 @@
 ---
-Checks: '*,-llvm-header-guard,-llvm-include-order,-google-runtime-references,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic'
+Checks: '*,-llvm-header-guard,-llvm-include-order,-google-runtime-references,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-fuchsia-default-arguments,-hicpp-no-array-decay,-fuchsia-overloaded-operator'
 FormatStyle: file
 HeaderFilterRegex: '.*'
 CheckOptions:
