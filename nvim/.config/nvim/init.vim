@@ -122,6 +122,7 @@ set virtualedit=block
 set ignorecase smartcase incsearch
 set wildmenu
 set showmatch
+set matchpairs& matchpairs+=<:>
 set laststatus=2
 set showcmd
 set hidden
