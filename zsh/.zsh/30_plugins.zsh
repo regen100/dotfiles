@@ -32,6 +32,7 @@ zplug "plugins/common-aliases", from:oh-my-zsh
 zplug "plugins/python", from:oh-my-zsh
 zplug "plugins/pip", from:oh-my-zsh
 zplug "plugins/sudo", from:oh-my-zsh
+zplug "plugins/kubectl", from:oh-my-zsh
 
 if [[ $TERM != "linux" && -z $MYVIMRC ]]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
