@@ -336,7 +336,7 @@ hook_add = '''
   nmap <Leader>A <Plug>(altr-back)
 '''
 hook_post_source = '''
-  call altr#define('%/include/%.hpp', '%/include/*/%.hpp', '%/include/*/*/%.hpp', '%/include/*/*/%.inl.hpp', '%/src/%.hpp', '%/src/%.cpp', '%/test/%Test.cpp', '%/test/%_test.cpp', '%/test/%.cpp')
+  call altr#define('%/include/%.hpp', '%/include/*/%.hpp', '%/include/*/*/%.hpp', '%/include/*/*/%.inl.hpp', '%/src/%.hpp', '%/src/%.h', '%/src/%.cpp', '%/test/%Test.cpp', '%/test/%_test.cpp', '%/test/%.cpp')
 '''
 
 [[plugins]]
