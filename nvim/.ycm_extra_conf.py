@@ -53,14 +53,7 @@ def FindDatabase(filename):
         with open(dbname, 'w') as fp:
             json.dump(filtered, fp)
 
-        subprocess.call([
-            "compdb", "-c", "compdb.complementers=headerdb", "-p", builddir,
-            "update"
-        ])
-        buf = subprocess.check_output([
-            "compdb", "-c", "compdb.complementers=headerdb", "-p", builddir,
-            "list"
-        ])
+        buf = subprocess.check_output(["compdb", "-p", builddir, "list"])
         dbfile = os.path.join(builddir, 'compile_commands.json')
         with open(dbfile, 'wb') as f:
             f.write(buf)
