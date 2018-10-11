@@ -5,3 +5,4 @@ tags
 .direnv
 .lvimrc
 build*/
+.ipynb_checkpoints
