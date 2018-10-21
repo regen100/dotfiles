@@ -41,7 +41,7 @@ stow:
 
 .PHONY: git
 git: stow
-	@$(PKG-INSTALL) -S git
+	@$(PKG-INSTALL) -S git tk
 	@$(STOW-INSTALL) git
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
 		echo "[include]" >> ~/.gitconfig; \
