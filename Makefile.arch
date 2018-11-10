@@ -114,7 +114,7 @@ tmux: git
 		git clone https://git.archlinux.org/svntogit/community.git --single-branch -b packages/tmux; \
 		cd /tmp/community/trunk; \
 		sed -i "s#source=(#source=('https://github.com/z80oolong/diffs/archive/master.zip' #; s/sha256sums=(/sha256sums=('SKIP' /" PKGBUILD; \
-		echo -e "prepare() {\ncd tmux-2.7; patch -Np1 -i ../diffs-master/tmux/tmux-2.7-fix.diff\n}" >> PKGBUILD; \
+		echo -e "prepare() {\ncd tmux-2.8; patch -Np1 -i ../diffs-master/tmux/tmux-2.8-rc-fix.diff\n}" >> PKGBUILD; \
 		makepkg --noconfirm -si; \
 		rm -rf /tmp/community; \
 	fi
