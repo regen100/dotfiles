@@ -174,3 +174,8 @@ gotty: repo
 gdb: repo stow
 	@$(PKG-INSTALL) -S gdb
 	@$(STOW-INSTALL) gdb
+
+.PHONY docker
+docker: repo
+	@$(PKG-INSTALL) -S docker docker-compose
+	@$(STOW-INSTALL) docker
