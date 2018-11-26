@@ -172,9 +172,9 @@ verilog: repo git
 gotty: repo
 	@$(PKG-INSTALL) -A gotty
 
-.PHONY: gdb
-gdb: repo stow
-	@$(PKG-INSTALL) -S gdb
+.PHONY: debug
+debug: repo stow
+	@$(PKG-INSTALL) -S gdb kcachegrind gperftools
 	@$(STOW-INSTALL) gdb
 
 .PHONY docker
