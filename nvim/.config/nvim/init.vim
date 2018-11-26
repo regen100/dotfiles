@@ -134,8 +134,6 @@ set diffopt=filler,vertical
 set splitbelow
 set showbreak=↳\ 
 
-autocmd vimrc QuickfixCmdPost make,grep,grepadd,vimgrep cwindow
-
 autocmd vimrc InsertLeave * set nopaste
 
 autocmd vimrc FileType * setlocal formatoptions-=ro
