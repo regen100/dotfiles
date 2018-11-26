@@ -365,4 +365,7 @@ hook_add = '''
   let g:gundo_prefer_python3 = 1
   nnoremap <Leader>u :<C-u>GundoToggle<CR>
 '''
+
+[[plugins]]
+repo = 'romainl/vim-qf'
 # }}}
