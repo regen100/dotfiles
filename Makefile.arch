@@ -93,8 +93,7 @@ nodejs: repo
 rust: stow
 	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | sh -s -- -y
 	@$$HOME/.cargo/bin/rustup update stable
-	@$$HOME/.cargo/bin/rustup install nightly
-	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview
+	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview clippy
 	@$(STOW-INSTALL) rust
 
 .PHONY: plantuml
