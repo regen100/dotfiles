@@ -36,7 +36,7 @@ utils: repo
 	@$(PKG-INSTALL) -A git-cola
 
 .PHONY: stow
-stow:
+stow: repo
 	@$(PKG-INSTALL) -S stow
 
 .PHONY: git
@@ -49,7 +49,7 @@ git: stow
 	fi
 
 .PHONY: ctags
-ctags: repo stow
+ctags: stow
 	@if ! which ctags > /dev/null; then \
 		cd /tmp; \
 		aura -Aw universal-ctags-git; \
@@ -64,7 +64,7 @@ ctags: repo stow
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
-nvim: repo pip ctags stow git
+nvim: stow pip ctags git
 	@! pacman -Qiq vi >/dev/null 2>&1 || sudo pacman --noconfirm -R vi
 	@$(PKG-INSTALL) -S neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher
 	@$(PKG-INSTALL) -A python-vint neovim-remote neovim-drop-in
@@ -73,14 +73,14 @@ nvim: repo pip ctags stow git
 	@vi --headless "+call dein#install()" +qa
 
 .PHONY: clang
-clang: repo pip stow
+clang: stow pip
 	@$(PKG-INSTALL) -S cmake ninja clang cppcheck ccache
 	@$(PKG-INSTALL) -A compdb
 	@$(PIP-INSTALL) cmakelint
 	@$(STOW-INSTALL) clang
 
 .PHONY: python
-python: repo
+python: stow
 	@$(PKG-INSTALL) -S python-virtualenv python-colorama python-isort yapf flake8 python-hacking
 	@$(PKG-INSTALL) -A direnv python-flake8-docstrings
 	@$(STOW-INSTALL) python readline
@@ -145,12 +145,12 @@ wcwidth:
 	fi
 
 .PHONY: xrdp
-xrdp: repo stow
+xrdp: stow
 	@$(PKG-INSTALL) -A xrdp xorgxrdp-git
 	@$(STOW-INSTALL) xsession
 
 .PHONY: font
-font: repo
+font: stow
 	@$(PKG-INSTALL) -S noto-fonts noto-fonts-cjk noto-fonts-emoji
 	@$(PKG-INSTALL) -A ttf-cica otf-ipaexfont
 	@$(STOW-INSTALL) font
@@ -172,11 +172,11 @@ gotty: repo
 	@$(PKG-INSTALL) -A gotty
 
 .PHONY: debug
-debug: repo stow
+debug: stow
 	@$(PKG-INSTALL) -S gdb kcachegrind gperftools
 	@$(STOW-INSTALL) gdb
 
 .PHONY: docker
-docker: repo
+docker: stow
 	@$(PKG-INSTALL) -S docker docker-compose
 	@$(STOW-INSTALL) docker
