@@ -50,17 +50,7 @@ git: stow
 
 .PHONY: ctags
 ctags: stow
-	@if ! which ctags > /dev/null; then \
-		cd /tmp; \
-		aura -Aw universal-ctags-git; \
-		tar xf universal-ctags-git.tar.gz; \
-		cd universal-ctags-git; \
-		cp $(DOTFILES_DIR).extras/universal-ctags/debian/patches/tex.diff .;\
-		sed -i "s/source=(/source=('tex.diff' /; s/md5sums=(/md5sums=('SKIP' /" PKGBUILD; \
-		echo -e "prepare() {\ncd ctags; patch -Np1 -i ../tex.diff\n}" >> PKGBUILD; \
-		makepkg --noconfirm -si; \
-		rm -rf /tmp/universal-ctags-git*; \
-	fi
+	@$(PKG-INSTALL) -Ax universal-ctags-git
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
