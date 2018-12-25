@@ -1,5 +1,5 @@
 # wcwidth
-[[ -z $LD_PRELOAD && $+commands[wcwidth-cjk] -eq 1 ]] && exec wcwidth-cjk $SHELL -l
+[[ -z $LD_PRELOAD && $+commands[wcwidth-cjk] -eq 1 ]] && exec wcwidth-cjk ${SHELL:-$0} -l
 
 # load settings
 for i in $HOME/.zsh/*.zsh; do

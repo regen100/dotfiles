@@ -70,7 +70,7 @@ nvim: stow pip ctags git
 	@$(PKG-INSTALL) -A python-vint neovim-remote neovim-drop-in
 	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
-	@vi --headless "+call dein#install()" +qa
+	@vi --headless "+call dein#install()" +qa && echo
 
 .PHONY: clang
 clang: stow pip

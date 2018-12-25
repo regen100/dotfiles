@@ -9,7 +9,7 @@ zstyle ":zplug:tag" depth 1
 
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions", hook-load:"ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter"
+zplug "zsh-users/zsh-autosuggestions", hook-load:"ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter", if:"[[ $TERM != linux ]]"
 zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
 zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"git apply $PATCH_DIR/fzf.patch; ./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
 zplug "b4b4r07/enhancd", use:init.sh
@@ -34,7 +34,9 @@ zplug "plugins/pip", from:oh-my-zsh
 zplug "plugins/sudo", from:oh-my-zsh
 zplug "plugins/kubectl", from:oh-my-zsh
 
-if [[ $TERM != "linux" && -z $MYVIMRC ]]; then
+if [[ $TERM = "linux" ]]; then
+  # no theme
+elif [[ $LD_PRELOAD = */wcwidth-cjk.so ]]; then
   zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
 else
   zplug "mafredri/zsh-async"
