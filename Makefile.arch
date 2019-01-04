@@ -1,7 +1,7 @@
 SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
-PKG-INSTALL := yay --noconfirm --needed
+PKG-INSTALL := yay --noconfirm --needed -S
 PIP-INSTALL := sudo python3 -m pip install -U
 STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 
@@ -20,7 +20,7 @@ repo:
 		rm -rf /tmp/yay-bin; \
 	fi
 	@if systemctl >/dev/null && ! systemctl is-active --quiet reflector.timer; then \
-		$(PKG-INSTALL) -S reflector-timer; \
+		$(PKG-INSTALL) reflector-timer; \
 		sudo mkdir -p /etc/conf.d; \
 		echo COUNTRY=Japan | sudo tee /etc/conf.d/reflector.conf >/dev/null; \
 		sudo systemctl enable --now reflector.timer; \
@@ -28,20 +28,19 @@ repo:
 
 .PHONY: pip
 pip: repo
-	@$(PKG-INSTALL) -S python python-pip python-wheel
+	@$(PKG-INSTALL) python python-pip python-wheel
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) -S man htop
-	@$(PKG-INSTALL) -S git-cola
+	@$(PKG-INSTALL) man htop git-cola
 
 .PHONY: stow
 stow: repo
-	@$(PKG-INSTALL) -S stow
+	@$(PKG-INSTALL) stow
 
 .PHONY: git
 git: stow
-	@$(PKG-INSTALL) -S git tk
+	@$(PKG-INSTALL) git tk
 	@$(STOW-INSTALL) git
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
 		echo "[include]" >> ~/.gitconfig; \
@@ -50,34 +49,30 @@ git: stow
 
 .PHONY: ctags
 ctags: stow
-	@$(PKG-INSTALL) -Ax universal-ctags-git
+	@$(PKG-INSTALL) universal-ctags-git
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
 nvim: stow pip ctags git
 	@! pacman -Qiq vi >/dev/null 2>&1 || sudo pacman --noconfirm -R vi
-	@$(PKG-INSTALL) -S neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher vint
-	@$(PKG-INSTALL) -S neovim-remote neovim-drop-in
+	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher vint neovim-remote neovim-drop-in
 	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
 	@vi --headless "+call dein#install()" +qa && echo
 
 .PHONY: clang
-clang: stow pip
-	@$(PKG-INSTALL) -S cmake ninja clang openmp cppcheck ccache
-	@$(PKG-INSTALL) -S compdb
-	@$(PIP-INSTALL) cmakelint
+clang: stow
+	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint
 	@$(STOW-INSTALL) clang
 
 .PHONY: python
 python: stow
-	@$(PKG-INSTALL) -S python-virtualenv python-colorama python-isort yapf flake8 python-hacking
-	@$(PKG-INSTALL) -S direnv python-flake8-docstrings
+	@$(PKG-INSTALL) python-virtualenv python-colorama python-isort yapf flake8 python-hacking direnv python-flake8-docstrings
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
 nodejs: repo
-	@$(PKG-INSTALL) -S nodejs npm
+	@$(PKG-INSTALL) nodejs npm
 
 .PHONY: rust
 rust: stow
@@ -88,12 +83,11 @@ rust: stow
 
 .PHONY: plantuml
 plantuml: repo
-	@$(PKG-INSTALL) -S jdk8-openjdk
-	@$(PKG-INSTALL) -S plantuml
+	@$(PKG-INSTALL) jdk8-openjdk plantuml
 
 .PHONY: latex
 latex: repo font
-	@$(PKG-INSTALL) -S texlive-most texlive-langjapanese qpdfview poppler-data
+	@$(PKG-INSTALL) texlive-most texlive-langjapanese qpdfview poppler-data
 	@kanji-config-updmap-sys auto
 
 .PHONY: tmux
@@ -110,7 +104,7 @@ tmux: git
 
 .PHONY: byobu
 byobu: repo tmux stow
-	@$(PKG-INSTALL) -S byobu
+	@$(PKG-INSTALL) byobu
 	@$(CHANGE_USER) mkdir -p ~/.config
 	@$(STOW-INSTALL) byobu
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
@@ -118,8 +112,7 @@ byobu: repo tmux stow
 
 .PHONY: zsh
 zsh: repo stow wcwidth
-	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip
-	@$(PKG-INSTALL) -S pygments-base16
+	@$(PKG-INSTALL) zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip pygments-base16
 	@sudo pkgfile --update
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline
@@ -136,18 +129,17 @@ wcwidth:
 
 .PHONY: xrdp
 xrdp: stow
-	@$(PKG-INSTALL) -S xrdp xorgxrdp-git
+	@$(PKG-INSTALL) xrdp xorgxrdp-git
 	@$(STOW-INSTALL) xsession
 
 .PHONY: font
 font: stow
-	@$(PKG-INSTALL) -S noto-fonts noto-fonts-cjk noto-fonts-emoji
-	@$(PKG-INSTALL) -S ttf-cica otf-ipaexfont
+	@$(PKG-INSTALL) noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-cica otf-ipaexfont
 	@$(STOW-INSTALL) font
 
 .PHONY: verilog
 verilog: repo git
-	@$(PKG-INSTALL) -S iverilog gtkwave
+	@$(PKG-INSTALL) iverilog gtkwave
 	@if ! which iStyle >/dev/null; then \
 		cd /tmp; \
 		git clone -b v1.21 https://github.com/thomasrussellmurphy/istyle-verilog-formatter.git; \
@@ -159,14 +151,13 @@ verilog: repo git
 
 .PHONY: gotty
 gotty: repo
-	@$(PKG-INSTALL) -S gotty
+	@$(PKG-INSTALL) gotty
 
 .PHONY: debug
 debug: stow
-	@$(PKG-INSTALL) -S gdb kcachegrind gperftools
+	@$(PKG-INSTALL) gdb kcachegrind gperftools
 	@$(STOW-INSTALL) gdb
 
 .PHONY: docker
 docker: repo
-	@$(PKG-INSTALL) -S docker docker-compose
-	@$(PKG-INSTALL) -S hadolint-bin
+	@$(PKG-INSTALL) docker docker-compose hadolint-bin
