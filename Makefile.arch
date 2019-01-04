@@ -1,7 +1,7 @@
 SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
-PKG-INSTALL := sudo aura --noconfirm --needed
+PKG-INSTALL := yay --noconfirm --needed
 PIP-INSTALL := sudo python3 -m pip install -U
 STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 
@@ -12,15 +12,15 @@ all:
 .PHONY: repo
 repo:
 	@which git >/dev/null || sudo pacman --noconfirm -S git
-	@if ! which aura >/dev/null; then \
+	@if ! which yay >/dev/null; then \
 		cd /tmp; \
-		git clone https://aur.archlinux.org/aura-bin.git; \
-		cd aura-bin; \
+		git clone https://aur.archlinux.org/yay-bin.git; \
+		cd yay-bin; \
 		makepkg --noconfirm -si; \
-		rm -rf /tmp/aura-bin; \
+		rm -rf /tmp/yay-bin; \
 	fi
 	@if systemctl >/dev/null && ! systemctl is-active --quiet reflector.timer; then \
-		$(PKG-INSTALL) -A reflector-timer; \
+		$(PKG-INSTALL) -S reflector-timer; \
 		sudo mkdir -p /etc/conf.d; \
 		echo COUNTRY=Japan | sudo tee /etc/conf.d/reflector.conf >/dev/null; \
 		sudo systemctl enable --now reflector.timer; \
@@ -33,7 +33,7 @@ pip: repo
 .PHONY: utils
 utils: repo
 	@$(PKG-INSTALL) -S htop
-	@$(PKG-INSTALL) -A git-cola
+	@$(PKG-INSTALL) -S git-cola
 
 .PHONY: stow
 stow: repo
@@ -57,7 +57,7 @@ ctags: stow
 nvim: stow pip ctags git
 	@! pacman -Qiq vi >/dev/null 2>&1 || sudo pacman --noconfirm -R vi
 	@$(PKG-INSTALL) -S neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher
-	@$(PKG-INSTALL) -A python-vint neovim-remote neovim-drop-in
+	@$(PKG-INSTALL) -S python-vint neovim-remote neovim-drop-in
 	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
 	@vi --headless "+call dein#install()" +qa && echo
@@ -65,14 +65,14 @@ nvim: stow pip ctags git
 .PHONY: clang
 clang: stow pip
 	@$(PKG-INSTALL) -S cmake ninja clang cppcheck ccache
-	@$(PKG-INSTALL) -A compdb
+	@$(PKG-INSTALL) -S compdb
 	@$(PIP-INSTALL) cmakelint
 	@$(STOW-INSTALL) clang
 
 .PHONY: python
 python: stow
 	@$(PKG-INSTALL) -S python-virtualenv python-colorama python-isort yapf flake8 python-hacking
-	@$(PKG-INSTALL) -A direnv python-flake8-docstrings
+	@$(PKG-INSTALL) -S direnv python-flake8-docstrings
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
@@ -89,7 +89,7 @@ rust: stow
 .PHONY: plantuml
 plantuml: repo
 	@$(PKG-INSTALL) -S jdk8-openjdk
-	@$(PKG-INSTALL) -A plantuml
+	@$(PKG-INSTALL) -S plantuml
 
 .PHONY: latex
 latex: repo font
@@ -110,7 +110,7 @@ tmux: git
 
 .PHONY: byobu
 byobu: repo tmux stow
-	@$(PKG-INSTALL) -A byobu
+	@$(PKG-INSTALL) -S byobu
 	@$(CHANGE_USER) mkdir -p ~/.config
 	@$(STOW-INSTALL) byobu
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
@@ -119,7 +119,7 @@ byobu: repo tmux stow
 .PHONY: zsh
 zsh: repo stow wcwidth
 	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe pkgfile wget
-	@$(PKG-INSTALL) -A pygments-base16
+	@$(PKG-INSTALL) -S pygments-base16
 	@sudo pkgfile --update
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline
@@ -136,13 +136,13 @@ wcwidth:
 
 .PHONY: xrdp
 xrdp: stow
-	@$(PKG-INSTALL) -A xrdp xorgxrdp-git
+	@$(PKG-INSTALL) -S xrdp xorgxrdp-git
 	@$(STOW-INSTALL) xsession
 
 .PHONY: font
 font: stow
 	@$(PKG-INSTALL) -S noto-fonts noto-fonts-cjk noto-fonts-emoji
-	@$(PKG-INSTALL) -A ttf-cica otf-ipaexfont
+	@$(PKG-INSTALL) -S ttf-cica otf-ipaexfont
 	@$(STOW-INSTALL) font
 
 .PHONY: verilog
@@ -159,7 +159,7 @@ verilog: repo git
 
 .PHONY: gotty
 gotty: repo
-	@$(PKG-INSTALL) -A gotty
+	@$(PKG-INSTALL) -S gotty
 
 .PHONY: debug
 debug: stow
