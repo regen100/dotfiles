@@ -32,7 +32,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) -S htop
+	@$(PKG-INSTALL) -S man htop
 	@$(PKG-INSTALL) -S git-cola
 
 .PHONY: stow
@@ -64,7 +64,7 @@ nvim: stow pip ctags git
 
 .PHONY: clang
 clang: stow pip
-	@$(PKG-INSTALL) -S cmake ninja clang cppcheck ccache
+	@$(PKG-INSTALL) -S cmake ninja clang openmp cppcheck ccache
 	@$(PKG-INSTALL) -S compdb
 	@$(PIP-INSTALL) cmakelint
 	@$(STOW-INSTALL) clang
@@ -118,7 +118,7 @@ byobu: repo tmux stow
 
 .PHONY: zsh
 zsh: repo stow wcwidth
-	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe pkgfile wget
+	@$(PKG-INSTALL) -S zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip
 	@$(PKG-INSTALL) -S pygments-base16
 	@sudo pkgfile --update
 	@mkdir -p ~/bin
