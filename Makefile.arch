@@ -49,7 +49,7 @@ git: stow
 
 .PHONY: ctags
 ctags: stow
-	@$(PKG-INSTALL) universal-ctags-git
+	@$(PKG-INSTALL) --mflags "--nocheck" universal-ctags-git
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
