@@ -167,6 +167,6 @@ debug: stow
 	@$(STOW-INSTALL) gdb
 
 .PHONY: docker
-docker: stow
+docker: repo
 	@$(PKG-INSTALL) -S docker docker-compose
-	@$(STOW-INSTALL) docker
+	@$(PKG-INSTALL) -S hadolint-bin
