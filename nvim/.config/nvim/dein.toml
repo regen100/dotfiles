@@ -327,6 +327,9 @@ repo = 'christoomey/vim-tmux-navigator'
 
 [[plugins]]
 repo = 'ludovicchabant/vim-gutentags'
+hook_add = '''
+  let g:gutentags_ctags_exclude = ['build/*']
+'''
 
 [[plugins]]
 repo = 'SirVer/ultisnips'
