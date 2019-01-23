@@ -39,6 +39,8 @@ unsetopt flow_control
 
 setopt interactivecomments
 
+setopt magic_equal_subst
+
 autoload -Uz zmv
 
 REPORTTIME=3
