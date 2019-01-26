@@ -1,0 +1,79 @@
+#!/bin/bash
+
+install_init() {
+  loadkeys jp106
+  timedatectl set-ntp true
+  wget "https://www.archlinux.org/mirrorlist/?country=JP&protocol=http&protocol=https&ip_version=4&ip_version=6" -O /etc/pacman.d/mirrorlist
+  sed -ie "s/^#Server/Server/" /etc/pacman.d/mirrorlist
+}
+
+install_checkmode() {
+  if [[ -d /sys/firmware/efi/efivars ]]; then
+    echo "EFI"
+  else
+    echo "BIOS"
+  fi
+}
+
+install_partition() {
+  umount /mnt/boot 2>/dev/null
+  umount /mnt 2>/dev/null
+  sgdisk -Z -n "0::+512M" -t 0:ef00 -n "0::" -t 0:8300 -p /dev/sda
+  mkfs.fat -F32 /dev/sda1
+  mkfs.ext4 -F /dev/sda2
+}
+
+install_mount() {
+  mount /dev/sda2 /mnt
+  mkdir -p /mnt/boot
+  mount /dev/sda1 /mnt/boot
+}
+
+install_system() {
+  pacstrap /mnt base base-devel grub efibootmgr git zsh
+}
+
+install_setup() {
+  genfstab -U /mnt >> /mnt/etc/fstab
+  arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+  arch-chroot /mnt hwclock --systohc --utc
+  sed -E 's/^#(en_US|ja_JP)\.UTF-8/\1.UTF-8/' -i /mnt/etc/locale.gen
+  arch-chroot /mnt locale-gen
+  echo LANG=en_US.UTF-8 > /mnt/etc/locale.conf
+  echo KEYMAP=jp106 > /mnt/etc/vconsole.conf
+  echo mkinitcpio -p linux
+
+  sed -E 's/^# (%wheel ALL=\(ALL\) ALL)/\1/; s/^# (Defaults env_keep \+= "HOME")/\1/' -i /mnt/etc/sudoers
+}
+
+install_hostname() {
+  if [[ -z $1 ]]; then
+    echo "usage: install_hostname HOSTNAME"
+    return 1
+  fi
+
+  echo "$1" > /mnt/etc/hostname
+  cat << EOS > /mnt/etc/hosts
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	$1.localdomain	$1
+EOS
+}
+
+install_bootloader() {
+  arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
+  arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+  mkdir /mnt/boot/EFI/boot
+  cp /mnt/boot/EFI/grub/grubx64.efi /mnt/boot/EFI/boot/bootx64.efi
+}
+
+install_user() {
+  if [[ -z $1 ]]; then
+    echo "usage: install_user USER"
+    return 1
+  fi
+
+  arch-chroot /mnt useradd -m -g wheel -s /bin/zsh "$1"
+  arch-chroot /mnt passwd "$1"
+  arch-chroot /mnt su "$1" -c "git clone https://github.com/regen100/dotfiles.git ~/dotfiles"
+}
