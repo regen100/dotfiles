@@ -61,11 +61,16 @@ ctags: stow
 
 .PHONY: nvim
 nvim: stow pip ctags git
-	@! pacman -Qiq vi >/dev/null 2>&1 || sudo pacman --noconfirm -R vi
+	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher vint neovim-remote neovim-drop-in
 	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
-	@vi --headless "+call dein#install()" +qa && echo
+	@vi --headless "+call dein#install()" +qa; echo
+	@if [ ! -f ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe/third_party/ycmd/ycm_core.so ]; then \↲
+		cmd=$$(grep YouCompleteMe $(DOTFILES_DIR)nvim/.config/nvim/dein.toml -A5 | grep ^build | sed -E "s/.+'(.+)'/\1/"); \↲
+		cd ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe; \↲
+		PATH="~/.cargo/bin:$$PATH" sh -c "$$cmd"; \↲
+	fi↲
 
 .PHONY: clang
 clang: stow
