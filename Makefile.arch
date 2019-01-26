@@ -9,6 +9,13 @@ STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 .PHONY: all
 all:
 
+.PHONY system
+system:
+	@sudo systemctl --now enable dhcpcd@enp0s3.service
+	@sudo timedatectl set-ntp true
+	@sudo pacman -S openssh
+	@sudo systemctl --now enable sshd
+
 .PHONY: repo
 repo:
 	@which git >/dev/null || sudo pacman --noconfirm -S git
