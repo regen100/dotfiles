@@ -47,6 +47,7 @@ utils: stow
 .PHONY: stow
 stow: repo
 	@$(PKG-INSTALL) stow
+	@mkdir -p ~/.config
 
 .PHONY: git
 git: stow
@@ -66,7 +67,6 @@ ctags: stow
 nvim: stow pip ctags git
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher vint neovim-remote neovim-drop-in
-	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
 	@vi --headless "+call dein#install()" +qa; echo
 	@if [ ! -f ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe/third_party/ycmd/ycm_core.so ]; then \↲
@@ -120,7 +120,6 @@ tmux: git
 .PHONY: byobu
 byobu: repo tmux stow
 	@$(PKG-INSTALL) byobu
-	@$(CHANGE_USER) mkdir -p ~/.config
 	@$(STOW-INSTALL) byobu
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
@@ -163,10 +162,6 @@ verilog: repo git
 		cp bin/release/iStyle /usr/local/bin; \
 		rm -rf $$(pwd); \
 	fi
-
-.PHONY: gotty
-gotty: repo
-	@$(PKG-INSTALL) gotty
 
 .PHONY: debug
 debug: stow
