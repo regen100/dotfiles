@@ -9,11 +9,11 @@ STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 .PHONY: all
 all:
 
-.PHONY system
+.PHONY: system
 system:
 	@sudo systemctl --now enable dhcpcd@enp0s3.service
 	@sudo timedatectl set-ntp true
-	@sudo pacman -S openssh
+	@sudo pacman -S openssh xorg-xauth
 	@sudo sed -ie 's/#X11Forwarding .*/X11Forwarding yes/' /etc/ssh/sshd_config
 	@sudo systemctl --now enable sshd
 	@touch ~/.Xauthority
