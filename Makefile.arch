@@ -40,8 +40,9 @@ pip: repo
 	@$(PKG-INSTALL) python python-pip python-wheel
 
 .PHONY: utils
-utils: repo
+utils: stow
 	@$(PKG-INSTALL) man htop git-cola
+	@$(STOW-INSTALL) htop
 
 .PHONY: stow
 stow: repo
