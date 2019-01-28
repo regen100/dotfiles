@@ -23,7 +23,6 @@ system:
 
 .PHONY: repo
 repo:
-	@which git >/dev/null || sudo pacman --noconfirm -S git
 	@if ! which yay >/dev/null; then \
 		cd /tmp; \
 		git clone https://aur.archlinux.org/yay-bin.git; \
@@ -31,6 +30,9 @@ repo:
 		makepkg --noconfirm -si; \
 		rm -rf /tmp/yay-bin; \
 	fi
+	@mkdir -p ~/.config
+	@$(PKG-INSTALL) stow
+	@$(STOW-INSTALL) pacman
 	@if systemctl >/dev/null && ! systemctl is-active --quiet reflector.timer; then \
 		$(PKG-INSTALL) reflector-timer; \
 		sudo mkdir -p /etc/conf.d; \
@@ -43,17 +45,12 @@ pip: repo
 	@$(PKG-INSTALL) python python-pip python-wheel
 
 .PHONY: utils
-utils: stow
+utils: repo
 	@$(PKG-INSTALL) man htop git-cola
 	@$(STOW-INSTALL) htop
 
-.PHONY: stow
-stow: repo
-	@$(PKG-INSTALL) stow
-	@mkdir -p ~/.config
-
 .PHONY: git
-git: stow
+git: repo
 	@$(PKG-INSTALL) git tk
 	@$(STOW-INSTALL) git
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
@@ -62,12 +59,12 @@ git: stow
 	fi
 
 .PHONY: ctags
-ctags: stow
+ctags: repo
 	@$(PKG-INSTALL) --mflags "--nocheck" universal-ctags-git
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
-nvim: stow pip ctags git
+nvim: repo pip ctags git
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher vint neovim-remote neovim-drop-in
 	@$(STOW-INSTALL) nvim
@@ -79,12 +76,12 @@ nvim: stow pip ctags git
 	fi↲
 
 .PHONY: clang
-clang: stow
+clang: repo
 	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint
 	@$(STOW-INSTALL) clang
 
 .PHONY: python
-python: stow
+python: repo
 	@$(PKG-INSTALL) python-virtualenv python-colorama python-isort yapf flake8 python-hacking direnv python-flake8-docstrings
 	@$(STOW-INSTALL) python readline
 
@@ -93,7 +90,7 @@ nodejs: repo
 	@$(PKG-INSTALL) nodejs npm
 
 .PHONY: rust
-rust: stow
+rust: repo
 	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | sh -s -- -y
 	@$$HOME/.cargo/bin/rustup update stable
 	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview clippy
@@ -121,14 +118,14 @@ tmux: git
 	fi
 
 .PHONY: byobu
-byobu: repo tmux stow
+byobu: repo tmux
 	@$(PKG-INSTALL) byobu
 	@$(STOW-INSTALL) byobu
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
-zsh: repo stow wcwidth
+zsh: repo wcwidth
 	@$(PKG-INSTALL) zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip pygments-base16
 	@sudo pkgfile --update
 	@mkdir -p ~/bin
@@ -145,12 +142,12 @@ wcwidth:
 	fi
 
 .PHONY: xrdp
-xrdp: stow
+xrdp: repo
 	@$(PKG-INSTALL) xrdp xorgxrdp-git
 	@$(STOW-INSTALL) xsession
 
 .PHONY: font
-font: stow
+font: repo
 	@$(PKG-INSTALL) noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-cica otf-ipaexfont
 	@$(STOW-INSTALL) font
 
@@ -167,7 +164,7 @@ verilog: repo git
 	fi
 
 .PHONY: debug
-debug: stow
+debug: repo
 	@$(PKG-INSTALL) gdb kcachegrind gperftools
 	@$(STOW-INSTALL) gdb
 
