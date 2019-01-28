@@ -13,10 +13,13 @@ all:
 system:
 	@sudo systemctl --now enable dhcpcd@enp0s3.service
 	@sudo timedatectl set-ntp true
-	@sudo pacman -S openssh xorg-xauth
+	@sudo pacman --noconfirm --needed -S openssh xorg-xauth
 	@sudo sed -ie 's/#X11Forwarding .*/X11Forwarding yes/' /etc/ssh/sshd_config
 	@sudo systemctl --now enable sshd
 	@touch ~/.Xauthority
+	@if lscpu | grep GenuineIntel >/dev/null; then sudo pacman --noconfirm --needed -S intel-ucode; fi
+	@if lscpu | grep AuthenticAMD >/dev/null; then sudo pacman --noconfirm --needed -S amd-ucode; fi
+	@sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 .PHONY: repo
 repo:
