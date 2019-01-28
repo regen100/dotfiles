@@ -64,16 +64,16 @@ ctags: repo
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
-nvim: repo pip ctags git
+nvim: # repo pip ctags git
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim python2-neovim the_silver_searcher vint neovim-remote neovim-drop-in
 	@$(STOW-INSTALL) nvim
 	@vi --headless "+call dein#install()" +qa; echo
-	@if [ ! -f ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe/third_party/ycmd/ycm_core.so ]; then \↲
-		cmd=$$(grep YouCompleteMe $(DOTFILES_DIR)nvim/.config/nvim/dein.toml -A5 | grep ^build | sed -E "s/.+'(.+)'/\1/"); \↲
-		cd ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe; \↲
-		PATH="~/.cargo/bin:$$PATH" sh -c "$$cmd"; \↲
-	fi↲
+	@if [ ! -f ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe/third_party/ycmd/ycm_core.so ] ; then \
+		cmd=$$(grep YouCompleteMe $(DOTFILES_DIR)nvim/.config/nvim/dein.toml -A5 | grep ^build | sed -E "s/.+'(.+)'/\1/"); \
+		cd ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe; \
+		PATH="~/.cargo/bin:$$PATH" sh -c "$$cmd"; \
+	fi
 
 .PHONY: clang
 clang: repo
