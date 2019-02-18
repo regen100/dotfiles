@@ -24,8 +24,6 @@ if [[ -z $ZSHENV_LOADED ]]; then
 
   [[ -f $HOME/.cargo/env ]] && source $HOME/.cargo/env
 
-  export CCACHE_SLOPPINESS=pch_defines,time_macros
-
   export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 
   export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp'
