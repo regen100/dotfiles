@@ -14,7 +14,6 @@ rationalise-dot() {
 zle -N rationalise-dot
 bindkey . rationalise-dot
 
-is-in-git() git rev-parse 2>/dev/null
 default-enter() {
   if [[ -n $BUFFER ]]; then
     ENTER_COUNT=0
@@ -25,13 +24,13 @@ default-enter() {
   local cmd
   while [[ -z $cmd ]]; do
     case $[ENTER_COUNT++] in
-      0) cmd="ls_abbrev" ;;
-      1) is-in-git && cmd="git status --short --branch" ;;
-      2) is-in-git && cmd="git --no-pager log --graph --decorate --oneline -n 5" ;;
+      0) cmd="pwd && ls_abbrev" ;;
+      1) cmd="git status --short --branch" ;;
+      2) cmd="git --no-pager log --graph --decorate --oneline -n 5" ;;
       *) return 1 ;;
     esac
   done
-  echo && eval $cmd
+  echo && eval "$cmd"
   zle reset-prompt
 }
 zle -N default-enter
@@ -62,12 +61,12 @@ key[PageDown]=${terminfo[knp]}
 [[ -n "${key[PageUp]}"   ]]  && bindkey  "${key[PageUp]}"   beginning-of-buffer-or-history
 [[ -n "${key[PageDown]}" ]]  && bindkey  "${key[PageDown]}" end-of-buffer-or-history
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-    function zle-line-init () {
-        printf '%s' "${terminfo[smkx]}"
-    }
-    function zle-line-finish () {
-        printf '%s' "${terminfo[rmkx]}"
-    }
-    zle -N zle-line-init
-    zle -N zle-line-finish
+  function zle-line-init () {
+    printf '%s' "${terminfo[smkx]}"
+  }
+  function zle-line-finish () {
+    printf '%s' "${terminfo[rmkx]}"
+  }
+  zle -N zle-line-init
+  zle -N zle-line-finish
 fi

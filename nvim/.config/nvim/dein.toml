@@ -155,7 +155,7 @@ repo = 'tpope/vim-fugitive'
 [[plugins]]
 repo = 'Valloric/YouCompleteMe'
 type__depth = 1
-build = 'python3 install.py $( which clang >/dev/null && echo "--clang-completer") $( which npm >/dev/null && echo "--js-completer" ) $( which cargo >/dev/null && echo "--rust-completer")'
+build = 'python3 install.py $(which clang >/dev/null && echo "--clang-completer") $(which npm >/dev/null && echo "--js-completer") $(which cargo >/dev/null && echo "--rust-completer")'
 hook_add = '''
   let g:ycm_python_binary_path = executable('python3') ? 'python3' : 'python'
   let g:ycm_global_ycm_extra_conf = expand('~/.ycm_extra_conf.py')
@@ -215,8 +215,6 @@ hook_add = '''
 repo = 'w0rp/ale'
 hook_add = '''
   let g:ale_sign_column_always = 1
-  let g:ale_echo_msg_error_str = 'E'
-  let g:ale_echo_msg_warning_str = 'W'
   let g:ale_cpp_clangcheck_options='-extra-arg=-D__clang_analyzer__'
   let g:ale_cpp_cppcheck_options='--enable=all --suppress=unusedFunction --suppress=syntaxError'
   let g:ale_cpp_clangtidy_checks=[]

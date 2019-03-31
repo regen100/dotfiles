@@ -8,12 +8,6 @@ if [[ -z $ZSHENV_LOADED ]]; then
   path=($HOME/bin(N-/) $HOME/.local/bin(N-/) $HOME/.linuxbrew/bin(N-/) $HOME/.linuxbrew/sbin(N-/) /opt/VirtualGL/bin(N-/) /snap/bin(N-/) /usr/local/cuda/bin(N-/) $path)
   path=(./node_modules/.bin $path)
 
-  llvm_dirs=(/usr/lib/llvm-*(N-/))
-  if [[ -n $llvm_dirs ]]; then
-    export LLVM_DIR=$(ls -td $llvm_dirs | head -1)
-    path=($LLVM_DIR/bin(N-/) $path)
-  fi
-
   export LESS='-giMRSW -z-4 -x4 -j4'
   export EDITOR=vim
   export VISUAL=vim

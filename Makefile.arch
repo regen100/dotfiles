@@ -51,7 +51,7 @@ utils: repo
 
 .PHONY: git
 git: repo
-	@$(PKG-INSTALL) git tk
+	@$(PKG-INSTALL) git tk git-extras gibo
 	@$(STOW-INSTALL) git
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
 		echo "[include]" >> ~/.gitconfig; \

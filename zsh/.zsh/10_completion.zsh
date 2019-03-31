@@ -16,12 +16,8 @@ zstyle ':completion:*:warnings' format '%F{red}No matches for:%f %F{green}%d%f'
 zstyle ':completion:*:descriptions' format '%U%F{green}%d%f%u'
 zstyle ':completion:*:corrections' format '%U%F{green}%d%f%u %F{red}(errors:%e)%f'
 
-autoload -U bashcompinit && bashcompinit
-export -f _have() { which "$@" >/dev/null }
-
-if [[ -n $LLVM_DIR && -f $LLVM_DIR/share/clang/bash-autocomplete.sh ]]; then
-  source "$LLVM_DIR/share/clang/bash-autocomplete.sh"
-fi
+# autoload -U bashcompinit && bashcompinit
+# export -f _have() { which "$@" >/dev/null }
 
 if (( $+commands[rustc] )); then
   fpath+=$(rustc --print sysroot)/share/zsh/site-functions
