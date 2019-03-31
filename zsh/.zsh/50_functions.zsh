@@ -2,37 +2,6 @@ wttr() {
   curl -H "Accept-Language: ${LANG%_*}" "wttr.in/${1}"
 }
 
-lxce() {
-  lxc exec "$1" -- sudo --login --user ubuntu
-}
-_lxce() {
-  local -a _containers
-  _containers=(${(@f)"$(_call_program repositories lxc list --format csv -c ns | grep ,RUNNING | cut -d, -f1)"})
-  _describe -t containers 'Running Containers' _containers
-}
-compdef _lxce lxce
-
-cd-lxd() {
-  local abspath=/var/snap/lxd/common/lxd/containers/$1/rootfs/$2
-  [[ -d $abspath ]] && cd $abspath
-}
-_cd-lxd() {
-  local context state state_descr line
-  typeset -A opt_args
-  _arguments '1: :->containers' '2: :->path'
-  case $state in
-    containers)
-      local -a _containers=(${(@f)"$(_call_program repositories lxc list --format csv -c n)"})
-      _describe -t containers containers _containers
-      ;;
-    path)
-      _path_files -/ -W /var/snap/lxd/common/lxd/containers/$line[1]/rootfs
-      ;;
-  esac
-}
-compdef _cd-lxd cd-lxd
-alias cdl=cd-lxd
-
 get_tty() {
   local tty
   if [[ -n $TMUX ]]; then

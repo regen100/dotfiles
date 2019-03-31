@@ -12,19 +12,17 @@ zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions", hook-load:"ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter", if:"[[ $TERM != linux ]]"
 zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
 zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"git apply $PATCH_DIR/fzf.patch; ./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
-zplug "b4b4r07/enhancd", use:init.sh
+# zplug "b4b4r07/enhancd", use:init.sh
 zplug "modules/command-not-found", from:prezto, hook-load:"export COMMAND_NOT_FOUND_INSTALL_PROMPT=1"
-zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
+# zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
 zplug "docker/compose", use:contrib/completion/zsh, if:"(( $+commands[docker-compose] ))"
 zplug "rust-lang/zsh-config", if:"(( $+commands[rustc] ))"
 zplug "lukechilds/zsh-better-npm-completion", if:"(( $+commands[npm] ))"
 zplug "caarlos0/zsh-mkc"
 zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >/dev/null 2>&1"
 zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
-zplug "tj/git-extras", at:"4.5.0", use:"etc/git-extras-completion.zsh", hook-build:"make install PREFIX=$HOME/.local"
-zplug "mollifier/cd-gitroot", hook-load:"alias cdu=cd-gitroot"
+zplug "tj/git-extras", use:"etc/git-extras-completion.zsh"
 zplug "takaaki-kasai/git-foresta", as:command, hook-build:"git apply $PATCH_DIR/git-foresta.patch"
-zplug "simonwhitaker/gibo", use:gibo, as:command, hook-build:"ln -sf gibo-completion.zsh shell-completions/_gibo", hook-load:"fpath=($ZPLUG_REPOS/simonwhitaker/gibo/shell-completions $fpath)"
 zplug "kwhrtsk/docker-fzf-completion", if:"(( $+commands[docker] ))"
 
 zplug "plugins/colored-man-pages", from:oh-my-zsh
@@ -64,7 +62,7 @@ zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
 zplug load
 
 typeset -x MANPATH
-manpath=($ZPLUG_ROOT/doc/man(N-/) $ZPLUG_ROOT/repos/junegunn/fzf/man(N-/) $ZPLUG_ROOT/repos/tj/git-extras/man(N-/) $HOME/.local/share/man(N-/) "")
+manpath=($ZPLUG_ROOT/doc/man(N-/) $ZPLUG_ROOT/repos/junegunn/fzf/man(N-/) $HOME/.local/share/man(N-/) "")
 
 # FZF
 if (( $+commands[ag] )); then
