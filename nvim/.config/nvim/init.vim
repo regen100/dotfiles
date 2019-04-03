@@ -142,6 +142,7 @@ autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
 autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
 autocmd vimrc BufNewFile,BufRead *.nspawn setfiletype systemd
 autocmd vimrc BufNewFile,BufRead .clang-tidy,.clang-format setfiletype yaml
+autocmd vimrc BufNewFile,BufRead *.pbtxt setfiletype proto
 
 " https://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
 augroup vimrc-auto-mkdir  " {{{
