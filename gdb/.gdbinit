@@ -27,3 +27,15 @@ except:
 end
 
 source ~/.cache/gdb/dashboard
+
+define hookpost-up
+dashboard
+end
+
+define hookpost-down
+dashboard
+end
+
+define hookpost-frame
+dashboard
+end
