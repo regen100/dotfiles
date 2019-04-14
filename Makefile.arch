@@ -106,20 +106,8 @@ latex: repo font
 	@$(PKG-INSTALL) texlive-most texlive-langjapanese qpdfview poppler-data
 	@kanji-config-updmap-sys auto
 
-.PHONY: tmux
-tmux: git
-	@if ! which tmux >/dev/null; then \
-		cd /tmp; \
-		git clone https://git.archlinux.org/svntogit/community.git --single-branch -b packages/tmux; \
-		cd /tmp/community/trunk; \
-		sed -i "s#source=(#source=('https://github.com/z80oolong/diffs/archive/master.zip' #; s/sha256sums=(/sha256sums=('SKIP' /" PKGBUILD; \
-		echo -e "prepare() {\ncd tmux-2.8; patch -Np1 -i ../diffs-master/tmux/tmux-2.8-rc-fix.diff\n}" >> PKGBUILD; \
-		makepkg --noconfirm -si; \
-		rm -rf /tmp/community; \
-	fi
-
 .PHONY: byobu
-byobu: repo tmux
+byobu: repo
 	@$(PKG-INSTALL) byobu
 	@$(STOW-INSTALL) byobu
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
