@@ -127,7 +127,7 @@ byobu: repo tmux
 
 .PHONY: zsh
 zsh: repo wcwidth
-	@$(PKG-INSTALL) zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip pygments-base16
+	@$(PKG-INSTALL) zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip pygments-base16 fzf subversion
 	@sudo pkgfile --update
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline

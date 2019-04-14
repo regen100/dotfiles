@@ -1,74 +1,39 @@
+mkdir  -p ~/.zplugin
+[[ -d ~/.zplugin/bin ]] || git clone https://github.com/zdharma/zplugin.git ~/.zplugin/bin
+source ~/.zplugin/bin/zplugin.zsh
+
 PATCH_DIR=$(dirname $0)/patches
 
-if [[ ! -d ~/.zplug ]]; then
-  git clone https://github.com/zplug/zplug ~/.zplug
-fi
-source ~/.zplug/init.zsh
+zplugin light zsh-users/zsh-completions
+zplugin ice atload'COMMAND_NOT_FOUND_INSTALL_PROMPT=1'; zplugin snippet PZT::modules/command-not-found/init.zsh
+zplugin ice as'completion' if'(( $+commands[docker-compose] ))'; zplugin snippet https://github.com/docker/compose/raw/master/contrib/completion/zsh/_docker-compose
+zplugin ice if'(( $+commands[rustc] ))'; zplugin light rust-lang/zsh-config
+zplugin light caarlos0/zsh-mkc
+zplugin snippet https://github.com/tj/git-extras/raw/master/etc/git-extras-completion.zsh
+zplugin ice as'program' atclone"git apply $PATCH_DIR/git-foresta.patch" atpull'%atclone'; zplugin light takaaki-kasai/git-foresta
+zplugin snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
+zplugin snippet OMZ::plugins/sudo/sudo.plugin.zsh
+zplugin snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
+zplugin ice pick'async.zsh' src'pure.zsh' if'[[ $TERM != linux ]]'; zplugin light sindresorhus/pure
+zplugin ice lucid wait'0'; zplugin light /usr/share/fzf
+zplugin ice lucid wait'0'; zplugin snippet OMZ::plugins/git/git.plugin.zsh
+zplugin ice lucid wait'0' atload'[[ -r ~/.base16_theme ]] || base16_default-dark'; zplugin light chriskempson/base16-shell
+zplugin ice lucid wait'0' atload'ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter; _zsh_autosuggest_start' if'[[ $TERM != linux ]]'; zplugin light zsh-users/zsh-autosuggestions
+zplugin ice lucid wait'0' atinit'zpcompinit; zpcdreplay'; zplugin light zdharma/fast-syntax-highlighting
 
-zstyle ":zplug:tag" depth 1
-
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions", hook-load:"ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter", if:"[[ $TERM != linux ]]"
-zplug "chriskempson/base16-shell", hook-load:"[[ -L ~/.base16_theme ]] || base16_default-dark"
-zplug "junegunn/fzf", use:"shell/*.zsh", hook-build:"git apply $PATCH_DIR/fzf.patch; ./install --bin", hook-load:"path=($ZPLUG_ROOT/repos/junegunn/fzf/bin $path)"
-# zplug "b4b4r07/enhancd", use:init.sh
-zplug "modules/command-not-found", from:prezto, hook-load:"export COMMAND_NOT_FOUND_INSTALL_PROMPT=1"
-# zplug "mollifier/cd-bookmark", hook-load:"alias cdb=cd-bookmark"
-zplug "docker/compose", use:contrib/completion/zsh, if:"(( $+commands[docker-compose] ))"
-zplug "rust-lang/zsh-config", if:"(( $+commands[rustc] ))"
-zplug "lukechilds/zsh-better-npm-completion", if:"(( $+commands[npm] ))"
-zplug "caarlos0/zsh-mkc"
-zplug "marzocchi/zsh-notify", if:"[[ -n $DISPLAY ]] && xdotool getactivewindow >/dev/null 2>&1"
-zplug 'endaaman/lxd-completion-zsh', if:"(( $+commands[lxc] ))"
-zplug "tj/git-extras", use:"etc/git-extras-completion.zsh"
-zplug "takaaki-kasai/git-foresta", as:command, hook-build:"git apply $PATCH_DIR/git-foresta.patch"
-zplug "kwhrtsk/docker-fzf-completion", if:"(( $+commands[docker] ))"
-
-zplug "plugins/colored-man-pages", from:oh-my-zsh
-zplug "plugins/common-aliases", from:oh-my-zsh
-zplug "plugins/python", from:oh-my-zsh
-zplug "plugins/pip", from:oh-my-zsh
-zplug "plugins/sudo", from:oh-my-zsh
-zplug "plugins/kubectl", from:oh-my-zsh
-
-if [[ $TERM = "linux" ]]; then
-  # no theme
-elif [[ $LD_PRELOAD = */wcwidth-cjk.so ]]; then
-  zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
-else
-  zplug "mafredri/zsh-async"
-  zplug "sindresorhus/pure", use:pure.zsh, as:theme
-fi
-
-installed=$HOME/.zplug_installed
-if [[ ! -f $installed || $0 -nt $installed ]]; then
-  if ! zplug check; then
-    zplug install && touch $installed
-  fi
-fi
-
-POWERLEVEL9K_MODE='nerdfont-complete'
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(detect_virt ssh context dir_writable nodeenv virtualenv anaconda rbenv)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs vcs dir time)
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
-POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
-
-_git-foresta() _git-log
 zstyle -g existing_user_commands ':completion:*:*:git:*' user-commands
-zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
-  foresta:'show commit graph'
+zstyle ':completion:*:*:git:*' user-commands $existing_user_commands foresta:'show commit graph'
+_git-foresta() _git-log
 
-zplug load
-
-typeset -x MANPATH
-manpath=($ZPLUG_ROOT/doc/man(N-/) $ZPLUG_ROOT/repos/junegunn/fzf/man(N-/) $HOME/.local/share/man(N-/) "")
-
-# FZF
 if (( $+commands[ag] )); then
-  export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
+  export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
+(( $+commands[lesspipe] )) && eval "$(lesspipe)"
+(( $+commands[lesspipe.sh] )) && eval "$(lesspipe.sh)"
+
+# clean
 unset PATCH_DIR
+rm -rf ~/.zplug ~/.zplug_installed
