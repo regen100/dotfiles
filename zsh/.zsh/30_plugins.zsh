@@ -15,7 +15,7 @@ zplugin snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
 zplugin snippet OMZ::plugins/sudo/sudo.plugin.zsh
 zplugin snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
 zplugin ice pick'async.zsh' src'pure.zsh' if'[[ $TERM != linux ]]'; zplugin light sindresorhus/pure
-zplugin ice lucid wait'0'; zplugin light /usr/share/fzf
+zplugin ice lucid wait'0' multisrc'{completion,key-bindings}.zsh'; zplugin light /usr/share/fzf
 zplugin ice lucid wait'0'; zplugin snippet OMZ::plugins/git/git.plugin.zsh
 zplugin ice lucid wait'0' atload'[[ -r ~/.base16_theme ]] || base16_default-dark'; zplugin light chriskempson/base16-shell
 zplugin ice lucid wait'0' atload'ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=default-enter; _zsh_autosuggest_start' if'[[ $TERM != linux ]]'; zplugin light zsh-users/zsh-autosuggestions
