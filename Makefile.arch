@@ -71,6 +71,7 @@ nvim: # repo pip ctags git
 	@vi --headless "+call dein#install()" +qa; echo
 	@if [ ! -f ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe/third_party/ycmd/ycm_core.so ] ; then \
 		cmd=$$(grep YouCompleteMe $(DOTFILES_DIR)nvim/.config/nvim/dein.toml -A5 | grep ^build | sed -E "s/.+'(.+)'/\1/"); \
+		echo "$$cmd"; \
 		cd ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe; \
 		PATH="~/.cargo/bin:$$PATH" sh -c "$$cmd"; \
 	fi
