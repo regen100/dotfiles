@@ -107,6 +107,14 @@ latex: repo font
 	@$(PKG-INSTALL) texlive-most texlive-langjapanese qpdfview poppler-data
 	@kanji-config-updmap-sys auto
 
+.PHONY: tmux-patch
+tmux-patch: repo
+	@git clone https://git.archlinux.org/svntogit/community.git --single-branch -b packages/tmux /tmp/arch
+	@sed -i "s#source=(#source=('https://github.com/z80oolong/tmux-eaw-fix/archive/master.zip' #; s/sha256sums=(/sha256sums=('SKIP' /" /tmp/arch/trunk/PKGBUILD
+	@echo -e "prepare() {\ncd tmux-2.9a; patch -Np1 -i ../tmux-eaw-fix-master/tmux-2.9a-fix.diff\n}" >> /tmp/arch/trunk/PKGBUILD
+	@cd /tmp/arch/trunk; makepkg --noconfirm -si
+	# @rm -rf /tmp/arch
+
 .PHONY: byobu
 byobu: repo
 	@$(PKG-INSTALL) byobu
