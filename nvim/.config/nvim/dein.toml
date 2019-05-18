@@ -138,8 +138,6 @@ hook_add = '''
   \   'right': [['lineinfo_percent'], ['fileformat', 'fileencoding', 'filetype']]
   \ },
   \ 'tabline': {'left': [['buffers']], 'right': [['close']]},
-  \ 'separator': {'left': "\ue0bc", 'right': "\ue0be"},
-  \ 'subseparator': {'left': "\ue0bd", 'right': "\ue0bf"}
   \}
 
   set showtabline=2
