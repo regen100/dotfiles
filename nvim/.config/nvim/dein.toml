@@ -417,4 +417,7 @@ repo = 'romainl/vim-qf'
 
 [[plugins]]
 repo = 'rhysd/conflict-marker.vim'
+
+[[plugins]]
+repo = 'Valloric/ListToggle'
 # }}}
