@@ -69,6 +69,10 @@ def FlagsForFile(filename, **kwargs):
 
     compilation_info = database.GetCompilationInfoForFile(filename)
     final_flags = list(compilation_info.compiler_flags_) or flags
+    try:
+        final_flags.remove('-isystem/usr/lib/zapcc/7.0.0/include')
+    except ValueError:
+        pass
     return {
         'flags': final_flags + systemflags,
         'include_paths_relative_to_dir': compilation_info.compiler_working_dir_
