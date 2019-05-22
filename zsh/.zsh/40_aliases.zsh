@@ -24,6 +24,8 @@ alias relogin='unset ZSHENV_LOADED; exec $SHELL -l'
 (( $+commands[xclip] )) && alias xclip='xclip -sel clip'
 
 alias mmv='noglob zmv -W'
+alias gdbrun='gdb -ex="set confirm on" -ex=run -ex=quit --args'
+alias valgrindrun='valgrind --exit-on-first-error=yes --error-exitcode=1'
 
 CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native"
 CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install)
