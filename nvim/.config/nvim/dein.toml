@@ -275,6 +275,7 @@ hook_add = '''
   \ 'json': ['prettier'],
   \ 'rust': ['rustfmt'],
   \ 'java': ['clang-format'],
+  \ 'qml': ['qmlfmt'],
   \ 'verilog': [
   \   {buffer, lines -> {'command': 'iStyle --style=ansi -s2 -p -n %t', 'read_temporary_file': 1}}
   \ ]
