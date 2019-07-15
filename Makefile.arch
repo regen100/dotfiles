@@ -10,16 +10,13 @@ STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 all:
 
 .PHONY: system
-system:
-	@sudo systemctl --now enable dhcpcd@enp0s3.service
+system: repo
+	@sudo systemctl --now enable dhcpcd@enp3s0.service
 	@sudo timedatectl set-ntp true
-	@sudo pacman --noconfirm --needed -S openssh xorg-xauth
+	@$(PKG-INSTALL) openssh xorg-xauth systemd-boot-pacman-hook
 	@sudo sed -ie 's/#X11Forwarding .*/X11Forwarding yes/' /etc/ssh/sshd_config
 	@sudo systemctl --now enable sshd
 	@touch ~/.Xauthority
-	@if lscpu | grep GenuineIntel >/dev/null; then sudo pacman --noconfirm --needed -S intel-ucode; fi
-	@if lscpu | grep AuthenticAMD >/dev/null; then sudo pacman --noconfirm --needed -S amd-ucode; fi
-	@sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 .PHONY: repo
 repo:

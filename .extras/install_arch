@@ -30,7 +30,7 @@ install_mount() {
 }
 
 install_system() {
-  pacstrap /mnt base base-devel grub efibootmgr git zsh
+  pacstrap /mnt base base-devel
 }
 
 install_setup() {
@@ -41,8 +41,6 @@ install_setup() {
   arch-chroot /mnt locale-gen
   echo LANG=en_US.UTF-8 > /mnt/etc/locale.conf
   echo KEYMAP=jp106 > /mnt/etc/vconsole.conf
-  echo mkinitcpio -p linux
-
   sed -E 's/^# (%wheel ALL=\(ALL\) ALL)/\1/; s/^# (Defaults env_keep \+= "HOME")/\1/' -i /mnt/etc/sudoers
 }
 
@@ -61,10 +59,31 @@ EOS
 }
 
 install_bootloader() {
-  arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub
-  arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-  mkdir /mnt/boot/EFI/boot
-  cp /mnt/boot/EFI/grub/grubx64.efi /mnt/boot/EFI/boot/bootx64.efi
+  local PARTUUID UCODE
+  arch-chroot /mnt mkinitcpio -p linux
+  arch-chroot /mnt bootctl --path=/boot install
+  PARTUUID=$(blkid -s PARTUUID -o value /dev/sda2)
+  if lscpu | grep GenuineIntel >/dev/null; then
+    UCODE="initrd  /intel-ucode.img"
+    pacstrap /mnt intel-ucode
+  elif lscpu | grep AuthenticAMD >/dev/null; then
+    UCODE="initrd  /amd-ucode.img"
+    pacstrap /mnt amd-ucode
+  else
+    UCODE=
+  fi
+  cat << EOS > /mnt/boot/loader/entries/arch.conf
+title   Arch Linux
+linux   /vmlinuz-linux
+$UCODE
+initrd  /initramfs-linux.img
+options root=PARTUUID=$PARTUUID add_efi_memmap
+EOS
+  cat << EOS > /mnt/boot/loader/loader.conf
+default Arch Linux
+timeout 3
+editor  no
+EOS
 }
 
 install_user() {
@@ -73,6 +92,7 @@ install_user() {
     return 1
   fi
 
+  pacstrap /mnt git zsh
   arch-chroot /mnt useradd -m -g wheel -s /bin/zsh "$1"
   arch-chroot /mnt passwd "$1"
   arch-chroot /mnt su "$1" -c "git clone https://github.com/regen100/dotfiles.git ~/dotfiles"
