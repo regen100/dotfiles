@@ -6,3 +6,4 @@ tags
 .lvimrc
 build*/
 .ipynb_checkpoints
+CMakeLists.txt.user
