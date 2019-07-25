@@ -13,6 +13,8 @@ if [[ -z $ZSHENV_LOADED ]]; then
 
   [[ -f $HOME/.cargo/env ]] && source $HOME/.cargo/env
 
+  [[ -f /opt/ros/melodic/setup.zsh ]] && source /opt/ros/melodic/setup.zsh
+
   export NVIM_LISTEN_ADDRESS=/tmp/nvimsocket
 
   export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp'
