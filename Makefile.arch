@@ -48,8 +48,8 @@ utils: repo
 
 .PHONY: git
 git: repo
-	@$(PKG-INSTALL) git tk git-extras gibo
-	@$(STOW-INSTALL) git
+	@$(PKG-INSTALL) git tk git-extras gibo tig
+	@$(STOW-INSTALL) git tig
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
 		echo "[include]" >> ~/.gitconfig; \
 		echo "	path = ~/.gitconfig_global" >> ~/.gitconfig; \
