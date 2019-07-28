@@ -2,7 +2,7 @@
 if [[ -z $ZSHENV_LOADED ]]; then
   export LANG=en_US.UTF-8
 
-  path=($HOME/bin(N-/) $HOME/.local/bin(N-/) $HOME/.linuxbrew/bin(N-/) $HOME/.linuxbrew/sbin(N-/) /opt/VirtualGL/bin(N-/) /snap/bin(N-/) /usr/local/cuda/bin(N-/) $path)
+  path=($HOME/bin(N-/) $HOME/.local/bin(N-/) $HOME/.linuxbrew/bin(N-/) $HOME/.linuxbrew/sbin(N-/) /opt/VirtualGL/bin(N-/) /snap/bin(N-/) /opt/cuda/bin(N-/) /usr/local/cuda/bin(N-/) $path)
   path=(./node_modules/.bin $path)
 
   export LESS='-giMRSW -z-4 -x4 -j4'
