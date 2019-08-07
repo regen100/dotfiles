@@ -71,6 +71,7 @@ nvim: # repo pip ctags git
 		echo "$$cmd"; \
 		cd ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe; \
 		PATH="~/.cargo/bin:$$PATH" sh -c "$$cmd"; \
+		vi --headless "dein#recache_runtimepath()" +qa; echo
 	fi
 
 .PHONY: clang
