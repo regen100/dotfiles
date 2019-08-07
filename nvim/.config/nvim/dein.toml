@@ -21,6 +21,12 @@ repo = 'anntzer/vim-cython'
 
 [[plugins]]
 repo = 'vhda/verilog_systemverilog.vim'
+
+[[plugins]]
+repo = 'Konfekt/FastFold'
+
+[[plugins]]
+repo = 'tmhedberg/SimpylFold'
 # }}}
 
 # java {{{
@@ -60,7 +66,6 @@ hook_add='''
   endif
   autocmd vimrc FileType tex let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 '''
-
 # }}}
 
 # doc {{{
@@ -184,7 +189,6 @@ hook_source = '''
 
 [[plugins]]
 repo = 'thinca/vim-zenspace'
-
 # }}}
 
 # git {{{
