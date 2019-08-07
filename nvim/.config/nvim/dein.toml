@@ -421,4 +421,12 @@ repo = 'rhysd/conflict-marker.vim'
 
 [[plugins]]
 repo = 'Valloric/ListToggle'
+
+[[plugins]]
+repo = 'kana/vim-niceblock'
+on_map = '<Plug>'
+hook_add = '''
+  xmap I <Plug>(niceblock-I)
+  xmap A <Plug>(niceblock-A)
+'''
 # }}}
