@@ -16,4 +16,3 @@ while 1
   if s:root_dir ==? '/' | break | endif
   let s:root_dir  = fnamemodify(s:root_dir, ':h')
 endwhile
-
