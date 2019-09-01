@@ -63,7 +63,7 @@ ctags: repo
 .PHONY: nvim
 nvim: # repo pip ctags git
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim the_silver_searcher vint neovim-remote neovim-drop-in
+	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone
 	@$(STOW-INSTALL) nvim
 	@vi --headless "+call dein#install()" +qa; echo
 	@if [ ! -f ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe/third_party/ycmd/ycm_core.so ] ; then \
