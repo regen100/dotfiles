@@ -4,6 +4,9 @@ source ~/.zplugin/bin/zplugin.zsh
 
 PATCH_DIR=$(dirname $0)/patches
 
+export ZSH_CACHE_DIR=~/.cache/zsh
+mkdir -p $ZSH_CACHE_DIR
+
 zplugin light zsh-users/zsh-completions
 zplugin ice atload'COMMAND_NOT_FOUND_INSTALL_PROMPT=1'; zplugin snippet PZT::modules/command-not-found/init.zsh
 zplugin ice as'completion' if'(( $+commands[docker-compose] ))'; zplugin snippet https://github.com/docker/compose/raw/master/contrib/completion/zsh/_docker-compose
