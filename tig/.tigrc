@@ -1,1 +1,3 @@
-line-graphics = ascii
+set line-graphics = ascii
+set main-view = line-number:yes,interval=5 id date author commit-title:graph=yes,refs=yes
+bind generic + !git commit --amend
