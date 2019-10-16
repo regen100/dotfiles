@@ -60,11 +60,6 @@ hook_add='''
     let g:vimtex_view_general_options = '--unique @pdf\#src:@tex:@line:@col'
     let g:vimtex_view_general_options_latexmk = '--unique'
   endif
-
-  if !exists('g:ycm_semantic_triggers')
-    let g:ycm_semantic_triggers = {}
-  endif
-  autocmd vimrc FileType tex let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 '''
 # }}}
 
@@ -116,6 +111,10 @@ hook_add = '''
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
+  function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+  endfunction
+
   let g:lightline = {
   \ 'colorscheme': 'wombat',
   \ 'component_expand': {
@@ -137,6 +136,10 @@ hook_add = '''
   \   'lineinfo_percent': '%3p%% %3l:%-2v',
   \   'tagbar': '%{winwidth(0) > 100 ? tagbar#currenttag("%s", "", "f"): ""}',
   \   'lightline_hunks': '%{winwidth(0) > 100 ? lightline#hunks#composer() : ""}',
+  \ },
+  \ 'component_function': {
+  \   'cocstatus': 'coc#status',
+  \   'currentfunction': 'CocCurrentFunction'
   \ },
   \ 'active': {
   \   'left': [['mode', 'paste'], ['lightline_hunks'], ['filename_readonly_modified'], ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'], ['tagbar']],
@@ -201,17 +204,54 @@ repo = 'tpope/vim-fugitive'
 
 # editor {{{
 [[plugins]]
-repo = 'Valloric/YouCompleteMe'
-type__depth = 1
-build = 'python3 install.py $(which clang >/dev/null && echo "--clang-completer") $(which npm >/dev/null && echo "--js-completer") $(which cargo >/dev/null && echo "--rust-completer")'
+repo = 'neoclide/coc.nvim'
+merged = 0
+rev = 'release'
 hook_add = '''
-  let g:ycm_python_binary_path = executable('python3') ? 'python3' : 'python'
-  let g:ycm_global_ycm_extra_conf = expand('~/.ycm_extra_conf.py')
-  let g:ycm_autoclose_preview_window_after_completion = 1
-  if executable('rustc')
-    let g:ycm_rust_src_path = system('rustc --print sysroot') + '/lib/rustlib/src/rust/src'
-  endif
-  autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust nnoremap <buffer> <CR> :<C-u>YcmCompleter GoTo<CR>
+  inoremap <silent><expr> <c-space> coc#refresh()
+
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+  nmap <silent> <cr> <Plug>(coc-definition)
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
+
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+
+  nmap <leader>cr <Plug>(coc-rename)
+  xmap <leader>cf <Plug>(coc-format-selected)
+  nmap <leader>cf <Plug>(coc-format-selected)
+
+  nnoremap <silent> <leader>ca :<C-u>CocList diagnostics<cr>
+  nnoremap <silent> <leader>ce :<C-u>CocList extensions<cr>
+  nnoremap <silent> <leader>cc :<C-u>CocList commands<cr>
+  nnoremap <silent> <leader>co :<C-u>CocList outline<cr>
+  nnoremap <silent> <leader>cs :<C-u>CocList -I symbols<cr>
+
+  inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+  let g:coc_snippet_next = '<tab>'
 '''
 
 [[plugins]]
@@ -266,19 +306,12 @@ hook_add = '''
   let g:ale_cpp_clangcheck_options='-extra-arg=-D__clang_analyzer__'
   let g:ale_cpp_cppcheck_options='--enable=all --suppress=unusedFunction --suppress=syntaxError'
   let g:ale_cpp_clangtidy_checks=[]
-  let g:ale_rust_cargo_use_clippy = 1
-  let g:ale_c_clangformat_options = '-fallback-style=Google -style=file -assume-filename=%s'
+  let g:ale_c_clangformat_options = '-fallback-style=Google -style=file'
   let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
   let g:ale_fix_on_save = 1
   let g:ale_linters = { 'cpp': ['clangcheck', 'clangtidy_h', 'cppcheck', 'cpplint', 'clang-format'] }
   let g:ale_fixers = {
   \ 'cpp': ['clang-format'],
-  \ 'python': ['isort', 'yapf'],
-  \ 'css': ['prettier', 'stylelint'],
-  \ 'javascript': ['prettier', 'eslint'],
-  \ 'json': ['prettier'],
-  \ 'rust': ['rustfmt'],
-  \ 'java': ['clang-format'],
   \ 'qml': ['qmlfmt'],
   \ 'verilog': [
   \   {buffer, lines -> {'command': 'iStyle --style=ansi -s2 -p -n %t', 'read_temporary_file': 1}}
@@ -326,7 +359,7 @@ merged = 0
 repo = 'junegunn/fzf.vim'
 depends = 'fzf'
 hook_add = '''
-  noremap <Leader>f :<C-u>Files<CR>
+  noremap <Leader>e :<C-u>Files<CR>
 '''
 
 [[plugins]]

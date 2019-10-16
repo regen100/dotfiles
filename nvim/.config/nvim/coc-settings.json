@@ -1,0 +1,60 @@
+{
+  "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "filetypes": [
+        "c",
+        "cpp",
+        "objc",
+        "objcpp"
+      ],
+      "rootPatterns": [
+        ".ccls",
+        "compile_commands.json",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
+      "initializationOptions": {
+        "compilationDatabaseDirectory": "build",
+        "cache": {
+          "directory": "/tmp/ccls"
+        }
+      }
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": [
+        "start"
+      ],
+      "filetypes": [
+        "sh"
+      ],
+      "ignorenRootPaths": [
+        "~"
+      ]
+    },
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": [
+        "dockerfile"
+      ],
+      "args": [
+        "--stdio"
+      ]
+    }
+  },
+  "python.linting.mypyEnabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.formatting.provider": "yapf",
+  "rust.clippy_preference": "on",
+  "yaml.format.enable": true,
+  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "json",
+    "jsonc",
+    "rust",
+    "python"
+  ],
+  "coc.preferences.diagnostic.displayByAle": true
+}
