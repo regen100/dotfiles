@@ -42,7 +42,7 @@ nnoremap <A-j> <C-w>-
 nnoremap <Leader>d "_d
 
 " quick replace
-nnoremap <Leader>r :%s/\<<C-r><C-w>\>//g<Left><Left>
+nnoremap <Leader>rr :%s/\<<C-r><C-w>\>//g<Left><Left>
 
 " toggle
 nnoremap <Leader>m :<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>

@@ -43,7 +43,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man htop git-cola
+	@$(PKG-INSTALL) man htop git-cola direnv
 	@$(STOW-INSTALL) htop
 
 .PHONY: git
@@ -61,28 +61,22 @@ ctags: repo
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
-nvim: # repo pip ctags git
+nvim: repo ctags git nodejs
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-neovim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone
+	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-pynvim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
 	@$(STOW-INSTALL) nvim
 	@vi --headless "+call dein#install()" +qa; echo
-	@if [ ! -f ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe/third_party/ycmd/ycm_core.so ] ; then \
-		cmd=$$(grep YouCompleteMe $(DOTFILES_DIR)nvim/.config/nvim/dein.toml -A5 | grep ^build | sed -E "s/.+'(.+)'/\1/"); \
-		echo "$$cmd"; \
-		cd ~/.cache/dein/repos/github.com/Valloric/YouCompleteMe; \
-		PATH="~/.cargo/bin:$$PATH" sh -c "$$cmd"; \
-		vi --headless "dein#recache_runtimepath()" +qa; echo
-	fi
+	@vi --headless "+CocInstall -sync coc-json coc-python coc-rls coc-yaml coc-snippets coc-highlight" +qa; echo
 
 .PHONY: clang
 clang: repo
-	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint
+	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint ccls
 	@mkdir ~/.ccache
 	@$(STOW-INSTALL) clang ccache
 
 .PHONY: python
 python: repo
-	@$(PKG-INSTALL) python-virtualenv python-colorama python-isort yapf flake8 python-hacking direnv python-flake8-docstrings
+	@$(PKG-INSTALL) python-virtualenv python-colorama python-jedi mypy python-isort yapf flake8 python-hacking python-flake8-docstrings
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
@@ -93,7 +87,7 @@ nodejs: repo
 rust: repo
 	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | sh -s -- -y
 	@$$HOME/.cargo/bin/rustup update stable
-	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview clippy
+	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview clippy rls rust-analysis
 	@$(STOW-INSTALL) rust
 
 .PHONY: plantuml
@@ -111,7 +105,7 @@ tmux-patch: repo
 	@sed -i "s#source=(#source=('https://github.com/z80oolong/tmux-eaw-fix/archive/master.zip' #; s/sha256sums=(/sha256sums=('SKIP' /" /tmp/arch/trunk/PKGBUILD
 	@echo -e "prepare() {\ncd tmux-2.9a; patch -Np1 -i ../tmux-eaw-fix-master/tmux-2.9a-fix.diff\n}" >> /tmp/arch/trunk/PKGBUILD
 	@cd /tmp/arch/trunk; makepkg --noconfirm -si
-	# @rm -rf /tmp/arch
+	@rm -rf /tmp/arch
 
 .PHONY: byobu
 byobu: repo
@@ -166,4 +160,4 @@ debug: repo
 
 .PHONY: docker
 docker: repo
-	@$(PKG-INSTALL) docker docker-compose hadolint-bin
+	@$(PKG-INSTALL) docker docker-compose hadolint-bin dockerfile-language-server-bin
