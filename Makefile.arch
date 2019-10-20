@@ -44,7 +44,7 @@ pip: repo
 .PHONY: utils
 utils: repo
 	@$(PKG-INSTALL) man htop git-cola direnv
-	@$(STOW-INSTALL) htop
+	@$(STOW-INSTALL) htop direnv
 
 .PHONY: git
 git: repo
