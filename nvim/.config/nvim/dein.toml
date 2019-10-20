@@ -215,7 +215,7 @@ hook_add = '''
   nmap <silent> [g <Plug>(coc-diagnostic-prev)
   nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-  nmap <silent> <cr> <Plug>(coc-definition)
+  autocmd vimrc FileType c,cpp,objc,objcpp,cs,go,javascript,python,rust nmap <buffer> <silent> <CR> <Plug>(coc-definition)
   nmap <silent> gd <Plug>(coc-definition)
   nmap <silent> gy <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
@@ -233,8 +233,8 @@ hook_add = '''
   autocmd CursorHold * silent call CocActionAsync('highlight')
 
   nmap <leader>cr <Plug>(coc-rename)
-  xmap <leader>cf <Plug>(coc-format-selected)
-  nmap <leader>cf <Plug>(coc-format-selected)
+  xmap <silent> <leader>cf <Plug>(coc-format-selected)
+  nmap <silent> <leader>cf <Plug>(coc-format-selected)
 
   nnoremap <silent> <leader>ca :<C-u>CocList diagnostics<cr>
   nnoremap <silent> <leader>ce :<C-u>CocList extensions<cr>
@@ -303,7 +303,7 @@ hook_add = '''
 repo = 'w0rp/ale'
 hook_add = '''
   let g:ale_sign_column_always = 1
-  let g:ale_cpp_clangcheck_options='-extra-arg=-D__clang_analyzer__'
+  let g:ale_cpp_clangcheck_options='-extra-arg=-D__clang_analyzer__ -extra-arg=-fno-color-diagnostics'
   let g:ale_cpp_cppcheck_options='--enable=all --suppress=unusedFunction --suppress=syntaxError'
   let g:ale_cpp_clangtidy_checks=[]
   let g:ale_c_clangformat_options = '-fallback-style=Google -style=file'
