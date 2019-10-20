@@ -71,7 +71,7 @@ nvim: repo ctags git nodejs
 .PHONY: clang
 clang: repo
 	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint ccls
-	@mkdir ~/.ccache
+	@mkdir -p ~/.ccache
 	@$(STOW-INSTALL) clang ccache
 
 .PHONY: python
