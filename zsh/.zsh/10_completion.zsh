@@ -23,4 +23,8 @@ if (( $+commands[rustc] )); then
   fpath+=$(rustc --print sysroot)/share/zsh/site-functions
 fi
 
+if (( $+commands[poetry] )); then
+  eval $(poetry completions zsh)
+fi
+
 fpath=(~/.zsh/functions $fpath)
