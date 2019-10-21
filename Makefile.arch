@@ -76,7 +76,7 @@ clang: repo
 
 .PHONY: python
 python: repo
-	@$(PKG-INSTALL) python-virtualenv python-colorama python-jedi mypy python-isort yapf flake8 python-hacking python-flake8-docstrings poetry python-pipenv
+	@$(PKG-INSTALL) python-virtualenv python-colorama mypy python-isort yapf flake8 python-hacking python-flake8-docstrings poetry python-pipenv
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
