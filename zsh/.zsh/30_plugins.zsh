@@ -15,7 +15,8 @@ zplugin light caarlos0/zsh-mkc
 zplugin snippet https://github.com/tj/git-extras/raw/master/etc/git-extras-completion.zsh
 zplugin ice as'program' atclone"git apply $PATCH_DIR/git-foresta.patch" atpull'%atclone'; zplugin light takaaki-kasai/git-foresta
 zplugin snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
-zplugin snippet OMZ::plugins/sudo/sudo.plugin.zsh
+zplugin ice if'(( ! $+commands[fuck] ))'; zplugin snippet OMZ::plugins/sudo/sudo.plugin.zsh
+zplugin ice if'(( $+commands[fuck] ))'; zplugin snippet OMZ::plugins/thefuck/thefuck.plugin.zsh
 zplugin snippet OMZ::plugins/kubectl/kubectl.plugin.zsh
 zplugin ice pick'async.zsh' src'pure.zsh' if'[[ $TERM != linux ]]'; zplugin light sindresorhus/pure
 zplugin ice lucid wait'0' multisrc'{completion,key-bindings}.zsh'; zplugin light /usr/share/fzf
