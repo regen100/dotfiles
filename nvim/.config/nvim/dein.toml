@@ -232,9 +232,11 @@ hook_add = '''
 
   autocmd CursorHold * silent call CocActionAsync('highlight')
 
+  command! -nargs=0 Format :call CocAction('format')
+
   nmap <leader>cr <Plug>(coc-rename)
   xmap <silent> <leader>cf <Plug>(coc-format-selected)
-  nmap <silent> <leader>cf <Plug>(coc-format-selected)
+  nnoremap <silent> <leader>cf :<C-u>Format<cr>
 
   nnoremap <silent> <leader>ca :<C-u>CocList diagnostics<cr>
   nnoremap <silent> <leader>ce :<C-u>CocList extensions<cr>
@@ -312,6 +314,7 @@ hook_add = '''
   let g:ale_linters = { 'cpp': ['clangcheck', 'clangtidy_h', 'cppcheck', 'cpplint', 'clang-format'] }
   let g:ale_fixers = {
   \ 'cpp': ['clang-format'],
+  \ 'python': ['isort'],
   \ 'qml': ['qmlfmt'],
   \ 'verilog': [
   \   {buffer, lines -> {'command': 'iStyle --style=ansi -s2 -p -n %t', 'read_temporary_file': 1}}
