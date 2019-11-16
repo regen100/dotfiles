@@ -34,3 +34,5 @@ alias -g CMAKE_DEV='"$CMAKE_CCACHE[@]" -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_CO
 alias -g CMAKE_DEV_ZAPCC='-DCMAKE_CXX_COMPILER=zapcc++ -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS -isystem/usr/lib/zapcc/7.0.0/include" -DCMAKE_C_FLAGS="$CMAKE_CXX_FLAGS -isystem/usr/lib/zapcc/7.0.0/include" "$CMAKE_COMMON_OPTIONS[@]"'
 
 (( $+commands[ag] )) && alias todo='ag "//\s*(TODO|FIXME)\b"'
+
+alias docker-user="docker -H unix://$XDG_RUNTIME_DIR/docker.sock"
