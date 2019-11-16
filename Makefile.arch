@@ -2,7 +2,7 @@ SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
 PKG-INSTALL := yay --noconfirm --needed -S
-PIP-INSTALL := sudo python3 -m pip install -U
+PIP-INSTALL := python3 -m pip install --user -U
 STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 
 
@@ -73,6 +73,7 @@ clang: repo
 	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint ccls
 	@mkdir -p ~/.ccache
 	@$(STOW-INSTALL) clang ccache
+	@$(PIP-INSTALL) cmake-language-server
 
 .PHONY: python
 python: repo
