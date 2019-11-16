@@ -63,6 +63,18 @@
       "args": [
         "--stdio"
       ]
+    },
+    "cmake": {
+      "command": "cmake-language-server",
+      "rootPatterns": [
+        "build/"
+      ],
+      "filetypes": [
+        "cmake"
+      ],
+      "initializationOptions": {
+        "buildDirectory": "build"
+      }
     }
   },
   "python.jediEnabled": false,
