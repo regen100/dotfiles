@@ -7,3 +7,5 @@
 	helper = cache
 [merge]
 	conflictStyle = diff3
+[alias]
+	conflicted = !vim +Conflicted
