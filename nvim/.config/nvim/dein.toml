@@ -457,9 +457,6 @@ hook_add = '''
 repo = 'romainl/vim-qf'
 
 [[plugins]]
-repo = 'christoomey/vim-conflicted'
-
-[[plugins]]
 repo = 'Valloric/ListToggle'
 
 [[plugins]]
