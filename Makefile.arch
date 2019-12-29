@@ -67,6 +67,7 @@ nvim: repo ctags git nodejs
 	@$(STOW-INSTALL) nvim
 	@vi --headless "+call dein#install()" +qa; echo
 	@vi --headless "+CocInstall -sync coc-json coc-python coc-rls coc-yaml coc-snippets coc-highlight" +qa; echo
+	@vi --headless "+call dein#recache_runtimepath()" +qa; echo
 
 .PHONY: clang
 clang: repo python
