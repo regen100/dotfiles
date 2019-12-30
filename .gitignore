@@ -2,3 +2,4 @@ byobu/.config/byobu/.metadata_available
 byobu/.config/byobu/.ssh-agent
 byobu/.config/byobu/plugins
 byobu/.config/byobu/layouts
+/nvim/.config/nvim/autoload/plug.vim
