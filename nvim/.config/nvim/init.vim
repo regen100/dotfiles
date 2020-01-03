@@ -109,7 +109,7 @@ if !filereadable(s:vimplug)
 endif
 
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
-Plug 'kristijanhusak/vim-hybrid-material'
+Plug 'w0ng/vim-hybrid'
 Plug 'sheerun/vim-polyglot'
   let g:cpp_class_scope_highlight = 1
   let g:cpp_member_variable_highlight = 1
@@ -154,7 +154,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
-  function! CocCurrentFunction()
+  function! CocCurrentFunction() abort
     return get(b:, 'coc_current_function', '')
   endfunction
   let g:lightline = {
@@ -183,7 +183,7 @@ Plug 'itchyny/lightline.vim'
   \   'currentfunction': 'CocCurrentFunction'
   \ },
   \ 'active': {
-  \   'left': [['mode', 'paste'], ['lightline_hunks'], ['filename_readonly_modified'], ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'], ['tagbar']],
+  \   'left': [['mode', 'paste'], ['lightline_hunks'], ['filename_readonly_modified'], ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok'], ['cocstatus', 'currentfunction']],
   \   'right': [['lineinfo_percent'], ['fileformat', 'fileencoding', 'filetype']]
   \ },
   \ 'tabline': {'left': [['buffers']], 'right': [['close']]},
@@ -275,7 +275,6 @@ if executable('node')
         call CocAction('doHover')
       endif
     endfunction
-    autocmd vimrc CursorHold * silent call CocActionAsync('highlight')
     command! -nargs=0 Format :call CocAction('format')
     nmap <leader>cr <Plug>(coc-rename)
     xmap <silent> <leader>cf <Plug>(coc-format-selected)
@@ -295,7 +294,10 @@ if executable('node')
       return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
     let g:coc_snippet_next = '<tab>'
-    let g:coc_global_extensions = ['coc-json', 'coc-python', 'coc-rls', 'coc-yaml', 'coc-snippets', 'coc-highlight']
+    let g:coc_global_extensions = ['coc-json', 'coc-python', 'coc-yaml', 'coc-snippets', 'coc-highlight']
+    if executable('rustc')
+      call add(g:coc_global_extensions, 'coc-rls')
+    endif
 endif
 if $USER !=# 'root' && !empty(glob('/tmp/fcitx-socket-*')) && $DISPLAY ==# ':0'
   Plug 'lilydjwg/fcitx.vim'
@@ -319,29 +321,31 @@ syntax enable
 
 if &t_Co >= 256
   set background=dark
-  colorscheme hybrid_material
+  colorscheme hybrid
 endif
 
-set fileencodings=utf-8,cp932 fileformats=unix,dos
-set smarttab expandtab tabstop=2 shiftwidth=2 softtabstop=2
-set cursorline number nowrap
-set list listchars=tab:>-,eol:↲,extends:»,precedes:«
 set ambiwidth=double
-set virtualedit=block
-set ignorecase smartcase incsearch
-set wildmenu
-set showmatch
-set matchpairs& matchpairs+=<:>
-set laststatus=2
-set showcmd
-set hidden
-set mouse=a
 set autoread
 set autowrite
-set scrolloff=3
+set cmdheight=2
+set cursorline number nowrap
 set diffopt=filler,vertical
-set splitbelow
+set fileencodings=utf-8,cp932 fileformats=unix,dos
+set hidden
+set ignorecase smartcase incsearch
+set laststatus=2
+set list listchars=tab:>-,eol:↲,extends:»,precedes:«
+set matchpairs& matchpairs+=<:>
+set mouse=a
+set scrolloff=3
 set showbreak=↳\ 
+set showcmd
+set showmatch
+set smarttab expandtab tabstop=2 shiftwidth=2 softtabstop=2
+set splitbelow
+set updatetime=300
+set virtualedit=block
+set wildmenu
 
 autocmd vimrc InsertLeave * set nopaste
 
@@ -357,7 +361,7 @@ autocmd vimrc BufNewFile,BufRead *.pbtxt setfiletype proto
 augroup vimrc-auto-mkdir
   autocmd!
   autocmd BufWritePre * call s:auto_mkdir(expand('<afile>:p:h'), v:cmdbang)
-  function! s:auto_mkdir(dir, force)
+  function! s:auto_mkdir(dir, force) abort
     if !isdirectory(a:dir) && a:dir !~? '^[^:]*://'  && (a:force || input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
       call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
     endif
@@ -377,7 +381,7 @@ else
 endif
 
 augroup vimrc-restore-view
-  function! s:restore_view_check()
+  function! s:restore_view_check() abort
     return expand('%') !=# '' && &buftype !~# 'nofile' && &filetype !~# 'gitcommit'
   endfunction
   autocmd!
