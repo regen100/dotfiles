@@ -1,7 +1,7 @@
 # hadolint ignore=DL3007
 FROM archlinux
 
-RUN pacman --noconfirm -Syuu && pacman --noconfirm -S base-devel git && rm /var/cache/pacman/pkg/*
+RUN pacman --noconfirm -Syuu && pacman --noconfirm -S base-devel git zsh && rm /var/cache/pacman/pkg/*
 
 RUN useradd -m -G wheel -s /usr/bin/zsh regen && echo "regen ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && echo 'Defaults env_keep += "HOME"' >> /etc/sudoers
 ENV TERM xterm-256color
