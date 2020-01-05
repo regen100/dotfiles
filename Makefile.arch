@@ -2,7 +2,7 @@ SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
 PKG-INSTALL := yay --noconfirm --needed -S
-PIP-INSTALL := python3 -m pip install --user -U
+PIP-INSTALL := python3 -m pip install --user --no-warn-script-location -U
 STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 
 
@@ -30,7 +30,7 @@ repo:
 	@mkdir -p ~/.config
 	@$(PKG-INSTALL) stow
 	@$(STOW-INSTALL) pacman
-	@if systemctl >/dev/null && ! systemctl is-active --quiet reflector.timer; then \
+	@if systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet reflector.timer; then \
 		$(PKG-INSTALL) reflector-timer; \
 		sudo mkdir -p /etc/conf.d; \
 		echo COUNTRY=Japan | sudo tee /etc/conf.d/reflector.conf >/dev/null; \
@@ -43,13 +43,18 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man htop git-cola direnv
+	@$(PKG-INSTALL) man htop direnv
 	@$(STOW-INSTALL) htop direnv
+
+.PHONY: utils-gui
+utils-gui: repo
+	@$(PKG-INSTALL) git-cola
 
 .PHONY: git
 git: repo
 	@$(PKG-INSTALL) git tk git-extras gibo tig
 	@$(STOW-INSTALL) git tig
+	@[[ -f ~/.gitconfig ]] || touch ~/.gitconfig
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
 		echo "[include]" >> ~/.gitconfig; \
 		echo "	path = ~/.gitconfig_global" >> ~/.gitconfig; \
@@ -61,14 +66,14 @@ ctags: repo
 	@$(STOW-INSTALL) ctags
 
 .PHONY: nvim
-nvim: repo ctags git nodejs
+nvim: repo
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim shellcheck xclip cmake python-pynvim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
+	@$(PKG-INSTALL) neovim git nodejs curl fzf shellcheck xclip cmake python-pynvim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa; echo
 
 .PHONY: clang
-clang: repo python
+clang: repo pip
 	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint ccls
 	@mkdir -p ~/.ccache
 	@$(STOW-INSTALL) clang ccache
@@ -76,7 +81,7 @@ clang: repo python
 
 .PHONY: python
 python: repo
-	@$(PKG-INSTALL) python-pip python-colorama mypy python-isort yapf flake8 python-hacking python-flake8-docstrings poetry python-pipenv
+	@$(PKG-INSTALL) python-colorama mypy python-isort yapf flake8 python-hacking python-flake8-docstrings poetry python-pipenv
 	@$(STOW-INSTALL) python readline
 
 .PHONY: nodejs
@@ -115,12 +120,12 @@ byobu: repo
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
-zsh: repo wcwidth
+zsh: repo
 	@$(PKG-INSTALL) zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip pygments-base16 fzf subversion thefuck
 	@sudo pkgfile --update
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh readline
-	@wcwidth-cjk zsh -ic exit </dev/null
+	@zsh -i -c -- '-zplg-scheduler burst || true'
 
 .PHONY: wcwidth
 wcwidth:
