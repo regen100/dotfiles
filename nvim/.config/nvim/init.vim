@@ -95,16 +95,19 @@ let s:vimplug_install = 0
 if !filereadable(s:vimplug)
   if !executable('curl')
     echoerr 'You have to install curl'
-    execute 'q!'
+    execute 'cq!'
   endif
   if !executable('git')
     echoerr 'You have to install git'
-    execute 'q!'
+    execute 'cq!'
   endif
-  echo 'Installing vim-plug...'
+  echo 'Installing vim-plug... ' . s:vimplug
   echo ''
-  silent exec '!\curl -fLo ' . s:vimplug . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  execute 'source ' . fnameescape(s:vimplug)
+  silent execute '!curl -fLo ' . s:vimplug . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  if v:shell_error != 0
+    echoerr 'Failed'
+    execute 'cq!'
+  endif
   let s:vimplug_install = 1
 endif
 
