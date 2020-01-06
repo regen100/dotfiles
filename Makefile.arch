@@ -166,3 +166,13 @@ debug: repo
 .PHONY: docker
 docker: repo
 	@$(PKG-INSTALL) docker docker-compose hadolint-bin dockerfile-language-server-bin
+
+.PHONY: xfce
+xfce: repo
+	@$(PKG-INSTALL) xorg-server xfce4 xfce4-goodies gvfs gvfs-smb sshfs lightdm lightdm-gtk-greeter light-locker numlockx archlinux-artwork archlinux-wallpaper accountsservice
+	@xfconf-query -c xfce4-session -p /general/LockCommand -s "light-locker-command -l" --create -t string
+	@sudo sed -ie "s@^#greeter-setup-script=@greeter-setup-script=/usr/bin/numlockx on@" /etc/lightdm/lightdm.conf
+	@echo -e "[Service]\nEnvironment=LANG=ja_JP.utf8" | sudo tee /etc/systemd/system/lightdm.service.d/override.conf >/dev/null
+	@sudo cp -f $(DOTFILES_DIR).extras/lightdm/lightdm-gtk-greeter.conf /etc/lightdm
+	@localectl set-x11-keymap jp,us
+	@sudo systemctl enable --now lightdm
