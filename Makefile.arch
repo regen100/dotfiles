@@ -11,7 +11,6 @@ all:
 
 .PHONY: system
 system: repo
-	@sudo systemctl --now enable dhcpcd@enp3s0.service
 	@sudo timedatectl set-ntp true
 	@$(PKG-INSTALL) openssh xorg-xauth systemd-boot-pacman-hook
 	@sudo sed -ie 's/#X11Forwarding .*/X11Forwarding yes/' /etc/ssh/sshd_config
@@ -35,6 +34,7 @@ repo:
 		sudo mkdir -p /etc/conf.d; \
 		echo COUNTRY=Japan | sudo tee /etc/conf.d/reflector.conf >/dev/null; \
 		sudo systemctl enable --now reflector.timer; \
+		sudo systemctl start reflector; \
 	fi
 
 .PHONY: pip
@@ -52,7 +52,7 @@ utils-gui: repo
 
 .PHONY: git
 git: repo
-	@$(PKG-INSTALL) git tk git-extras gibo tig
+	@$(PKG-INSTALL) git git-lfs tk git-extras gibo tig
 	@$(STOW-INSTALL) git tig
 	@[[ -f ~/.gitconfig ]] || touch ~/.gitconfig
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
@@ -68,7 +68,7 @@ ctags: repo
 .PHONY: nvim
 nvim: repo
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim git nodejs curl fzf shellcheck xclip cmake python-pynvim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
+	@$(PKG-INSTALL) neovim git nodejs npm curl fzf shellcheck xclip cmake python-pynvim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa; echo
 
