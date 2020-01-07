@@ -176,3 +176,8 @@ xfce: repo
 	@sudo cp -f $(DOTFILES_DIR).extras/lightdm/lightdm-gtk-greeter.conf /etc/lightdm
 	@localectl set-x11-keymap jp,us
 	@sudo systemctl enable --now lightdm
+
+.PHONY: nftables
+nftables: repo
+	@$(PKG-INSTALL) nftables
+	@sudo systemctl enable --now nftables
