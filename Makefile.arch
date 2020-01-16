@@ -68,7 +68,7 @@ ctags: repo
 .PHONY: nvim
 nvim: repo
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim git nodejs npm curl fzf shellcheck xclip cmake python-pynvim the_silver_searcher vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
+	@$(PKG-INSTALL) neovim git nodejs npm curl fzf shellcheck xclip cmake python-pynvim ripgrep vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa; echo
 

@@ -30,7 +30,11 @@ zstyle -g existing_user_commands ':completion:*:*:git:*' user-commands
 zstyle ':completion:*:*:git:*' user-commands $existing_user_commands foresta:'show commit graph'
 _git-foresta() _git-log
 
-if (( $+commands[ag] )); then
+if (( $+commands[rg] )); then
+  export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+elif (( $+commands[ag] )); then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
