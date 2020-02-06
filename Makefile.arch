@@ -181,3 +181,7 @@ xfce: repo
 nftables: repo
 	@$(PKG-INSTALL) nftables
 	@sudo systemctl enable --now nftables
+
+.PHONY: doxygen
+doxygen: repo
+	@$(PKG-INSTALL) doxygen dot texlive-core texlive-bin
