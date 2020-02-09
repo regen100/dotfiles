@@ -309,6 +309,10 @@ if executable('fzf')
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
     noremap <Leader>e :<C-u>Files<CR>
+    noremap <Leader>b :<C-u>Buffers<CR>
+    if has('nvim')
+      tnoremap <expr> <Esc> (&filetype == 'fzf') ? '<Esc>' : '<c-\><c-n>'
+    endif
   Plug 'n04ln/yankee.vim'
 endif
 call plug#end()
