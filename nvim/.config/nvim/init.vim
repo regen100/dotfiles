@@ -141,11 +141,6 @@ Plug 'lervag/vimtex'
     let g:vimtex_view_general_options = '--unique @pdf\#src:@tex:@line:@col'
     let g:vimtex_view_general_options_latexmk = '--unique'
   endif
-Plug 'Shougo/context_filetype.vim'
-  let g:context_filetype#filetypes = {
-  \ 'gdb': [{'filetype': 'python', 'start' : '^python$', 'end' : '^end$'}]
-  \}
-  Plug 'osyo-manga/vim-precious'
 Plug 'scrooloose/nerdtree'
   let g:NERDTreeRespectWildIgnore = 1
   nnoremap <silent> <Leader>n :<C-u>NERDTreeToggle<CR>
