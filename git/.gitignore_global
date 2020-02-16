@@ -1,10 +1,11 @@
-tags
 .ignore
 .gdb_history
 .envrc
 .direnv
 .lvimrc
-build*/
 .ipynb_checkpoints
 CMakeLists.txt.user
-.mypy_cache
+Session.vim
+.mypy_cache/
+tags/
+build*/
