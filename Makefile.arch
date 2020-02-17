@@ -74,9 +74,8 @@ nvim: repo
 
 .PHONY: clang
 clang: repo pip
-	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck ccache compdb cmake-lint ccls
-	@mkdir -p ~/.ccache
-	@$(STOW-INSTALL) clang ccache
+	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache-bin compdb cmake-lint ccls
+	@$(STOW-INSTALL) clang
 	@$(PIP-INSTALL) cmake-language-server
 
 .PHONY: python
@@ -90,6 +89,7 @@ nodejs: repo
 
 .PHONY: rust
 rust: repo
+	@$(PKG-INSTALL) sccache-bin
 	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | sh -s -- -y
 	@$$HOME/.cargo/bin/rustup update stable
 	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview clippy rls rust-analysis

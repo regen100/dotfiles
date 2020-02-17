@@ -19,5 +19,7 @@ if [[ -z $ZSHENV_LOADED ]]; then
 
   export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=gasp'
 
+  (( $+commands[sccache] )) && export RUSTC_WRAPPER=sccache
+
   export ZSHENV_LOADED=1
 fi
