@@ -255,6 +255,7 @@ Plug 'thaerkh/vim-workspace'
   let g:workspace_session_disable_on_args = 1
   let g:workspace_persist_undo_history = 0
   let g:workspace_autosave = 0
+Plug 'rhysd/vim-grammarous'
 if has('nvim')
   Plug 'jeffkreeftmeijer/vim-numbertoggle'
 endif
