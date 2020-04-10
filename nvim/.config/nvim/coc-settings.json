@@ -81,7 +81,7 @@
   "python.linting.mypyEnabled": true,
   "python.linting.flake8Enabled": true,
   "python.sortImports.path": "isort",
-  "python.formatting.provider": "yapf",
+  "python.formatting.provider": "black",
   "rust.clippy_preference": "on",
   "yaml.format.enable": true,
   "coc.preferences.formatOnType": true,
