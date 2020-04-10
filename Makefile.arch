@@ -185,3 +185,7 @@ nftables: repo
 .PHONY: doxygen
 doxygen: repo
 	@$(PKG-INSTALL) doxygen dot texlive-core texlive-bin
+
+.PHONY: doxygen
+k8s: repo
+	@$(PKG-INSTALL) kubernetes-bin argo-bin jsonnet
