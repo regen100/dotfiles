@@ -353,6 +353,7 @@ set splitbelow
 set updatetime=300
 set virtualedit=block
 set wildmenu
+set guicursor=
 
 autocmd vimrc InsertLeave * set nopaste
 
