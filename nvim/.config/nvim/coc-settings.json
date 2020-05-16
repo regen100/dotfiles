@@ -83,6 +83,7 @@
   "python.sortImports.path": "isort",
   "python.formatting.provider": "black",
   "rust.clippy_preference": "on",
+  "rust.all_features": true,
   "yaml.format.enable": true,
   "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
