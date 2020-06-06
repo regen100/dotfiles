@@ -2,6 +2,7 @@
 
 install_init() {
   loadkeys jp106
+  setfont latarcyrheb-sun32
   timedatectl set-ntp true
   wget "https://www.archlinux.org/mirrorlist/?country=JP&protocol=http&protocol=https&ip_version=4&ip_version=6" -O /etc/pacman.d/mirrorlist
   sed -ie "s/^#Server/Server/" /etc/pacman.d/mirrorlist
@@ -104,7 +105,7 @@ EOS
   cat << EOS > /mnt/boot/loader/loader.conf
 default Arch Linux
 timeout 3
-editor  no
+editor  yes
 EOS
 }
 
