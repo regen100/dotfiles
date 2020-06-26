@@ -354,6 +354,8 @@ set updatetime=300
 set virtualedit=block
 set wildmenu
 set guicursor=
+set termguicolors
+set pumblend=30
 
 autocmd vimrc InsertLeave * set nopaste
 
