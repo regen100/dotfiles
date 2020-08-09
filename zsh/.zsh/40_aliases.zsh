@@ -27,10 +27,10 @@ alias mmv='noglob zmv -W'
 alias gdbrun='gdb -ex="set confirm on" -ex=run -ex=quit --args'
 alias valgrindrun='valgrind --exit-on-first-error=yes --error-exitcode=1'
 
-CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -ferror-limit=1 -g"
-CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install -DBUILD_TESTS=ON)
+CMAKE_CXX_FLAGS="-fcolor-diagnostics -march=native -ferror-limit=1 -g"
+CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install)
 CMAKE_SCCACHE=(-DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_C_COMPILER_LAUNCHER=sccache)
-alias -g CMAKE_DEV='"$CMAKE_SCCACHE[@]" -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DCMAKE_C_FLAGS="$CMAKE_CXX_FLAGS" "$CMAKE_COMMON_OPTIONS[@]"'
+alias -g CMAKE_DEV='"$CMAKE_SCCACHE[@]" -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DCMAKE_C_FLAGS="$CMAKE_CXX_FLAGS" "$CMAKE_COMMON_OPTIONS[@]" -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld -DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld'
 
 (( $+commands[ag] )) && alias todo='ag "//\s*(TODO|FIXME)\b"'
 
