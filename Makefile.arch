@@ -44,7 +44,7 @@ pip: repo
 .PHONY: utils
 utils: repo
 	@$(PKG-INSTALL) man htop direnv
-	@$(STOW-INSTALL) htop direnv
+	@$(STOW-INSTALL) direnv
 
 .PHONY: utils-gui
 utils-gui: repo
