@@ -1,5 +1,4 @@
 [core]
-	excludesfile = ~/.gitignore_global
 	pager = less -R -F -X
 [push]
 	default = simple
@@ -7,3 +6,10 @@
 	helper = cache
 [merge]
 	conflictStyle = diff3
+[alias]
+	co = checkout
+	pushf = push --force-with-lease
+	m = !git co master && git fetch && git rb && git su
+	rc = rebase --continue
+	rb = pull --rebase origin master
+	su = submodule update --init --recursive
