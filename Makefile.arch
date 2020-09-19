@@ -30,9 +30,9 @@ repo:
 	@$(PKG-INSTALL) stow
 	@$(STOW-INSTALL) pacman
 	@if systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet reflector.timer; then \
-		$(PKG-INSTALL) reflector-timer; \
-		sudo mkdir -p /etc/conf.d; \
-		echo COUNTRY=Japan | sudo tee /etc/conf.d/reflector.conf >/dev/null; \
+		$(PKG-INSTALL) reflector; \
+		sudo sed -i "s/^--protocol https$$/--protocol https --protocol http --protocol ftp/" /etc/xdg/reflector/reflector.conf; \
+		sudo sed -i "s/^# --country France,Germany$$/--country Japan/" /etc/xdg/reflector/reflector.conf; \
 		sudo systemctl enable --now reflector.timer; \
 		sudo systemctl start reflector; \
 	fi
