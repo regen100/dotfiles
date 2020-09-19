@@ -121,7 +121,7 @@ Plug 'sheerun/vim-polyglot'
   let g:cpp_concepts_highlight = 1
   let g:cpp_no_function_highlight = 1
   let g:vim_json_syntax_conceal = 0
-  let g:markdown_enable_conceal = 0
+  let g:vim_markdown_conceal = 0
   autocmd vimrc BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
 Plug 'anntzer/vim-cython'
 Plug 'vhda/verilog_systemverilog.vim'
