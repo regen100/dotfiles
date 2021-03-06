@@ -1,3 +1,0 @@
---langdef=dein
---langmap=dein:.toml
---regex-dein=/repo *= *[^\/]*\/?([^"']+)/\1/r,repo
