@@ -1,8 +1,0 @@
-#compdef rlwrap
-
-_rlwrap() {
-  _arguments \
-    '(-p --prompt-colour)'{-p-,--prompt-colour=}'[prompt colour]:colour:(black red green yellow blue cyan purple magenta white Black Red Green Yellow Blue Cyan Purple Magenta White)' \
-    '(-)1:command: _command_names -e' \
-    '*::arguments: _normal'
-}

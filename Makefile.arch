@@ -43,16 +43,12 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man htop direnv
+	@$(PKG-INSTALL) man htop direnv-bin ripgrep pkgfile
 	@$(STOW-INSTALL) direnv
-
-.PHONY: utils-gui
-utils-gui: repo
-	@$(PKG-INSTALL) git-cola
 
 .PHONY: git
 git: repo
-	@$(PKG-INSTALL) git git-lfs tk git-extras gibo tig
+	@$(PKG-INSTALL) git git-lfs git-extras-git tig
 	@$(STOW-INSTALL) git tig
 	@[[ -f ~/.gitconfig ]] || touch ~/.gitconfig
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
@@ -60,28 +56,22 @@ git: repo
 		echo "	path = ~/.gitconfig_global" >> ~/.gitconfig; \
 	fi
 
-.PHONY: ctags
-ctags: repo
-	@$(PKG-INSTALL) --mflags "--nocheck" universal-ctags-git
-	@$(STOW-INSTALL) ctags
-
 .PHONY: nvim
-nvim: repo
+nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim git nodejs npm curl fzf shellcheck xclip cmake python-pynvim ripgrep vint neovim-remote neovim-drop-in xxd-standalone bash-language-server
+	@$(PKG-INSTALL) neovim-nightly-bin xclip neovim-drop-in xxd-standalone
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa; echo
 
 .PHONY: clang
 clang: repo pip
-	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache-bin compdb cmake-lint ccls
+	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache-bin compdb cmake-lint clangd lldb
 	@$(STOW-INSTALL) clang
 	@$(PIP-INSTALL) cmake-language-server
 
 .PHONY: python
 python: repo
-	@$(PKG-INSTALL) python-colorama mypy python-isort yapf flake8 python-hacking python-flake8-docstrings poetry python-pipenv python-black python-tox
-	@$(STOW-INSTALL) python readline
+	@$(PKG-INSTALL) poetry
 
 .PHONY: nodejs
 nodejs: repo
@@ -97,7 +87,7 @@ rust: repo
 
 .PHONY: plantuml
 plantuml: repo
-	@$(PKG-INSTALL) jdk8-openjdk plantuml
+	@$(PKG-INSTALL) jdk-openjdk plantuml
 
 .PHONY: latex
 latex: repo font
@@ -121,20 +111,10 @@ byobu: repo
 
 .PHONY: zsh
 zsh: repo
-	@$(PKG-INSTALL) zsh ccze rlwrap python-pygments lesspipe pkgfile wget unzip pygments-base16 fzf subversion thefuck
-	@sudo pkgfile --update
+	@$(PKG-INSTALL) zsh grml-zsh-config fzf
 	@mkdir -p ~/bin
-	@$(STOW-INSTALL) zsh readline
-	@zsh -i -c -- '-zplg-scheduler burst || true'
-
-.PHONY: wcwidth
-wcwidth:
-	@if [ ! -f /usr/lib/wcwidth-cjk.so ]; then \
-		cp -r $(DOTFILES_DIR).extras/wcwidth-cjk/arch /tmp/wcwidth-cjk; \
-		cd /tmp/wcwidth-cjk; \
-		makepkg --noconfirm -si; \
-		rm -rf /tmp/wcwidth-cjk; \
-	fi
+	@ln -sf /etc/skel/.zshrc ~/.zshrc
+	@$(STOW-INSTALL) zsh
 
 .PHONY: xrdp
 xrdp: repo
@@ -157,14 +137,9 @@ verilog: repo git
 		rm -rf $$(pwd); \
 	fi
 
-.PHONY: debug
-debug: repo
-	@$(PKG-INSTALL) gdb kcachegrind gperftools
-	@$(STOW-INSTALL) gdb
-
 .PHONY: docker
 docker: repo
-	@$(PKG-INSTALL) docker docker-compose hadolint-bin dockerfile-language-server-bin
+	@$(PKG-INSTALL) docker docker-compose hadolint-bin
 
 .PHONY: xfce
 xfce: repo
