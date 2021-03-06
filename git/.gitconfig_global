@@ -13,3 +13,4 @@
 	rc = rebase --continue
 	rb = pull --rebase origin master
 	su = submodule update --init --recursive
+	delete-gone = !git branch -vv | grep ': gone]' | awk '{print $1}' | xargs --no-run-if-empty git branch -D
