@@ -120,7 +120,6 @@ byobu: repo
 zsh: repo
 	@$(PKG-INSTALL) zsh grml-zsh-config fzf
 	@mkdir -p ~/bin
-	@ln -sf /etc/skel/.zshrc ~/.zshrc
 	@$(STOW-INSTALL) zsh
 
 .PHONY: xrdp
