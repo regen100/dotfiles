@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$TERM" = "linux" ] || [ "$LANG" = "C.UTF-8" ] || [ -z "$LANG" ]; then
+if [ "$TERM" = "linux" ] || [ "$LANG" = "C" ] || [ "$LANG" = "C.UTF-8" ] || [ -z "$LANG" ]; then
   export LANG=en_US.UTF-8
 fi
 

@@ -66,7 +66,7 @@ git: repo
 .PHONY: nvim
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim-nightly-bin xclip neovim-drop-in xxd-standalone
+	@$(PKG-INSTALL) neovim-nightly-bin xclip wl-clipboard neovim-drop-in xxd-standalone
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa; echo
 
@@ -118,7 +118,7 @@ byobu: repo
 
 .PHONY: zsh
 zsh: repo
-	@$(PKG-INSTALL) zsh grml-zsh-config fzf zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-pure-prompt zsh-abbr zsh-manydots-magic
+	@$(PKG-INSTALL) zsh grml-zsh-config fzf zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-pure-prompt zsh-manydots-magic
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh
 
@@ -145,7 +145,7 @@ verilog: repo git
 
 .PHONY: docker
 docker: repo
-	@$(PKG-INSTALL) docker docker-compose hadolint-bin
+	@$(PKG-INSTALL) docker docker-compose
 
 .PHONY: xfce
 xfce: repo
@@ -168,7 +168,7 @@ nftables: repo
 doxygen: repo
 	@$(PKG-INSTALL) doxygen dot texlive-core texlive-bin
 
-.PHONY: doxygen
+.PHONY: k8s
 k8s: repo
 	@$(PKG-INSTALL) kubernetes-bin argo-bin jsonnet
 
