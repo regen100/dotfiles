@@ -171,3 +171,7 @@ doxygen: repo
 .PHONY: doxygen
 k8s: repo
 	@$(PKG-INSTALL) kubernetes-bin argo-bin jsonnet
+
+.PHONY: code
+code: repo
+	@$(PKG-INSTALL) visual-studio-code-insiders-bin gnome-keyring ttf-windows
