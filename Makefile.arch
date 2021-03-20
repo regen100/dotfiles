@@ -19,8 +19,7 @@ system: repo
 .PHONY: wsl
 wsl: repo
 	@$(PKG-INSTALL) openssh xorg-xauth unzip
-	@echo >~/.Xauthority
-	@xauth generate "$$(cat /etc/resolv.conf | grep nameserver | awk '{print $$2}'):0" . trusted
+	@touch ~/.Xauthority
 	@mkdir /tmp/win32yank; curl -sSL https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip -o /tmp/win32yank/win32yank.zip
 	@cd /tmp/win32yank; unzip win32yank.zip; mkdir -p ~/bin; mv win32yank.exe ~/bin; rm -rf /tmp/win32yank
 
