@@ -52,6 +52,7 @@ nvim: repo git
 	@mkdir -p ~/.config
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa; echo
+	@vi --headless --cmd "let g:vscode=1" --cmd "let g:force_install=1" +qa; echo
 
 .PHONY: clang
 clang: repo pip stow

@@ -69,6 +69,7 @@ nvim: repo git utils
 	@$(PKG-INSTALL) neovim-nightly-bin xclip wl-clipboard neovim-drop-in xxd-standalone
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa; echo
+	@vi --headless --cmd "let g:vscode=1" --cmd "let g:force_install=1" +qa; echo
 
 .PHONY: clang
 clang: repo pip
@@ -177,5 +178,5 @@ k8s: repo
 	@$(PKG-INSTALL) kubernetes-bin argo-bin jsonnet
 
 .PHONY: code
-code: repo
+code: repo nvim
 	@$(PKG-INSTALL) visual-studio-code-insiders-bin gnome-keyring ttf-windows
