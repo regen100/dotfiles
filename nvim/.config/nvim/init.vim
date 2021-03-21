@@ -19,9 +19,6 @@ nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
 " exit from help
 autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
 
-" sudo save
-cabbrev w!! w !sudo tee > /dev/null %
-
 " open {}
 nnoremap <Leader>o ^f{a<CR><CR><UP>
 
@@ -116,6 +113,8 @@ if !exists('g:vscode')
         tnoremap <expr> <Esc> (&filetype == 'fzf') ? '<Esc>' : '<c-\><c-n>'
       endif
   endif
+  Plug 'lambdalisue/suda.vim'
+    cabbrev w!! SudaWrite
 endif
 Plug 'tpope/vim-repeat'
 if exists('g:vscode')
