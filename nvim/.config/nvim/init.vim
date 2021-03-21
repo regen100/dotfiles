@@ -212,6 +212,12 @@ if !exists('g:vscode')
     autocmd BufRead * if s:restore_view_check() | silent! loadview | endif
     set viewoptions=cursor,folds,slash,unix
   augroup END
+
+  let g:netrw_banner = 0
+  let g:netrw_preview = 0
+  let g:netrw_liststyle = 1
+  let g:netrw_sizestyle = 'H'
+  let g:netrw_timefmt = '%Y/%m/%d %H:%M:%S'
 endif
 
 if has('win32') || has('win64') || has('mac')
