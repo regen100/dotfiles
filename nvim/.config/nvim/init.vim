@@ -222,10 +222,9 @@ endif
 
 augroup vimrc-restore-ime
   autocmd!
-  if exists('g:vscode')
-    call system('cp -f ' . stdpath('config') . '/ime.ps1 /mnt/c/temp')
+  if exists('g:vscode') && filereadable('/proc/sys/fs/binfmt_misc/WSLInterop')
     let s:ime_status = '0'
-    let s:ime_script = 'powershell.exe -NoLogo -File "C:\temp\ime.ps1" '
+    let s:ime_script = stdpath('config') . '/imeonoff.exe -s '
     autocmd InsertEnter * silent call system(s:ime_script . s:ime_status)
     autocmd InsertLeave * silent let s:ime_status = system(s:ime_script . '0')
   elseif exists('$TMUX')
