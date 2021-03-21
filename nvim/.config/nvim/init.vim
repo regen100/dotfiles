@@ -218,20 +218,26 @@ if !exists('g:vscode')
   let g:netrw_liststyle = 1
   let g:netrw_sizestyle = 'H'
   let g:netrw_timefmt = '%Y/%m/%d %H:%M:%S'
-
-  augroup vimrc-restore-ime
-    autocmd!
-    if exists('$TMUX')
-      autocmd InsertEnter * silent call chansend(v:stderr, "\ePtmux;\e\e[<r\e\\")
-      autocmd InsertLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<s\e\e[<0t\e\\")
-      autocmd VimLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
-    else
-      autocmd InsertEnter * silent call chansend(v:stderr, "\e[<r")
-      autocmd InsertLeave * silent call chansend(v:stderr, "\e[<s\e[<0t")
-      autocmd VimLeave * silent call chansend(v:stderr, "\e[<0t\e[<s")
-    endif
-  augroup END
 endif
+
+augroup vimrc-restore-ime
+  autocmd!
+  if exists('g:vscode')
+    call system('cp -f ' . stdpath('config') . '/ime.ps1 /mnt/c/temp')
+    let s:ime_status = '0'
+    let s:ime_script = 'powershell.exe -NoLogo -File "C:\temp\ime.ps1" '
+    autocmd InsertEnter * silent call system(s:ime_script . s:ime_status)
+    autocmd InsertLeave * silent let s:ime_status = system(s:ime_script . '0')
+  elseif exists('$TMUX')
+    autocmd InsertEnter * silent call chansend(v:stderr, "\ePtmux;\e\e[<r\e\\")
+    autocmd InsertLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<s\e\e[<0t\e\\")
+    autocmd VimLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
+  else
+    autocmd InsertEnter * silent call chansend(v:stderr, "\e[<r")
+    autocmd InsertLeave * silent call chansend(v:stderr, "\e[<s\e[<0t")
+    autocmd VimLeave * silent call chansend(v:stderr, "\e[<0t\e[<s")
+  endif
+augroup END
 
 if has('win32') || has('win64') || has('mac')
   set clipboard=unnamed
