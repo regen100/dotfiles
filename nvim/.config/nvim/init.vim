@@ -218,6 +218,19 @@ if !exists('g:vscode')
   let g:netrw_liststyle = 1
   let g:netrw_sizestyle = 'H'
   let g:netrw_timefmt = '%Y/%m/%d %H:%M:%S'
+
+  augroup vimrc-restore-ime
+    autocmd!
+    if exists('$TMUX')
+      autocmd InsertEnter * silent call chansend(v:stderr, "\ePtmux;\e\e[<r\e\\")
+      autocmd InsertLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<s\e\e[<0t\e\\")
+      autocmd VimLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
+    else
+      autocmd InsertEnter * silent call chansend(v:stderr, "\e[<r")
+      autocmd InsertLeave * silent call chansend(v:stderr, "\e[<s\e[<0t")
+      autocmd VimLeave * silent call chansend(v:stderr, "\e[<0t\e[<s")
+    endif
+  augroup END
 endif
 
 if has('win32') || has('win64') || has('mac')
