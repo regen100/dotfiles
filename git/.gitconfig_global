@@ -1,7 +1,9 @@
 [core]
 	pager = less -R -F -X
 [push]
-	default = simple
+	default = current
+[pull]
+	rebase = true
 [credential]
 	helper = cache
 [merge]
