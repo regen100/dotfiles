@@ -51,6 +51,7 @@ pip: repo
 utils: repo
 	@$(PKG-INSTALL) man htop direnv-bin ripgrep pkgfile
 	@$(STOW-INSTALL) direnv
+	@sudo pkgfile --update
 
 .PHONY: git
 git: repo
