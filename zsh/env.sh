@@ -15,12 +15,14 @@ if [ -f $HOME/.cargo/env ]; then
   . $HOME/.cargo/env
 fi
 
+PATH="./node_modules/.bin:$PATH"
 if [ -d $HOME/.local/bin ]; then
-  export PATH="$HOME/.local/bin:$PATH"
+  PATH="$HOME/.local/bin:$PATH"
 fi
 if [ -d $HOME/bin ]; then
-  export PATH="$HOME/bin:$PATH"
+  PATH="$HOME/bin:$PATH"
 fi
+export PATH
 
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
   export DISPLAY="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0"
