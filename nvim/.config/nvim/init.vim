@@ -92,11 +92,12 @@ if !exists('g:vscode')
     let g:cpp_no_function_highlight = 1
     let g:vim_json_syntax_conceal = 0
     let g:vim_markdown_conceal = 0
+    let g:vim_markdown_conceal_code_blocks = 0
     autocmd vimrc BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
   Plug 'Yggdroot/indentLine'
     let g:indentLine_fileTypeExclude = ['help', 'tagbar', 'git', '']
   Plug 'lilydjwg/colorizer'
-  Plug 'junegunn/rainbow_parentheses.vim'
+  Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
     let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
     autocmd vimrc FileType cpp RainbowParentheses
   Plug 'thinca/vim-zenspace'
@@ -113,8 +114,6 @@ if !exists('g:vscode')
         tnoremap <expr> <Esc> (&filetype == 'fzf') ? '<Esc>' : '<c-\><c-n>'
       endif
   endif
-  Plug 'lambdalisue/suda.vim'
-    cabbrev w!! SudaWrite
 endif
 Plug 'tpope/vim-repeat'
 if exists('g:vscode')
@@ -133,6 +132,10 @@ if exists('g:vscode')
 else
   Plug 'tpope/vim-commentary'
 endif
+if executable('sudo')
+  Plug 'lambdalisue/suda.vim', { 'on': 'SudaWrite' }
+    cabbrev w!! SudaWrite
+endif
 
 call plug#end()
 if s:vimplug_install || exists('g:force_install')
@@ -144,9 +147,6 @@ endif
 set ignorecase smartcase incsearch
 
 if !exists('g:vscode')
-  filetype plugin indent on
-  syntax enable
-
   if &t_Co >= 256
     set background=dark
     colorscheme hybrid
@@ -223,10 +223,10 @@ endif
 augroup vimrc-restore-ime
   autocmd!
   if exists('g:vscode') && filereadable('/proc/sys/fs/binfmt_misc/WSLInterop')
-    let s:ime_status = '0'
+    let b:ime_status = '0'
     let s:ime_script = stdpath('config') . '/imeonoff.exe -s '
-    autocmd InsertEnter * silent call system(s:ime_script . s:ime_status)
-    autocmd InsertLeave * silent let s:ime_status = system(s:ime_script . '0')
+    autocmd InsertEnter * silent call system(s:ime_script . b:ime_status)
+    autocmd InsertLeave * silent let b:ime_status = system(s:ime_script . '0')
   elseif exists('$TMUX')
     autocmd InsertEnter * silent call chansend(v:stderr, "\ePtmux;\e\e[<r\e\\")
     autocmd InsertLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<s\e\e[<0t\e\\")
