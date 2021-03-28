@@ -10,6 +10,16 @@ alias gdbrun='gdb -ex=run --args'
 alias lldbrun='lldb -o run --'
 alias valgrindrun='valgrind --exit-on-first-error=yes --error-exitcode=1'
 
+git config --list | grep '^alias\.' | while IFS=$'\n' read line && key=${line%%=*} val=${line#*=}
+do
+  if [[ "${val:0:1}" == ! ]]; then
+    alias "g${key:6}=${val:1}"
+  else
+    alias "g${key:6}=git ${val}"
+  fi
+done
+unset line key val
+
 CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -ferror-limit=1 -g"
 CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install -DBUILD_TESTS=ON)
 CMAKE_SCCACHE=(-DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_C_COMPILER_LAUNCHER=sccache)
