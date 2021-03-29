@@ -123,6 +123,15 @@ if !exists('g:vscode')
       autocmd vimrc User PlugEnd lua require('lsp')
     Plug 'hrsh7th/nvim-compe'
   endif
+  if has('nvim-0.5')
+    Plug 'kyazdani42/nvim-web-devicons'
+    Plug 'romgrk/barbar.nvim'
+      let bufferline = get(g:, 'bufferline', {})
+      let bufferline.auto_hide = v:true
+      let bufferline.closable = v:false
+    Plug 'hoob3rt/lualine.nvim'
+      autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
+  endif
 endif
 Plug 'tpope/vim-repeat'
 if exists('g:vscode')
@@ -165,7 +174,6 @@ if !exists('g:vscode')
   set ambiwidth=double
   set autoread
   set autowrite
-  set cmdheight=2
   set cursorline number nowrap
   set diffopt=filler,vertical
   set fileencodings=utf-8,cp932 fileformats=unix,dos
