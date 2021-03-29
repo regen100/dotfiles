@@ -114,6 +114,15 @@ if !exists('g:vscode')
         tnoremap <expr> <Esc> (&filetype == 'fzf') ? '<Esc>' : '<c-\><c-n>'
       endif
   endif
+  if executable('lua-format')
+    Plug 'andrejlevkovitch/vim-lua-format'
+      autocmd BufWrite *.lua call LuaFormat()
+  endif
+  if has('nvim-0.5')
+    Plug 'neovim/nvim-lspconfig'
+      autocmd vimrc User PlugEnd lua require('lsp')
+    Plug 'hrsh7th/nvim-compe'
+  endif
 endif
 Plug 'tpope/vim-repeat'
 if exists('g:vscode')
@@ -141,6 +150,7 @@ call plug#end()
 if s:vimplug_install || exists('g:force_install')
   PlugInstall --sync
 endif
+if exists('#User#PlugEnd') | doautocmd User PlugEnd | endif
 " }}}
 
 " set {{{
