@@ -78,7 +78,7 @@ clang: repo pip
 	@$(PIP-INSTALL) cmake-language-server
 
 .PHONY: python
-python: repo
+python: repo readline
 	@$(PKG-INSTALL) poetry
 
 .PHONY: nodejs
@@ -120,7 +120,7 @@ byobu: repo
 	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
 
 .PHONY: zsh
-zsh: repo
+zsh: repo readline
 	@$(PKG-INSTALL) zsh grml-zsh-config fzf zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-pure-prompt zsh-manydots-magic keychain
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh
@@ -182,3 +182,8 @@ k8s: repo
 .PHONY: code
 code: repo nvim
 	@$(PKG-INSTALL) visual-studio-code-insiders-bin gnome-keyring ttf-windows
+
+.PHONY: readline
+readline: repo
+	@$(STOW-INSTALL) readline
+
