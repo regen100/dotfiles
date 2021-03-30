@@ -1,5 +1,3 @@
-#!/bin/sh
-
 if [ "$TERM" = "linux" ] || [ "$LANG" = "C" ] || [ "$LANG" = "C.UTF-8" ] || [ -z "$LANG" ]; then
   export LANG=en_US.UTF-8
 fi
@@ -11,11 +9,9 @@ if type vim >/dev/null 2>&1; then
   export VISUAL=vim
 fi
 
-if [ -f $HOME/.cargo/env ]; then
+if [ -e $HOME/.cargo/env ]; then
   . $HOME/.cargo/env
 fi
-
-PATH="./node_modules/.bin:$PATH"
 if [ -d $HOME/.local/bin ]; then
   PATH="$HOME/.local/bin:$PATH"
 fi

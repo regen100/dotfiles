@@ -1,1 +1,0 @@
-. $HOME/env.sh
