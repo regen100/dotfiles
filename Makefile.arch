@@ -187,3 +187,8 @@ code: repo nvim
 readline: repo
 	@$(STOW-INSTALL) readline
 
+.PHONY: borg
+borg: repo
+	@$(PKG-INSTALL) borg
+	@$(STOW-INSTALL) borg
+
