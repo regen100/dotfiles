@@ -124,6 +124,7 @@ zsh: repo readline
 	@$(PKG-INSTALL) zsh grml-zsh-config fzf zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-pure-prompt zsh-manydots-magic keychain
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh
+	@mkdir -p ~/.zfunc
 
 .PHONY: xrdp
 xrdp: repo
