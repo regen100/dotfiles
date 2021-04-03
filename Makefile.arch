@@ -131,7 +131,7 @@ xrdp: repo
 
 .PHONY: font
 font: repo
-	@$(PKG-INSTALL) noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-cica otf-ipaexfont
+	@$(PKG-INSTALL) noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-cica otf-ipaexfont ttf-times-new-roman
 	@$(STOW-INSTALL) font
 
 .PHONY: verilog
