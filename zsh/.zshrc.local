@@ -10,41 +10,29 @@ alias gdbrun='gdb -ex=run --args'
 alias lldbrun='lldb -o run --'
 alias valgrindrun='valgrind --exit-on-first-error=yes --error-exitcode=1'
 
-git config --list | grep '^alias\.' | while IFS=$'\n' read line && key=${line%%=*} val=${line#*=}
-do
-  if [[ "${val:0:1}" == ! ]]; then
-    alias "g${key:6}=${val:1}"
-  else
-    alias "g${key:6}=git ${val}"
-  fi
-done
-unset line key val
-
 CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -ferror-limit=1 -g"
 CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install -DBUILD_TESTS=ON)
 CMAKE_SCCACHE=(-DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_C_COMPILER_LAUNCHER=sccache)
 alias -g CMAKE_DEV='"$CMAKE_SCCACHE[@]" -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DCMAKE_C_FLAGS="$CMAKE_CXX_FLAGS" "$CMAKE_COMMON_OPTIONS[@]"'
 
-mkc() { mkdir -p "$1" && cd "$1" }
-_mkc() { _files -W "$1" -/ }
-
-ls_abbrev() {
-  if [[ $ZSH_SUBSHELL -eq 1 ]]; then
-    return
-  fi
-  local -r ls_result=$(CLICOLOR_FORCE=1 COLUMNS=$COLUMNS command ls -aCF --color=always | sed $'/^\e\[[0-9;]*m$/d')
-  local -r ls_lines=$(echo "$ls_result" | wc -l | tr -d ' ')
-  if [ $ls_lines -gt 10 ]; then
-    echo "$ls_result" | head -n 5
-    echo '...'
-    echo "$ls_result" | tail -n 5
-    echo "$(command ls -1 -A | wc -l | tr -d ' ') files exist"
-  else
-    echo "$ls_result"
-  fi
-}
+mkc() { mkdir -p $1 && cd $1 }
+_mkc() { _files -W $1 -/ }
 
 autoload -Uz add-zsh-hook
+
+ls_abbrev() {
+  if [[ $ZSH_SUBSHELL -eq 1 ]]; then return; fi
+  local -r ls_result=$(COLUMNS=$COLUMNS command ls -aCF --color=always)
+  local -r ls_lines=$(echo $ls_result | wc -l)
+  if [[ $ls_lines -gt 10 ]]; then
+    echo $ls_result | head -n 5
+    echo ...
+    echo $ls_result | tail -n 5
+    echo "$(command ls -1 -A | wc -l) files exist"
+  else
+    echo $ls_result
+  fi
+}
 add-zsh-hook chpwd ls_abbrev
 
 reset_cursor() { echo -ne '\e[5 q' }
@@ -57,4 +45,6 @@ autoload -Uz manydots-magic && manydots-magic
 
 type prompt_pure_setup >/dev/null 2>&1 && prompt pure
 
-eval $(keychain --eval --quiet --ignore-missing --noask id_rsa)
+(( $+commands[keychain] )) && eval "$(keychain --eval --quiet --ignore-missing --noask id_rsa)"
+
+[[ -e ~/.zshrc.$(uname -n) ]] && source ~/.zshrc.$(uname -n)

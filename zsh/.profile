@@ -1,7 +1,3 @@
-if [ "$TERM" = "linux" ] || [ "$LANG" = "C" ] || [ "$LANG" = "C.UTF-8" ] || [ -z "$LANG" ]; then
-  export LANG=en_US.UTF-8
-fi
-
 export LESS="-giMRSW -z-4 -x4 -j4"
 
 if type vim >/dev/null 2>&1; then
