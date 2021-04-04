@@ -1,4 +1,0 @@
-#!/bin/sh
-
-prefix=$(tmux show-options -gv prefix | tr '[:lower:]' '[:upper:]' | sed 's/C-/\^/' )
-echo "#{?client_prefix,#[reverse],}$prefix#[default] "
