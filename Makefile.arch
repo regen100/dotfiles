@@ -112,12 +112,10 @@ tmux-patch: repo
 	@cd /tmp/arch/trunk; makepkg --noconfirm -si
 	@rm -rf /tmp/arch
 
-.PHONY: byobu
-byobu: repo
-	@$(PKG-INSTALL) byobu
-	@$(STOW-INSTALL) byobu
-	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.enable
-	@sudo sed -i 's/^\(set -g .*-.*\)/#\1/g' /usr/share/byobu/keybindings/mouse.tmux.disable
+.PHONY: tmux
+tmux: repo
+	@$(PKG-INSTALL) tmux
+	@$(STOW-INSTALL) tmux
 
 .PHONY: zsh
 zsh: repo readline
