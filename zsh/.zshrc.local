@@ -35,7 +35,7 @@ ls_abbrev() {
 }
 add-zsh-hook chpwd ls_abbrev
 
-reset_cursor() { echo -ne '\e[5 q' }
+reset_cursor() { echo -ne '\e[5 q\e[?1000l' }
 add-zsh-hook precmd reset_cursor
 
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
