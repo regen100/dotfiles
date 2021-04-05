@@ -105,6 +105,7 @@ if !exists('g:vscode')
     autocmd vimrc BufWritePre * FixWhitespace
   Plug 'itchyny/vim-cursorword'
   Plug 'tpope/vim-unimpaired'
+  Plug 'google/vim-jsonnet'
   if executable('fzf')
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
