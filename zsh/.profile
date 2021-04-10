@@ -17,5 +17,5 @@ fi
 export PATH
 
 if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ]; then
-  export DISPLAY="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0"
+  export DISPLAY="$(</etc/resolv.conf awk '/nameserver/{print $2}'):0"
 fi
