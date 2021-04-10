@@ -4,6 +4,11 @@
 [[ -e /usr/share/doc/pkgfile/command-not-found.zsh ]] && source /usr/share/doc/pkgfile/command-not-found.zsh
 [[ -e /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [[ -e /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+(( $+commands[keychain] )) && eval "$(keychain --eval --quiet --ignore-missing --noask id_rsa)"
+(( $+functions[prompt_pure_setup] )) && prompt pure
+
+setopt HIST_VERIFY
 
 alias mmv='noglob zmv -W'
 alias gdbrun='gdb -ex=run --args'
@@ -35,16 +40,18 @@ ls_abbrev() {
 }
 add-zsh-hook chpwd ls_abbrev
 
-reset_cursor() { echo -ne '\e[5 q\e[?1000l' }
-add-zsh-hook precmd reset_cursor
+reset_prompt() {
+  echo -ne '\e[5 q'     # reset cursor
+  echo -ne '\e[?1000l'  # mouse tracking off
+}
+add-zsh-hook precmd reset_prompt
 
-(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+reset_env() {
+  [[ -n $TMUX && -n $DISPLAY ]] && export $(tmux show-environment DISPLAY)
+}
+add-zsh-hook preexec reset_env
 
 url-quote
 autoload -Uz manydots-magic && manydots-magic
 
-type prompt_pure_setup >/dev/null 2>&1 && prompt pure
-
-(( $+commands[keychain] )) && eval "$(keychain --eval --quiet --ignore-missing --noask id_rsa)"
-
-[[ -e ~/.zshrc.$(uname -n) ]] && source ~/.zshrc.$(uname -n)
+[[ -e ~/.zshrc.$HOST ]] && source ~/.zshrc.$HOST
