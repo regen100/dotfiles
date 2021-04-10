@@ -1,1 +1,1 @@
-include Makefile.$(shell grep -h ^ID= /etc/os-release | cut -d= -f2)
+include Makefile.$(shell </etc/os-release awk -F= '/^ID=/ {print $$2}')
