@@ -101,11 +101,9 @@ if !exists('g:vscode')
     let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
     autocmd vimrc FileType cpp RainbowParentheses
   Plug 'thinca/vim-zenspace'
-  Plug 'bronson/vim-trailing-whitespace'
-    autocmd vimrc BufWritePre * FixWhitespace
   Plug 'itchyny/vim-cursorword'
   Plug 'tpope/vim-unimpaired'
-  Plug 'google/vim-jsonnet'
+  Plug 'mhinz/vim-startify'
   if executable('fzf')
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
@@ -236,7 +234,7 @@ if !exists('g:vscode')
   let g:netrw_preview = 0
   let g:netrw_liststyle = 1
   let g:netrw_sizestyle = 'H'
-  let g:netrw_timefmt = '%Y/%m/%d %H:%M:%S'
+  let g:netrw_timefmt = '%Y-%m-%d %H:%M:%S'
 endif
 
 augroup vimrc-restore-ime
@@ -265,4 +263,3 @@ endif
 " }}}
 
 set secure
-
