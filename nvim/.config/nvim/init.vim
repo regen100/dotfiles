@@ -133,6 +133,7 @@ if !exists('g:vscode')
   endif
 endif
 Plug 'tpope/vim-repeat'
+Plug 'kana/vim-niceblock'
 if exists('g:vscode')
   Plug 'asvetliakov/vim-easymotion', {'as': 'vim-easymotion_vscode'}
 else
