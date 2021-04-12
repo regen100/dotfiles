@@ -5,8 +5,9 @@
 [[ -e /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [[ -e /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-(( $+commands[keychain] )) && eval "$(keychain --eval --quiet --ignore-missing --noask id_rsa)"
 (( $+functions[prompt_pure_setup] )) && prompt pure
+
+[[ -z $SSH_AUTH_SOCK && $+commands[keychain] -eq 1 ]] && eval "$(keychain --eval --quiet --ignore-missing --noask id_rsa)"
 
 setopt HIST_VERIFY
 
@@ -47,7 +48,14 @@ reset_prompt() {
 add-zsh-hook precmd reset_prompt
 
 reset_env() {
-  [[ -n $TMUX && -n $DISPLAY ]] && export $(tmux show-environment DISPLAY)
+  [[ -z $TMUX ]] && return
+  while IFS=$'\n' read v; do
+    if [[ ${v:0:1} = - ]]; then
+      unset ${v:1}
+    else
+      export $v
+    fi
+  done < <(tmux showenv)
 }
 add-zsh-hook preexec reset_env
 
