@@ -49,7 +49,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man htop direnv-bin ripgrep pkgfile duf ncdu
+	@$(PKG-INSTALL) man htop direnv-bin ripgrep pkgfile duf-bin ncdu
 	@$(STOW-INSTALL) direnv
 	@sudo pkgfile --update
 
