@@ -57,7 +57,7 @@ nvim_lsp.clangd.setup {
   cmd = {'clangd', '--clang-tidy', '--header-insertion=never'},
   on_attach = on_attach
 }
-nvim_lsp.rust_analyzer.setup {on_attach = on_attach}
+nvim_lsp.rls.setup {on_attach = on_attach}
 nvim_lsp.vimls.setup {on_attach = on_attach}
 nvim_lsp.sumneko_lua.setup {
   cmd = {'lua-language-server'},
