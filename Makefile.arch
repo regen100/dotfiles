@@ -119,7 +119,7 @@ tmux: repo
 
 .PHONY: zsh
 zsh: repo readline
-	@$(PKG-INSTALL) zsh grml-zsh-config fzf zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-pure-prompt zsh-manydots-magic keychain
+	@$(PKG-INSTALL) zsh grml-zsh-config fzf zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-manydots-magic keychain starship
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh
 	@mkdir -p ~/.zfunc
