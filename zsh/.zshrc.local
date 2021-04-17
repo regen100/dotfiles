@@ -5,9 +5,13 @@
 [[ -e /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [[ -e /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-(( $+functions[prompt_pure_setup] )) && prompt pure
-
 [[ -z $SSH_AUTH_SOCK && $+commands[keychain] -eq 1 ]] && eval "$(keychain --eval --quiet --ignore-missing --noask id_rsa)"
+
+if (( $+commands[starship] )); then
+  prompt off && eval "$(starship init zsh)"
+elif (( $+functions[prompt_pure_setup] )); then
+  prompt pure
+fi
 
 setopt HIST_VERIFY
 
