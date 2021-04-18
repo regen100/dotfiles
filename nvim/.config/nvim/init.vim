@@ -94,8 +94,6 @@ if !exists('g:vscode')
     let g:vim_markdown_conceal = 0
     let g:vim_markdown_conceal_code_blocks = 0
     autocmd vimrc BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript.css
-  Plug 'Yggdroot/indentLine'
-    let g:indentLine_fileTypeExclude = ['help', 'tagbar', 'git', '']
   Plug 'lilydjwg/colorizer'
   Plug 'junegunn/rainbow_parentheses.vim', { 'on': 'RainbowParentheses' }
     let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
@@ -130,6 +128,11 @@ if !exists('g:vscode')
       let bufferline.closable = v:false
     Plug 'hoob3rt/lualine.nvim'
       autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
+  endif
+  if has('nvim-0.5')
+    Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
+      let g:indent_blankline_filetype_exclude = ['help', 'gitcommit']
+      let g:indent_blankline_buftype_exclude = ['terminal']
   endif
 endif
 Plug 'tpope/vim-repeat'
