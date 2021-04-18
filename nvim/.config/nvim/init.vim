@@ -119,6 +119,7 @@ if !exists('g:vscode')
     Plug 'neovim/nvim-lspconfig'
       autocmd vimrc User PlugEnd lua require('lsp')
     Plug 'hrsh7th/nvim-compe'
+    Plug 'ray-x/lsp_signature.nvim'
   endif
   if has('nvim-0.5')
     Plug 'kyazdani42/nvim-web-devicons'
