@@ -250,10 +250,12 @@ augroup vimrc-restore-ime
     autocmd InsertEnter * silent call system(s:ime_script . b:ime_status)
     autocmd InsertLeave * silent let b:ime_status = system(s:ime_script . '0')
   elseif exists('$TMUX')
+    call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
     autocmd InsertEnter * silent call chansend(v:stderr, "\ePtmux;\e\e[<r\e\\")
     autocmd InsertLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<s\e\e[<0t\e\\")
     autocmd VimLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
   else
+    call chansend(v:stderr, "\e[<0t\e[<s")
     autocmd InsertEnter * silent call chansend(v:stderr, "\e[<r")
     autocmd InsertLeave * silent call chansend(v:stderr, "\e[<s\e[<0t")
     autocmd VimLeave * silent call chansend(v:stderr, "\e[<0t\e[<s")

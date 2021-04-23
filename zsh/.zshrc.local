@@ -5,7 +5,7 @@
 [[ -e /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [[ -e /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-[[ -z $SSH_AUTH_SOCK && $+commands[keychain] -eq 1 ]] && eval "$(keychain --eval --quiet --ignore-missing --noask id_rsa)"
+(( $+commands[keychain] )) && eval "$(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519)"
 
 if (( $+commands[starship] )); then
   prompt off && eval "$(starship init zsh)"
