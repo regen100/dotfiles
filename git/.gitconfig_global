@@ -11,8 +11,8 @@
 [alias]
 	co = checkout
 	pushf = push --force-with-lease
-	m = !git co master && git fetch && git rb && git su
-	rc = rebase --continue
-	rb = pull --rebase origin master
 	su = submodule update --init --recursive
+	rc = rebase --continue
+	rb = !git pull --rebase origin master && git su
+	m = !git co master && git fetch && git rb
 	delete-gone = !git branch -vv | awk '/: gone]/{print $1}' | xargs --no-run-if-empty git branch -D
