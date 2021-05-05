@@ -78,6 +78,7 @@ nvim_lsp.sumneko_lua.setup {
   },
   on_attach = on_attach
 }
+nvim_lsp.pyls.setup {on_attach = on_attach}
 
 vim.o.completeopt = 'menuone,noselect'
 require'compe'.setup {
