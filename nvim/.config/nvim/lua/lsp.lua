@@ -85,6 +85,19 @@ nvim_lsp.sumneko_lua.setup {
 }
 nvim_lsp.pyls.setup {on_attach = on_attach}
 
+local configs = require 'lspconfig/configs'
+if not nvim_lsp.pysen then
+  configs.pysen = {
+    default_config = {
+      cmd = {'pysen_language_server', '--io'},
+      filetypes = {'python'},
+      root_dir = nvim_lsp.util.root_pattern('pyproject.toml'),
+      settings = {}
+    }
+  }
+end
+nvim_lsp.pysen.setup {}
+
 vim.o.completeopt = 'menuone,noselect'
 require'compe'.setup {
   source = {
