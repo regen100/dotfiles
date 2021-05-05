@@ -119,6 +119,12 @@ if !exists('g:vscode')
     Plug 'neovim/nvim-lspconfig'
       autocmd vimrc User PlugEnd lua require('lsp')
     Plug 'hrsh7th/nvim-compe'
+      inoremap <silent><expr> <C-Space> compe#complete()
+      inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+      inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+      inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+      inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+      inoremap <expr><TAB>              pumvisible() ? "\<CR>" : "\<TAB>"
     Plug 'ray-x/lsp_signature.nvim'
   endif
   if has('nvim-0.5')
