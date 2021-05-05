@@ -58,15 +58,26 @@ local on_attach = function(client, bufnr)
   require'lsp_signature'.on_attach()
 end
 
-local nvim_lsp = require 'lspconfig'
-nvim_lsp.cmake.setup {on_attach = on_attach}
-nvim_lsp.clangd.setup {
+local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig/configs'
+if not lspconfig.pysen then
+  configs.pysen = {
+    default_config = {
+      cmd = {'pysen_language_server', '--io'},
+      filetypes = {'python'},
+      root_dir = lspconfig.util.root_pattern('pyproject.toml')
+    }
+  }
+end
+
+lspconfig.cmake.setup {on_attach = on_attach}
+lspconfig.clangd.setup {
   cmd = {'clangd', '--clang-tidy', '--header-insertion=never'},
   on_attach = on_attach
 }
-nvim_lsp.rls.setup {on_attach = on_attach}
-nvim_lsp.vimls.setup {on_attach = on_attach}
-nvim_lsp.sumneko_lua.setup {
+lspconfig.rls.setup {on_attach = on_attach}
+lspconfig.vimls.setup {on_attach = on_attach}
+lspconfig.sumneko_lua.setup {
   cmd = {'lua-language-server'},
   settings = {
     Lua = {
@@ -83,20 +94,8 @@ nvim_lsp.sumneko_lua.setup {
   },
   on_attach = on_attach
 }
-nvim_lsp.pyls.setup {on_attach = on_attach}
-
-local configs = require 'lspconfig/configs'
-if not nvim_lsp.pysen then
-  configs.pysen = {
-    default_config = {
-      cmd = {'pysen_language_server', '--io'},
-      filetypes = {'python'},
-      root_dir = nvim_lsp.util.root_pattern('pyproject.toml'),
-      settings = {}
-    }
-  }
-end
-nvim_lsp.pysen.setup {}
+lspconfig.pyls.setup {on_attach = on_attach}
+lspconfig.pysen.setup {on_attach = on_attach}
 
 vim.o.completeopt = 'menuone,noselect'
 require'compe'.setup {
