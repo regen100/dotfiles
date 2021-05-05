@@ -29,12 +29,12 @@ local on_attach = function(client, bufnr)
                  '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
   if client.resolved_capabilities.document_formatting then
-    buf_set_keymap("n", "<Leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>",
+    buf_set_keymap('n', '<Leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>',
                    opts)
   end
   if client.resolved_capabilities.document_range_formatting then
-    buf_set_keymap("v", "<Leader>f",
-                   "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+    buf_set_keymap('v', '<Leader>f',
+                   '<cmd>lua vim.lsp.buf.range_formatting()<CR>', opts)
   end
 
   if client.resolved_capabilities.document_highlight then
@@ -49,6 +49,11 @@ local on_attach = function(client, bufnr)
       augroup END
     ]], false)
   end
+
+  vim.api.nvim_exec([[
+    hi LspDiagnosticsDefaultError  guifg=lightred
+    hi LspDiagnosticsDefaultWarning  guifg=lightyellow
+  ]], false)
 
   require'lsp_signature'.on_attach()
 end
@@ -88,6 +93,10 @@ require'compe'.setup {
     calc = true,
     nvim_lsp = true,
     nvim_lua = true,
-    vsnip = true
+    vsnip = false
   }
 }
+
+vim.lsp.handlers['textDocument/publishDiagnostics'] =
+    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
+                 {virtual_text = {prefix = '!', update_in_insert = false}})
