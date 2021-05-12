@@ -130,7 +130,7 @@ xrdp: repo
 
 .PHONY: font
 font: repo
-	@$(PKG-INSTALL) noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-cica otf-ipaexfont ttf-times-new-roman
+	@$(PKG-INSTALL) noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-times-new-roman ttf-hackgen
 	@$(STOW-INSTALL) font
 
 .PHONY: verilog
@@ -179,8 +179,8 @@ k8s: repo
 	@$(PKG-INSTALL) kubernetes-bin argo-bin jsonnet
 
 .PHONY: code
-code: repo nvim
-	@$(PKG-INSTALL) visual-studio-code-insiders-bin gnome-keyring ttf-windows
+code: repo nvim font
+	@$(PKG-INSTALL) visual-studio-code-insiders-bin gnome-keyring
 
 .PHONY: readline
 readline: repo
