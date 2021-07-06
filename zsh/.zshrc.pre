@@ -1,2 +1,2 @@
-fpath=(~/.zfunc(N-/) $fpath)
+fpath=(~/.zfunc(N-/) /usr/share/zsh/site-functions(N-/) $fpath)
 (( $+commands[rustc] )) && fpath=("$(rustc --print sysroot)/share/zsh/site-functions" $fpath)
