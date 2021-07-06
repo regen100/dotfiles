@@ -129,15 +129,11 @@ if !exists('g:vscode')
   endif
   if has('nvim-0.5')
     Plug 'kyazdani42/nvim-web-devicons'
-    Plug 'romgrk/barbar.nvim'
-      let bufferline = get(g:, 'bufferline', {})
-      let bufferline.auto_hide = v:true
-      let bufferline.closable = v:false
     Plug 'hoob3rt/lualine.nvim'
       autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
   endif
   if has('nvim-0.5')
-    Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
+    Plug 'lukas-reineke/indent-blankline.nvim'
       let g:indent_blankline_filetype_exclude = ['help', 'gitcommit']
       let g:indent_blankline_buftype_exclude = ['terminal']
   endif
