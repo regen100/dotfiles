@@ -7,10 +7,12 @@
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 (( $+commands[keychain] )) && eval "$(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519)"
 
-if (( $+commands[starship] )); then
-  prompt off && eval "$(starship init zsh)"
-elif (( $+functions[prompt_pure_setup] )); then
-  prompt pure
+if [[ $TERM != linux ]]; then
+  if (( $+commands[starship] )); then
+    prompt off && eval "$(starship init zsh)"
+  elif (( $+functions[prompt_pure_setup] )); then
+    prompt pure
+  fi
 fi
 
 setopt HIST_VERIFY
