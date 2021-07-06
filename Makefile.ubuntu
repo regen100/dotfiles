@@ -68,8 +68,17 @@ python: pip
 
 .PHONY: zsh
 zsh: stow git
-	@$(APT-INSTALL) zsh command-not-found wget
-	@wget -O ~/.zshrc https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+	@echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-completions/xUbuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/shells:zsh-users:zsh-completions.list
+	@curl -fsSL https://download.opensuse.org/repositories/shells:zsh-users:zsh-completions/xUbuntu_19.10/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_zsh-users_zsh-completions.gpg > /dev/null
+	@echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-syntax-highlighting/xUbuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/shells:zsh-users:zsh-syntax-highlighting.list
+	@curl -fsSL https://download.opensuse.org/repositories/shells:zsh-users:zsh-syntax-highlighting/xUbuntu_19.10/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_zsh-users_zsh-syntax-highlighting.gpg > /dev/null
+	@echo 'deb http://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/xUbuntu_18.04/ /' | sudo tee /etc/apt/sources.list.d/shells:zsh-users:zsh-autosuggestions.list
+	@curl -fsSL https://download.opensuse.org/repositories/shells:zsh-users:zsh-autosuggestions/xUbuntu_19.10/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_zsh-users_zsh-autosuggestions.gpg > /dev/null
+	@sudo apt-get update
+	@$(APT-INSTALL) zsh command-not-found wget zsh-completions zsh-syntax-highlighting zsh-autosuggestions
+	@curl -sSL -o ~/.zshrc https://github.com/grml/grml-etc-core/raw/master/etc/zsh/zshrc
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh
+	@sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
+	@curl -sSL https://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/xUbuntu_18.04/amd64/zsh-autosuggestions_0.5.0+1.1_amd64.deb -o /tmp/zsh-autosuggestions.deb && sudo dpkg -i /tmp/zsh-autosuggestions.deb
 
