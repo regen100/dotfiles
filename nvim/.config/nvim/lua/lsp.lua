@@ -73,7 +73,12 @@ end
 lspconfig.cmake.setup {on_attach = on_attach}
 lspconfig.clangd.setup {
   cmd = {'clangd', '--clang-tidy', '--header-insertion=never'},
-  on_attach = on_attach
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',
+                                '<Cmd>ClangdSwitchSourceHeader<CR>',
+                                {noremap = true, silent = true})
+  end
 }
 lspconfig.rls.setup {on_attach = on_attach}
 lspconfig.vimls.setup {on_attach = on_attach}
