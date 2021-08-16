@@ -59,7 +59,8 @@ nvim: repo git
 
 .PHONY: clang
 clang: repo pip stow
-	@$(APT-INSTALL) cmake make ninja-build clang clang-tidy clang-format
+	@$(APT-INSTALL) cmake make ninja-build clang clang-tidy clang-format clangd-9
+	@sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-9 100
 	@$(STOW-INSTALL) clang
 
 .PHONY: python
