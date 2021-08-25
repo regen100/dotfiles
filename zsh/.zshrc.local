@@ -1,3 +1,11 @@
+export FZF_DEFAULT_COMMAND="rg --files --hidden 2>/dev/null"
+_fzf_compgen_path() {
+  rg --files --hidden 2>/dev/null
+}
+_fzf_compgen_dir() {
+	rg --files --hidden --null --sort path 2>/dev/null | xargs -0 dirname | uniq
+}
+
 [[ -e /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
 [[ -e /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
 [[ -e /etc/zsh_command_not_found ]] && source /etc/zsh_command_not_found
