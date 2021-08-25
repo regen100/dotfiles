@@ -131,6 +131,8 @@ if !exists('g:vscode')
     Plug 'kyazdani42/nvim-web-devicons'
     Plug 'hoob3rt/lualine.nvim'
       autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
+    Plug 'jose-elias-alvarez/buftabline.nvim'
+      autocmd vimrc User PlugEnd lua require('buftabline').setup{}
   endif
   if has('nvim-0.5')
     Plug 'lukas-reineke/indent-blankline.nvim'
