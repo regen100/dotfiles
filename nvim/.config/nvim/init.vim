@@ -134,6 +134,7 @@ if !exists('g:vscode')
   endif
   if has('nvim-0.5')
     Plug 'lukas-reineke/indent-blankline.nvim'
+      let g:indent_blankline_char = '|'
       let g:indent_blankline_filetype_exclude = ['help', 'gitcommit']
       let g:indent_blankline_buftype_exclude = ['terminal']
   endif
