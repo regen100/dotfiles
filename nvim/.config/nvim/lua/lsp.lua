@@ -33,6 +33,16 @@ local on_attach = function(client, bufnr)
   if client.resolved_capabilities.document_formatting then
     buf_set_keymap('n', '<Leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>',
                    opts)
+    vim.cmd(
+        'call system("git shortlog -se HEAD | grep $(git config user.email)")')
+    if vim.v.shell_error == 0 then
+      vim.api.nvim_exec([[
+        augroup autoformat
+          autocmd! * <buffer>
+          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        augroup END
+      ]], false)
+    end
   end
   if client.resolved_capabilities.document_range_formatting then
     buf_set_keymap('v', '<Leader>f',
