@@ -14,6 +14,7 @@ _fzf_compgen_dir() {
 [[ -e /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [[ -e /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ -e /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+[[ -n $CLOUDSDK_ROOT_DIR ]] && source $CLOUDSDK_ROOT_DIR/completion.zsh.inc
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 (( $+commands[keychain] )) && eval "$(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519)"
 
