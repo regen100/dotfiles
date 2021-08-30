@@ -8,7 +8,6 @@ CMakeLists.txt.user
 Session.vim
 .mypy_cache/
 tags/
-build*/
 .clangd
 .vscode
 compile_commands.json
