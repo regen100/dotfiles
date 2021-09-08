@@ -83,3 +83,8 @@ zsh: stow git
 	@sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- -y
 	@curl -sSL https://download.opensuse.org/repositories/shells:/zsh-users:/zsh-autosuggestions/xUbuntu_18.04/amd64/zsh-autosuggestions_0.5.0+1.1_amd64.deb -o /tmp/zsh-autosuggestions.deb && sudo dpkg -i /tmp/zsh-autosuggestions.deb
 
+.PHONY: bazel
+bazel: repo
+	@sudo mkdir -p /usr/local/bin/bazel-compilation-database
+	@curl -fsSL https://github.com/grailbio/bazel-compilation-database/archive/0.4.5.tar.gz | sudo tar -xz -C /usr/local/bin/bazel-compilation-database --strip-components 1
+	@sudo ln -sf bazel-compilation-database/generate.sh /usr/local/bin/bazel-compdb
