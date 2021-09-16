@@ -55,7 +55,7 @@ utils: repo
 
 .PHONY: git
 git: repo
-	@$(PKG-INSTALL) git git-lfs git-extras-git tig git-delta-bin
+	@$(PKG-INSTALL) git git-lfs git-extras-git tig git-delta
 	@$(STOW-INSTALL) git tig
 	@[[ -f ~/.gitconfig ]] || touch ~/.gitconfig
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
