@@ -115,16 +115,6 @@ lspconfig.pylsp.setup {on_attach = on_attach}
 lspconfig.pysen.setup {on_attach = on_attach}
 
 vim.o.completeopt = 'menuone,noselect'
-require'compe'.setup {
-  source = {
-    path = true,
-    buffer = true,
-    calc = true,
-    nvim_lsp = true,
-    nvim_lua = true,
-    vsnip = false
-  }
-}
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] =
     vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,

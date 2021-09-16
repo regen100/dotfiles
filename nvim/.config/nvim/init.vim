@@ -113,52 +113,29 @@ if !exists('g:vscode')
   endif
   if executable('lua-format')
     Plug 'andrejlevkovitch/vim-lua-format'
-      autocmd BufWrite *.lua call LuaFormat()
+      autocmd BufWritePre *.lua call LuaFormat()
   endif
-  if has('nvim-0.5')
-    Plug 'neovim/nvim-lspconfig'
-      autocmd vimrc User PlugEnd lua require('lsp')
-    Plug 'hrsh7th/nvim-compe'
-      inoremap <silent><expr> <C-Space> compe#complete()
-      inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-      inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-      inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-      inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
-      inoremap <expr><TAB>              pumvisible() ? "\<CR>" : "\<TAB>"
-    Plug 'ray-x/lsp_signature.nvim'
-  endif
-  if has('nvim-0.5')
-    Plug 'kyazdani42/nvim-web-devicons'
-    Plug 'hoob3rt/lualine.nvim'
-      autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
-    Plug 'jose-elias-alvarez/buftabline.nvim'
-      autocmd vimrc User PlugEnd lua require('buftabline').setup{}
-  endif
-  if has('nvim-0.5')
-    Plug 'lukas-reineke/indent-blankline.nvim'
-      let g:indent_blankline_char = '|'
-      let g:indent_blankline_filetype_exclude = ['help', 'gitcommit']
-      let g:indent_blankline_buftype_exclude = ['terminal']
-  endif
+  Plug 'neovim/nvim-lspconfig'
+    autocmd vimrc User PlugEnd lua require('lsp')
+  Plug 'ray-x/lsp_signature.nvim'
+  Plug 'hoob3rt/lualine.nvim'
+    autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
+  Plug 'jose-elias-alvarez/buftabline.nvim'
+    autocmd vimrc User PlugEnd lua require('buftabline').setup{}
+  Plug 'lukas-reineke/indent-blankline.nvim'
+    let g:indent_blankline_char = '|'
+    let g:indent_blankline_filetype_exclude = ['help', 'gitcommit']
+    let g:indent_blankline_buftype_exclude = ['terminal']
 endif
 Plug 'tpope/vim-repeat'
 Plug 'kana/vim-niceblock'
-if exists('g:vscode')
-  Plug 'asvetliakov/vim-easymotion', {'as': 'vim-easymotion_vscode'}
-else
+if !exists('g:vscode')
   Plug 'easymotion/vim-easymotion'
+    let g:EasyMotion_use_migemo = 1
+    nmap s <Plug>(easymotion-s2)
+    xmap s <Plug>(easymotion-s2)
 endif
-  let g:EasyMotion_use_migemo = 1
-  nmap s <Plug>(easymotion-s2)
-  xmap s <Plug>(easymotion-s2)
-if exists('g:vscode')
-  xmap gc <Plug>VSCodeCommentary
-  nmap gc <Plug>VSCodeCommentary
-  omap gc <Plug>VSCodeCommentary
-  nmap gcc <Plug>VSCodeCommentaryLine
-else
-  Plug 'tpope/vim-commentary'
-endif
+Plug 'tpope/vim-commentary'
 if executable('sudo')
   Plug 'lambdalisue/suda.vim', { 'on': 'SudaWrite' }
     cabbrev w!! SudaWrite
