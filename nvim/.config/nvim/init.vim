@@ -117,6 +117,10 @@ if !exists('g:vscode')
   endif
   Plug 'neovim/nvim-lspconfig'
     autocmd vimrc User PlugEnd lua require('lsp')
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'ray-x/lsp_signature.nvim'
   Plug 'hoob3rt/lualine.nvim'
     autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
