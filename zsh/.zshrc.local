@@ -5,6 +5,7 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
 	rg --files --null --sort path 2>/dev/null | xargs -0 dirname | uniq
 }
+export FZF_CTRL_T_COMMAND=_fzf_compgen_path
 
 [[ -e /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
 [[ -e /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
