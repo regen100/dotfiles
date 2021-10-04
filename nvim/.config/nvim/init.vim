@@ -120,7 +120,6 @@ if !exists('g:vscode')
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-path'
   Plug 'hrsh7th/cmp-nvim-lsp'
-  Plug 'ray-x/lsp_signature.nvim'
   Plug 'hoob3rt/lualine.nvim'
     autocmd vimrc User PlugEnd lua require('lualine').setup{options = {section_separators = '', component_separators = ''}}
   Plug 'jose-elias-alvarez/buftabline.nvim'

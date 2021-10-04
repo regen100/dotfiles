@@ -67,8 +67,6 @@ local on_attach = function(client, bufnr)
     hi LspDiagnosticsDefaultError  guifg=lightred
     hi LspDiagnosticsDefaultWarning  guifg=lightyellow
   ]], false)
-
-  require'lsp_signature'.on_attach()
 end
 
 local lspconfig = require 'lspconfig'
