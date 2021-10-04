@@ -36,6 +36,7 @@ stow:
 git: stow
 	@$(APT-INSTALL) git tig
 	@$(STOW-INSTALL) git tig
+	@[[ -f ~/.gitconfig ]] || touch ~/.gitconfig
 	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
 		echo "[include]" >> ~/.gitconfig; \
 		echo "	path = ~/.gitconfig_global" >> ~/.gitconfig; \
