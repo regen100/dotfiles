@@ -64,8 +64,8 @@ local on_attach = function(client, bufnr)
   end
 
   vim.api.nvim_exec([[
-    hi LspDiagnosticsDefaultError  guifg=lightred
-    hi LspDiagnosticsDefaultWarning  guifg=lightyellow
+    hi LspDiagnosticsDefaultError guifg=lightred
+    hi LspDiagnosticsDefaultWarning guifg=lightyellow
   ]], false)
 end
 
