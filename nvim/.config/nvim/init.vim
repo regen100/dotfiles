@@ -104,9 +104,8 @@ if !exists('g:vscode')
   if executable('fzf')
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
-      noremap <Leader>e :<C-u>Files<CR>
-      noremap <Leader><leader>e :<C-u>Files<CR>
-      noremap <Leader><leader>b :<C-u>Buffers<CR>
+      noremap <C-p> :<C-u>Files<CR>
+      noremap <Leader>fb :<C-u>Buffers<CR>
       if has('nvim')
         tnoremap <expr> <Esc> (&filetype == 'fzf') ? '<Esc>' : '<c-\><c-n>'
       endif
