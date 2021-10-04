@@ -128,6 +128,7 @@ if !exists('g:vscode')
     let g:indent_blankline_char = '|'
     let g:indent_blankline_filetype_exclude = ['help', 'gitcommit']
     let g:indent_blankline_buftype_exclude = ['terminal']
+  Plug 'bogado/file-line'
 endif
 Plug 'tpope/vim-repeat'
 Plug 'kana/vim-niceblock'
