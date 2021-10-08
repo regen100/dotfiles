@@ -66,7 +66,7 @@ git: repo
 .PHONY: nvim
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim-nightly-bin xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server lua-format vim-language-server
+	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server lua-format vim-language-server
 	@$(STOW-INSTALL) nvim
 	@vi --headless --cmd "let g:force_install=1" +qa
 	@vi --headless --cmd "let g:vscode=1" --cmd "let g:force_install=1" +qa
