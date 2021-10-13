@@ -78,6 +78,6 @@ reset_env() {
 add-zsh-hook preexec reset_env
 
 url-quote
-autoload -XUz manydots-magic 2>/dev/null
+autoload -Uz manydots-magic 2>/dev/null && manydots-magic
 
 [[ -e ~/.zshrc.$HOST ]] && source ~/.zshrc.$HOST
