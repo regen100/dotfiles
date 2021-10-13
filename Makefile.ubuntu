@@ -11,8 +11,8 @@ all:
 
 .PHONY: repo
 repo:
-	@if grep "//a" /etc/apt/sources.list > /dev/null; then \
-		sudo sed -ie "s#//a#//jp.a#g" /etc/apt/sources.list; \
+	@if grep "//archive.ubuntu.com" /etc/apt/sources.list > /dev/null; then \
+		sudo sed -ie "s#//archive.ubuntu.com#//jp.archive.ubuntu.com#g" /etc/apt/sources.list; \
 		sudo apt-get update; \
 	fi
 	@$(APT-INSTALL) software-properties-common wget
@@ -59,8 +59,10 @@ nvim: repo git
 
 .PHONY: clang
 clang: repo stow
-	@$(APT-INSTALL) cmake make ninja-build clang clang-tidy clang-format clangd-9
-	@sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-9 100
+	@wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+	@echo "deb http://apt.llvm.org/$$(lsb_release -cs)/ llvm-toolchain-$$(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/llvm.list
+	@sudo apt-get update
+	@$(APT-INSTALL) cmake make ninja-build clang clang-tidy clang-format clangd
 	@$(STOW-INSTALL) clang
 
 .PHONY: python
