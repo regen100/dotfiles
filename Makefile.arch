@@ -49,7 +49,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man htop direnv-bin ripgrep pkgfile duf-bin ncdu
+	@$(PKG-INSTALL) man htop direnv-bin ripgrep pkgfile duf-bin ncdu fzf bat
 	@$(STOW-INSTALL) direnv
 	@sudo pkgfile --update
 
@@ -118,8 +118,8 @@ tmux: repo
 	@$(STOW-INSTALL) tmux
 
 .PHONY: zsh
-zsh: repo readline
-	@$(PKG-INSTALL) zsh grml-zsh-config fzf bat zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-manydots-magic keychain starship
+zsh: repo readline utils
+	@$(PKG-INSTALL) zsh grml-zsh-config zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-manydots-magic keychain starship
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh
 	@mkdir -p ~/.zfunc
