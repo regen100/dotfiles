@@ -24,7 +24,8 @@ pip: repo stow
 
 .PHONY: utils
 utils:
-	@$(APT-INSTALL) htop
+	@$(APT-INSTALL) htop xclip
+	@$(APT-INSTALL) fzf | true
 	@curl -sSL https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb -o /tmp/ripgrep.deb && sudo dpkg -i /tmp/ripgrep.deb && rm /tmp/ripgrep.deb
 
 .PHONY: stow
@@ -43,12 +44,12 @@ git: stow
 		&& sudo mv /tmp/git-delta/delta /usr/local/bin && rm /tmp/git-delta -rf
 
 .PHONY: nvim
-nvim: repo git
+nvim: repo git utils
 	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-unstable-xenial.list ]; then \
 		sudo add-apt-repository -y ppa:neovim-ppa/unstable; \
 		sudo apt-get update; \
 	fi
-	@$(APT-INSTALL) neovim xclip
+	@$(APT-INSTALL) neovim
 	@sudo update-alternatives --install /usr/bin/vi vi /usr/bin/nvim 60
 	@sudo update-alternatives --install /usr/bin/vim vim /usr/bin/nvim 60
 	@sudo update-alternatives --install /usr/bin/editor editor /usr/bin/nvim 60
