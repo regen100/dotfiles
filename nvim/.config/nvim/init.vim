@@ -186,6 +186,7 @@ if !exists('g:vscode')
   autocmd vimrc InsertLeave * set nopaste
 
   autocmd vimrc FileType * setlocal formatoptions-=ro
+  autocmd vimrc FileType c,cpp,java setlocal commentstring=//\ %s
 
   autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
   autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
