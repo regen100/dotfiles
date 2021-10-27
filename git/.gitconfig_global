@@ -20,7 +20,10 @@
 	co = checkout
 	pushf = push --force-with-lease
 	su = submodule update --init --recursive
+	ra = rebase --abort
 	rc = rebase --continue
 	rb = !git pull --rebase origin master && git su
 	m = !git co master && git fetch && git rb
 	delete-gone = !git branch -vv | awk '/: gone]/{print $1}' | xargs --no-run-if-empty git branch -D
+	f = fetch
+	fco = !git fetch && git co
