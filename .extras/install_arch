@@ -85,7 +85,7 @@ install_bootloader() {
   fi
   PARTUUID=$(blkid -s PARTUUID -o value /dev/sda2)
   if [[ -n $LUKS_PASSWD ]]; then
-    OPTS="root=/dev/mapper/cryptroot cryptdevice=PARTUUID=$PARTUUID:cryptroot add_efi_memmap"
+    OPTS="root=/dev/mapper/cryptroot cryptdevice=PARTUUID=$PARTUUID:cryptroot:allow-discards add_efi_memmap"
   else
     OPTS="root=PARTUUID=$PARTUUID add_efi_memmap"
   fi
