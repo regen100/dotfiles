@@ -27,3 +27,5 @@
 	delete-gone = !git branch -vv | awk '/: gone]/{print $1}' | xargs --no-run-if-empty git branch -D
 	f = fetch
 	fco = !git fetch && git co
+	u = diff --name-only --diff-filter=U
+	b = branch
