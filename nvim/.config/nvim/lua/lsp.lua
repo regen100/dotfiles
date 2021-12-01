@@ -71,7 +71,7 @@ end
 
 local lspconfig = require 'lspconfig'
 local configs = require 'lspconfig/configs'
-if not lspconfig.pysen then
+if not configs.pysen then
   configs.pysen = {
     default_config = {
       cmd = {'pysen_language_server', '--io'},
