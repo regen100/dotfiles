@@ -24,7 +24,7 @@ pip: repo stow
 
 .PHONY: utils
 utils:
-	@$(APT-INSTALL) htop xclip
+	@$(APT-INSTALL) htop xclip bat
 	@$(APT-INSTALL) fzf | true
 	@curl -sSL https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb -o /tmp/ripgrep.deb && sudo dpkg -i /tmp/ripgrep.deb && rm /tmp/ripgrep.deb
 
