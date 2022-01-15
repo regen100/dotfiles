@@ -80,4 +80,6 @@ add-zsh-hook preexec reset_env
 url-quote
 autoload -Uz manydots-magic 2>/dev/null && manydots-magic
 
+zstyle ":acceptline:default" nocompwarn true
+
 [[ -e ~/.zshrc.$HOST ]] && source ~/.zshrc.$HOST
