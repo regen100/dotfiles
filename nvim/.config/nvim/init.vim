@@ -125,6 +125,10 @@ if !exists('g:vscode')
     let g:indent_blankline_filetype_exclude = ['help', 'gitcommit']
     let g:indent_blankline_buftype_exclude = ['terminal']
   Plug 'bogado/file-line'
+  Plug 'milkypostman/vim-togglelist'
+    let g:toggle_list_no_mappings = 1
+    nmap <script> <silent> <leader>l :call ToggleLocationList()<CR>
+    "nmap <script> <silent> <leader>q :call ToggleQuickfixList()<CR>
 endif
 Plug 'tpope/vim-repeat'
 Plug 'kana/vim-niceblock'
