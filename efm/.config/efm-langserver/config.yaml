@@ -1,0 +1,44 @@
+version: 2
+root-markers:
+  - .git/
+tools:
+  json-jq: &json-jq
+    format-command: 'jq'
+    format-stdin: true
+  lua-lua-format: &lua-lua-format
+    format-command: 'lua-format -i -c .lua-format'
+    format-stdin: true
+    root-markers:
+      - .lua-format
+  sh-shellcheck: &sh-shellcheck
+    lint-command: 'shellcheck -f gcc -x'
+    lint-source: 'shellcheck'
+    lint-formats:
+      - '%f:%l:%c: %trror: %m'
+      - '%f:%l:%c: %tarning: %m'
+      - '%f:%l:%c: %tote: %m'
+  textlint-lint: &textlint-lint
+    prefix: textlint
+    lint-command: 'npx --no-install textlint -f unix'
+    lint-ignore-exit-code: true
+    lint-formats:
+      - '%f:%l:%c: %m [%trror/%r]'
+    root-markers:
+      - .textlintrc
+    commands:
+      - title: 'textlint fix'
+        command: npx
+        arguments:
+          - '--no-install'
+          - 'textlint'
+          - '--fix'
+          - '${INPUT}'
+languages:
+  json:
+    - <<: *json-jq
+  lua:
+    - <<: *lua-lua-format
+  markdown:
+    - <<: *textlint-lint
+  sh:
+    - <<: *sh-shellcheck

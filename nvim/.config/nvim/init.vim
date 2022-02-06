@@ -110,10 +110,6 @@ if !exists('g:vscode')
         tnoremap <expr> <Esc> (&filetype == 'fzf') ? '<Esc>' : '<c-\><c-n>'
       endif
   endif
-  if executable('lua-format')
-    Plug 'andrejlevkovitch/vim-lua-format'
-      autocmd BufWritePre *.lua call LuaFormat()
-  endif
   Plug 'neovim/nvim-lspconfig'
     autocmd vimrc User PlugEnd lua require('lsp')
   Plug 'hrsh7th/nvim-cmp'
@@ -193,6 +189,7 @@ if !exists('g:vscode')
   autocmd vimrc BufNewFile,BufRead *.nspawn setfiletype systemd
   autocmd vimrc BufNewFile,BufRead .clang-tidy,.clang-format setfiletype yaml
   autocmd vimrc BufNewFile,BufRead *.pbtxt setfiletype proto
+  autocmd vimrc BufNewFile,BufRead .textlintrc setfiletype json
 
   " https://vim-jp.org/vim-users-jp/2011/02/20/Hack-202.html
   augroup vimrc-auto-mkdir
