@@ -34,8 +34,6 @@ repo:
 		rm -rf /tmp/yay-bin; \
 	fi
 	@mkdir -p ~/.config
-	@$(PKG-INSTALL) stow informant
-	@$(STOW-INSTALL) pacman
 	@if systemctl >/dev/null 2>&1 && ! systemctl is-active --quiet reflector.timer; then \
 		$(PKG-INSTALL) reflector; \
 		sudo sed -i "s/^--protocol https$$/--protocol https --protocol http --protocol ftp/" /etc/xdg/reflector/reflector.conf; \
@@ -43,6 +41,9 @@ repo:
 		sudo systemctl enable --now reflector.timer; \
 		sudo systemctl start reflector; \
 	fi
+	@$(PKG-INSTALL) stow informant
+	@sudo usermod -a -G informant $$USER
+	@$(STOW-INSTALL) pacman
 
 .PHONY: pip
 pip: repo
