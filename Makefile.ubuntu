@@ -44,8 +44,16 @@ git: stow
 	@mkdir -p /tmp/git-delta && curl -sSL https://github.com/dandavison/delta/releases/download/0.8.2/delta-0.8.2-x86_64-unknown-linux-gnu.tar.gz | tar xz -C /tmp/git-delta --strip-components 1 \
 		&& sudo mv /tmp/git-delta/delta /usr/local/bin && rm /tmp/git-delta -rf
 
+.PHONY: efm
+efm: repo
+	@mkdir -p /tmp/efm-langserver
+	@curl -fsSL https://github.com/mattn/efm-langserver/releases/download/v0.0.40/efm-langserver_v0.0.40_linux_amd64.tar.gz | sudo tar -xz -C /tmp/efm-langserver --strip-components 1
+	@sudo /usr/bin/install /tmp/efm-langserver/efm-langserver /usr/local/bin
+	@rm -rf /tmp/efm-langserver
+	@$(STOW-INSTALL) efm
+
 .PHONY: nvim
-nvim: repo git utils
+nvim: repo git utils efm
 	@if [ ! -f /etc/apt/sources.list.d/neovim-ppa-ubuntu-unstable-xenial.list ]; then \
 		sudo add-apt-repository -y ppa:neovim-ppa/unstable; \
 		sudo apt-get update; \
