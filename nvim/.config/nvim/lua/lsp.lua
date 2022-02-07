@@ -123,7 +123,7 @@ lspconfig.sumneko_lua.setup {
 lspconfig.pylsp.setup {on_attach = on_attach}
 lspconfig.pysen.setup {on_attach = on_attach}
 lspconfig.efm.setup {
-  filetypes = {'json', 'lua', 'markdown', 'sh'},
+  filetypes = {'bzl', 'json', 'lua', 'markdown', 'sh'},
   on_attach = on_attach
 }
 
