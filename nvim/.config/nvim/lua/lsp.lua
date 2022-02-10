@@ -41,6 +41,9 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f',
                               '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<CR>',
+                              '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+
   if client.resolved_capabilities.document_formatting then
     vim.cmd(
         'call system("git shortlog -se HEAD | grep $(git config user.email)")')
