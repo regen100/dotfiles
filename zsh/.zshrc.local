@@ -33,6 +33,7 @@ alias mmv='noglob zmv -W'
 alias gdbrun='gdb -ex=run --args'
 alias lldbrun='lldb -o run --'
 alias valgrindrun='valgrind --exit-on-first-error=yes --error-exitcode=1'
+alias g='git'
 
 CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -ferror-limit=1 -g"
 CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install -DBUILD_TESTING=ON)
