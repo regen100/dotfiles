@@ -1,3 +1,5 @@
+# shellcheck disable=SC1090,SC1091,SC1094,SC2086,SC2154
+
 export FZF_DEFAULT_COMMAND="rg --files 2>/dev/null"
 _fzf_compgen_path() {
   rg --files 2>/dev/null
@@ -40,22 +42,22 @@ CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
 CMAKE_SCCACHE=(-DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_C_COMPILER_LAUNCHER=sccache)
 alias -g CMAKE_DEV='"$CMAKE_SCCACHE[@]" -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DCMAKE_C_FLAGS="$CMAKE_CXX_FLAGS" "$CMAKE_COMMON_OPTIONS[@]"'
 
-mkc() { mkdir -p $1 && cd $1 }
-_mkc() { _files -W $1 -/ }
+mkc() { mkdir -p "$1" && cd "$1" || return; }
+_mkc() { _files -W "$1" -/; }
 
 autoload -Uz add-zsh-hook
 
 ls_abbrev() {
   if [[ $ZSH_SUBSHELL -eq 1 ]]; then return; fi
   local -r ls_result=$(COLUMNS=$COLUMNS command ls -aCF --color=always)
-  local -r ls_lines=$(echo $ls_result | wc -l)
+  local -r ls_lines=$(echo "$ls_result" | wc -l)
   if [[ $ls_lines -gt 10 ]]; then
-    echo $ls_result | head -n 5
+    echo "$ls_result" | head -n 5
     echo ...
-    echo $ls_result | tail -n 5
+    echo "$ls_result" | tail -n 5
     echo "$(command ls -1 -A | wc -l) files exist"
   else
-    echo $ls_result
+    echo "$ls_result"
   fi
 }
 add-zsh-hook chpwd ls_abbrev
@@ -68,11 +70,11 @@ add-zsh-hook precmd reset_prompt
 
 reset_env() {
   [[ -z $TMUX ]] && return
-  while IFS=$'\n' read v; do
+  while IFS=$'\n' read -r v; do
     if [[ ${v:0:1} = - ]]; then
-      unset ${v:1}
+      unset "${v:1}"
     else
-      export $v
+      export "${v?}"
     fi
   done < <(tmux showenv)
 }
@@ -83,4 +85,4 @@ autoload -Uz manydots-magic 2>/dev/null && manydots-magic
 
 zstyle ":acceptline:default" nocompwarn true
 
-[[ -e ~/.zshrc.$HOST ]] && source ~/.zshrc.$HOST
+[[ -e $HOME/.zshrc.$HOST ]] && source $HOME/.zshrc.$HOST

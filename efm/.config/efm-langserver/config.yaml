@@ -40,6 +40,14 @@ tools:
           - 'textlint'
           - '--fix'
           - '${INPUT}'
+  zsh-shellcheck: &zsh-shellcheck
+    lint-command: 'shellcheck -f gcc -x -s bash -'
+    lint-stdin: true
+    lint-source: 'shellcheck'
+    lint-formats:
+      - '%f:%l:%c: %trror: %m'
+      - '%f:%l:%c: %tarning: %m'
+      - '%f:%l:%c: %tote: %m'
 languages:
   bzl:
     - <<: *bzl-buildifier
@@ -51,3 +59,5 @@ languages:
     - <<: *textlint-lint
   sh:
     - <<: *sh-shellcheck
+  zsh:
+    - <<: *zsh-shellcheck
