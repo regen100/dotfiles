@@ -83,7 +83,7 @@ local on_attach = function(client, bufnr)
 end
 
 local lspconfig = require 'lspconfig'
-local configs = require 'lspconfig/configs'
+local configs = require 'lspconfig.configs'
 if not configs.pysen then
   configs.pysen = {
     default_config = {
