@@ -29,3 +29,9 @@
 	fco = !git fetch && git co
 	u = diff --name-only --diff-filter=U
 	b = branch
+	cp = cherry-pick
+	cpa = cherry-pick --abort
+	cpc = cherry-pick --continue
+	hash = rev-parse HEAD
+	s = status
+	d = diff
