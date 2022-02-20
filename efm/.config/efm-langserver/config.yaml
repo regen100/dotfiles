@@ -30,6 +30,10 @@ tools:
     lint-ignore-exit-code: true
     lint-formats:
       - '%f:%l:%c: %m [%trror/%r]'
+      - '%f:%l:%c: 【%r】 %m'
+      - '%E%f:%l:%c: %m'
+      - '%Z%m [%trror/%r]'
+      - '%C%m'
     root-markers:
       - .textlintrc
     commands:
