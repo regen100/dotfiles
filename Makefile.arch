@@ -41,8 +41,11 @@ repo:
 		sudo systemctl enable --now reflector.timer; \
 		sudo systemctl start reflector; \
 	fi
-	@$(PKG-INSTALL) stow informant
-	@sudo usermod -a -G informant $$USER
+	@if [ ! -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then \
+		$(PKG-INSTALL) informant; \
+		sudo usermod -a -G informant $$USER; \
+	fi
+	@$(PKG-INSTALL) stow
 	@$(STOW-INSTALL) pacman
 
 .PHONY: pip
