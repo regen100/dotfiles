@@ -12,10 +12,11 @@ all:
 .PHONY: system
 system: repo
 	@sudo timedatectl set-ntp true
-	@$(PKG-INSTALL) openssh xorg-xauth systemd-boot-pacman-hook
+	@$(PKG-INSTALL) openssh xorg-xauth systemd-boot-pacman-hook earlyoom
 	@sudo sed -i 's/#X11Forwarding .*/X11Forwarding yes/' /etc/ssh/sshd_config
 	@sudo systemctl --now enable sshd
 	@sudo systemctl --now enable fstrim.timer
+	@sudo systemctl --now enable earlyoom
 
 .PHONY: wsl
 wsl: repo
