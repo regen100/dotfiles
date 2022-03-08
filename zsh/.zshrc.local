@@ -18,12 +18,12 @@ export FZF_CTRL_T_COMMAND=_fzf_compgen_path
 [[ -e /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ -e /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ -n $CLOUDSDK_ROOT_DIR ]] && source $CLOUDSDK_ROOT_DIR/completion.zsh.inc
-(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-(( $+commands[keychain] )) && eval "$(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519)"
+(( $+commands[direnv] )) && source <(direnv hook zsh)
+(( $+commands[keychain] )) && source <(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519)
 
 if [[ $TERM != linux ]]; then
   if (( $+commands[starship] )); then
-    prompt off && eval "$(starship init zsh)"
+    prompt off && source <(starship init zsh)
   elif (( $+functions[prompt_pure_setup] )); then
     prompt pure
   fi
