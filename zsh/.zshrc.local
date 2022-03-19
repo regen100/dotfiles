@@ -19,7 +19,14 @@ export FZF_CTRL_T_COMMAND=_fzf_compgen_path
 [[ -e /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ -n $CLOUDSDK_ROOT_DIR ]] && source $CLOUDSDK_ROOT_DIR/completion.zsh.inc
 (( $+commands[direnv] )) && source <(direnv hook zsh)
-(( $+commands[keychain] )) && source <(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519)
+if (( $+commands[keychain] )); then
+  opt=()
+  if [[ -e /usr/lib/systemd/user/sommelier-x@.service ]]; then
+    opt+=(--noask)
+  fi
+  source <(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519 "$opt[@]")
+  unset opt
+fi
 
 if [[ $TERM != linux ]]; then
   if (( $+commands[starship] )); then
