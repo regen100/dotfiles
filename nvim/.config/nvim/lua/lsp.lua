@@ -83,16 +83,6 @@ local on_attach = function(client, bufnr)
 end
 
 local lspconfig = require 'lspconfig'
-local configs = require 'lspconfig.configs'
-if not configs.pysen then
-  configs.pysen = {
-    default_config = {
-      cmd = {'pysen_language_server', '--io'},
-      filetypes = {'python'},
-      root_dir = lspconfig.util.root_pattern('pyproject.toml')
-    }
-  }
-end
 
 lspconfig.cmake.setup {on_attach = on_attach}
 lspconfig.clangd.setup {
@@ -124,7 +114,6 @@ lspconfig.sumneko_lua.setup {
   on_attach = on_attach
 }
 lspconfig.pylsp.setup {on_attach = on_attach}
-lspconfig.pysen.setup {on_attach = on_attach}
 lspconfig.efm.setup {
   filetypes = {'bzl', 'json', 'lua', 'markdown', 'sh', 'zsh'},
   on_attach = on_attach
