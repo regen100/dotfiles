@@ -1,4 +1,6 @@
-# shellcheck disable=SC1036,SC2206,SC2128,SC2154
+# shellcheck disable=SC1036,SC2102,SC2203,SC2206,SC2128,SC2154
 
 fpath=(~/.zfunc(N-/) /usr/share/zsh/site-functions(N-/) $fpath)
 (( $+commands[rustc] )) && fpath=("$(rustc --print sysroot)"/share/zsh/site-functions $fpath)
+(( $+commands[rustup] )) && [[ ! -f ~/.zfunc/_rustup || ${commands[rustup]} -nt ~/.zfunc/_rustup ]] && rustup completions zsh >~/.zfunc/_rustup
+
