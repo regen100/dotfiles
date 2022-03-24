@@ -103,8 +103,6 @@ rust: repo
 	@$$HOME/.cargo/bin/rustup update stable
 	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview clippy rls rust-analysis
 	@$(STOW-INSTALL) rust
-	@mkdir -p ~/.zfunc
-	@rustup completions zsh >~/.zfunc/_rustup
 
 .PHONY: plantuml
 plantuml: repo
