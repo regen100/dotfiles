@@ -19,14 +19,7 @@ export FZF_CTRL_T_COMMAND=_fzf_compgen_path
 [[ -e /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ -n $CLOUDSDK_ROOT_DIR ]] && source $CLOUDSDK_ROOT_DIR/completion.zsh.inc
 (( $+commands[direnv] )) && source <(direnv hook zsh)
-if (( $+commands[keychain] )); then
-  opt=()
-  if [[ -e /usr/lib/systemd/user/sommelier-x@.service ]]; then
-    opt+=(--noask)
-  fi
-  source <(keychain --eval --quiet --inherit any --ignore-missing id_rsa id_ed25519 "$opt[@]")
-  unset opt
-fi
+(( $+commands[keychain] )) && source <(keychain --eval --quiet --inherit any --ignore-missing --noask id_rsa id_ed25519)
 
 if [[ $TERM != linux ]]; then
   if (( $+commands[starship] )); then
@@ -48,6 +41,11 @@ CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -ferror-li
 CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install -DBUILD_TESTING=ON)
 CMAKE_SCCACHE=(-DCMAKE_CXX_COMPILER_LAUNCHER=sccache -DCMAKE_C_COMPILER_LAUNCHER=sccache)
 alias -g CMAKE_DEV='"$CMAKE_SCCACHE[@]" -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_FLAGS="$CMAKE_CXX_FLAGS" -DCMAKE_C_FLAGS="$CMAKE_CXX_FLAGS" "$CMAKE_COMMON_OPTIONS[@]"'
+
+for i in ssh git; do
+  # shellcheck disable=SC2139
+  alias $i="ssh-add -l >/dev/null || ssh-add && unalias $i && $i"
+done
 
 mkc() { mkdir -p "$1" && cd "$1" || return; }
 _mkc() { _files -W "$1" -/; }
