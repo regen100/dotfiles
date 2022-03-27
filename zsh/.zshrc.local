@@ -47,8 +47,8 @@ for i in ssh git; do
   alias $i="ssh-add -l >/dev/null || ssh-add && unalias $i && $i"
 done
 
-mkc() { mkdir -p "$1" && cd "$1" || return; }
-_mkc() { _files -W "$1" -/; }
+_mkcd() { _wanted directories expl directory _path_files -/; }
+compdef _mkcd mkcd
 
 autoload -Uz add-zsh-hook
 
