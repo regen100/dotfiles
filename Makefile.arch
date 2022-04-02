@@ -69,7 +69,7 @@ git: repo
 
 .PHONY: efm
 efm: repo
-	@$(PKG-INSTALL) efm-langserver
+	@$(PKG-INSTALL) efm-langserver shellcheck
 	@$(STOW-INSTALL) efm
 
 .PHONY: nvim
