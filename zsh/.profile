@@ -21,7 +21,6 @@ if [ -d "$HOME/go/bin" ]; then
 fi
 export PATH
 
-if [ -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then
-  DISPLAY="$(awk '/nameserver/{print $2}' /etc/resolv.conf):0"
-  export DISPLAY
+if [ -n "$WSL_HOST_IP" ]; then
+  export DISPLAY="${WSL_HOST_IP}:0"
 fi

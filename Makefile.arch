@@ -11,8 +11,9 @@ all:
 
 .PHONY: system
 system: repo
+	@sudo sed -E 's/^#(en_US|ja_JP)\.UTF-8/\1.UTF-8/' -i /etc/locale.gen && sudo locale-gen
 	@sudo timedatectl set-ntp true
-	@$(PKG-INSTALL) openssh xorg-xauth systemd-boot-pacman-hook earlyoom
+	@$(PKG-INSTALL) base-devel openssh xorg-xauth systemd-boot-pacman-hook earlyoom
 	@sudo sed -i 's/#X11Forwarding .*/X11Forwarding yes/' /etc/ssh/sshd_config
 	@sudo systemctl --now enable sshd
 	@sudo systemctl --now enable fstrim.timer
@@ -23,7 +24,7 @@ wsl: repo
 	@$(PKG-INSTALL) openssh xorg-xauth unzip
 	@touch ~/.Xauthority
 	@mkdir /tmp/win32yank; curl -sSL https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip -o /tmp/win32yank/win32yank.zip
-	@cd /tmp/win32yank; unzip win32yank.zip; mkdir -p ~/bin; mv win32yank.exe ~/bin; rm -rf /tmp/win32yank
+	@cd /tmp/win32yank; unzip win32yank.zip; chmod +x win32yank.exe; mkdir -p ~/bin; mv win32yank.exe ~/bin; rm -rf /tmp/win32yank
 
 .PHONY: repo
 repo:
@@ -42,10 +43,7 @@ repo:
 		sudo systemctl enable --now reflector.timer; \
 		sudo systemctl start reflector; \
 	fi
-	@if [ ! -e /proc/sys/fs/binfmt_misc/WSLInterop ]; then \
-		$(PKG-INSTALL) informant; \
-		sudo usermod -a -G informant $$USER; \
-	fi
+	@$(PKG-INSTALL) informant && sudo usermod -a -G informant $$USER
 	@$(PKG-INSTALL) stow
 	@$(STOW-INSTALL) pacman
 
@@ -55,7 +53,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man htop direnv ripgrep pkgfile duf ncdu fzf bat bandwhich
+	@$(PKG-INSTALL) man rsync htop direnv ripgrep pkgfile duf ncdu fzf bat bandwhich
 	@$(STOW-INSTALL) direnv
 	@sudo pkgfile --update
 
@@ -130,7 +128,7 @@ tmux: repo
 zsh: repo readline utils
 	@$(PKG-INSTALL) zsh grml-zsh-config zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-manydots-magic keychain starship
 	@mkdir -p ~/bin
-	@$(STOW-INSTALL) zsh
+	@$(STOW-INSTALL) zsh starship
 	@mkdir -p ~/.zfunc
 
 .PHONY: xrdp
