@@ -28,6 +28,7 @@ vim.opt.termguicolors = true
 vim.opt.pumblend = 30
 vim.opt.undofile = true
 vim.opt.clipboard:append({'unnamedplus'})
+vim.opt.viewoptions = {'cursor', 'folds', 'slash', 'unix'}
 
 vim.cmd([[
   augroup vimrc
@@ -100,11 +101,17 @@ jetpack.startup(function(use)
 
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use 'p00f/nvim-ts-rainbow'
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
   table.insert(config, function()
     require('nvim-treesitter.configs').setup {
       highlight = {enable = true},
-      rainbow = {enable = true, extended_mode = true, max_file_lines = nil}
+      rainbow = {enable = true, extended_mode = true, max_file_lines = nil},
+      context_commentstring = {enable = true}
     }
+
+    vim.opt.foldmethod = 'expr'
+    vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+    vim.opt.foldlevel = 2
 
     function _G.ensure_treesitter_language_installed()
       local lang = require('nvim-treesitter.parsers').get_buf_lang()
@@ -125,7 +132,6 @@ jetpack.startup(function(use)
   use 'lukas-reineke/indent-blankline.nvim'
   table.insert(config, function()
     require('indent_blankline').setup {
-      char = '|',
       filetype_exclude = {'help', 'gitcommit'},
       buftype_exclude = {'terminal'}
     }
@@ -181,6 +187,8 @@ vim.cmd([[
 
   autocmd vimrc FileType * setlocal formatoptions-=ro
   autocmd vimrc FileType c,cpp,java setlocal commentstring=//\ %s
+  autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
+  autocmd vimrc FileType help nnoremap <buffer> <Esc> <C-w>c
 
   autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
   autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
@@ -189,16 +197,13 @@ vim.cmd([[
   autocmd vimrc BufNewFile,BufRead *.pbtxt,*.pb.txt setfiletype proto
   autocmd vimrc BufNewFile,BufRead .textlintrc setfiletype json
 
-  autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
-
   augroup vimrc-restore-view
     function! s:restore_view_check() abort
       return expand('%') !=# '' && &buftype !~# 'nofile' && &filetype !~# 'gitcommit'
     endfunction
     autocmd!
-    autocmd BufWritePost,BufWinLeave * if s:restore_view_check() | silent! mkview | endif
-    autocmd BufRead * if s:restore_view_check() | silent! loadview | endif
-    set viewoptions=cursor,folds,slash,unix
+    autocmd BufWinLeave * if s:restore_view_check() | mkview | endif
+    autocmd BufEnter * silent! loadview
   augroup END
 
   augroup vimrc-restore-ime

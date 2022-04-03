@@ -78,7 +78,10 @@ local lspconfig = require 'lspconfig'
 
 lspconfig.cmake.setup {on_attach = on_attach}
 lspconfig.clangd.setup {
-  cmd = {'clangd', '--clang-tidy', '--header-insertion=never'},
+  cmd = {
+    'clangd', '--clang-tidy', '--header-insertion=never',
+    '--completion-style=detailed'
+  },
   on_attach = function(client, bufnr)
     on_attach(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',
