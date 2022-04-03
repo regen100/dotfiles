@@ -6,7 +6,7 @@ vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>',
 vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>',
                         opts)
 vim.api.nvim_set_keymap('n', '<leader>q',
-                        '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+                        '<cmd>Telescope diagnostics bufnr=0<CR>', opts)
 
 local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -31,18 +31,18 @@ local on_attach = function(client, bufnr)
                               '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>',
                               opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D',
-                              '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+                              '<cmd>Telescope lsp_type_definitions<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn',
                               '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca',
-                              '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+                              '<cmd>Telescope lsp_code_actions<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr',
-                              '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+                              '<cmd>Telescope lsp_references<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f',
                               '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<CR>',
-                              '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+                              '<cmd>Telescope lsp_definitions<CR>', opts)
 
   if client.resolved_capabilities.document_formatting then
     vim.cmd(
@@ -65,9 +65,6 @@ local on_attach = function(client, bufnr)
 
   if client.resolved_capabilities.document_highlight then
     vim.api.nvim_exec([[
-      hi LspReferenceRead term=underline cterm=underline gui=underline
-      hi LspReferenceText term=underline cterm=underline gui=underline
-      hi LspReferenceWrite term=underline cterm=underline gui=underline
       augroup lsp_document_highlight
         autocmd! * <buffer>
         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
@@ -75,11 +72,6 @@ local on_attach = function(client, bufnr)
       augroup END
     ]], false)
   end
-
-  vim.api.nvim_exec([[
-    hi LspDiagnosticsDefaultError guifg=lightred
-    hi LspDiagnosticsDefaultWarning guifg=lightyellow
-  ]], false)
 end
 
 local lspconfig = require 'lspconfig'
@@ -96,27 +88,25 @@ lspconfig.clangd.setup {
 }
 lspconfig.rls.setup {on_attach = on_attach}
 lspconfig.vimls.setup {on_attach = on_attach}
-lspconfig.sumneko_lua.setup {
-  cmd = {'lua-language-server'},
-  settings = {
-    Lua = {
-      runtime = {version = 'LuaJIT', path = vim.split(package.path, ';')},
-      diagnostics = {globals = {'vim'}},
-      workspace = {
-        library = {
-          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
-        }
-      },
-      telemetry = {enable = false}
-    }
-  },
-  on_attach = on_attach
-}
 lspconfig.pylsp.setup {on_attach = on_attach}
 lspconfig.efm.setup {
   filetypes = {'bzl', 'json', 'lua', 'markdown', 'sh', 'zsh'},
   on_attach = on_attach
+}
+
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+lspconfig.sumneko_lua.setup {
+  settings = {
+    Lua = {
+      runtime = {version = 'LuaJIT', path = runtime_path},
+      diagnostics = {globals = {'vim'}},
+      workspace = {library = vim.api.nvim_get_runtime_file("", true)},
+      telemetry = {enable = false}
+    }
+  }
 }
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] =
@@ -125,36 +115,17 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] =
 
 local cmp = require 'cmp'
 cmp.setup({
+  snippet = {expand = function() end},
   mapping = {
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true
     },
-    ['<Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api
-                            .nvim_replace_termcodes('<C-n>', true, true, true),
-                        'n')
-      else
-        fallback()
-      end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        vim.fn.feedkeys(vim.api
-                            .nvim_replace_termcodes('<C-p>', true, true, true),
-                        'n')
-      else
-        fallback()
-      end
-    end
+    ["<Tab>"] = cmp.mapping.select_next_item(),
+    ["<S-Tab>"] = cmp.mapping.select_prev_item()
   },
-  sources = {{name = 'buffer'}, {name = 'nvim_lsp'}, {name = 'path'}}
+  sources = {{name = 'nvim_lsp'}, {name = 'path'}, {name = 'buffer'}}
 })
