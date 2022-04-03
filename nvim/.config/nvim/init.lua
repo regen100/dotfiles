@@ -203,7 +203,7 @@ vim.cmd([[
 
   augroup vimrc-restore-ime
     autocmd!
-    if exists('g:vscode') && filereadable('/proc/sys/fs/binfmt_misc/WSLInterop')
+    if exists('g:vscode') && !empty($WSL_DISTRO_NAME)
       let b:ime_status = '0'
       let s:ime_script = stdpath('config') . '/imeonoff.exe -s '
       autocmd InsertEnter * silent call system(s:ime_script . b:ime_status)
