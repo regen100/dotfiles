@@ -82,7 +82,7 @@ nvim: repo git utils efm
 
 .PHONY: clang
 clang: repo pip
-	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache-bin compdb cmake-lint clangd lldb
+	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache compdb cmake-lint lldb
 	@$(STOW-INSTALL) clang
 	@$(PIP-INSTALL) cmake-language-server
 
