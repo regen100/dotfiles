@@ -44,7 +44,7 @@ alias -g CMAKE_DEV='"$CMAKE_SCCACHE[@]" -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_C
 
 for i in ssh git rsync scp; do
   # shellcheck disable=SC2139,SC2004
-  (( $+commands[$i] )) && alias $i="ssh-add -l >/dev/null || ssh-add; unalias $i && $i"
+  (( $+commands[$i] )) && alias $i="ssh-add -l >/dev/null || ssh-add; unalias $i 2>/dev/null; $i"
 done
 
 _mkcd() { _wanted directories expl directory _path_files -/; }
