@@ -1,1 +1,1 @@
-include Makefile.$(shell </etc/os-release awk -F= '/^ID=/ {print $$2}')
+include Makefile.$(shell awk -F= '/^ID=/ {print $$2}' /etc/os-release)
