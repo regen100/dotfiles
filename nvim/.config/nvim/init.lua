@@ -33,50 +33,6 @@ vim.cmd([[
   augroup vimrc
     autocmd!
   augroup END
-
-  autocmd vimrc InsertLeave * set nopaste
-
-  autocmd vimrc FileType * setlocal formatoptions-=ro
-  autocmd vimrc FileType c,cpp,java setlocal commentstring=//\ %s
-
-  autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
-  autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
-  autocmd vimrc BufNewFile,BufRead *.nspawn setfiletype systemd
-  autocmd vimrc BufNewFile,BufRead .clang-tidy,.clang-format setfiletype yaml
-  autocmd vimrc BufNewFile,BufRead *.pbtxt,*.pb.txt setfiletype proto
-  autocmd vimrc BufNewFile,BufRead .textlintrc setfiletype json
-
-  autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
-
-  augroup vimrc-restore-view
-    function! s:restore_view_check() abort
-      return expand('%') !=# '' && &buftype !~# 'nofile' && &filetype !~# 'gitcommit'
-    endfunction
-    autocmd!
-    autocmd BufWritePost,BufWinLeave * if s:restore_view_check() | silent! mkview | endif
-    autocmd BufRead * if s:restore_view_check() | silent! loadview | endif
-    set viewoptions=cursor,folds,slash,unix
-  augroup END
-
-  augroup vimrc-restore-ime
-    autocmd!
-    if exists('g:vscode') && filereadable('/proc/sys/fs/binfmt_misc/WSLInterop')
-      let b:ime_status = '0'
-      let s:ime_script = stdpath('config') . '/imeonoff.exe -s '
-      autocmd InsertEnter * silent call system(s:ime_script . b:ime_status)
-      autocmd InsertLeave * silent let b:ime_status = system(s:ime_script . '0')
-    elseif exists('$TMUX')
-      call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
-      autocmd InsertEnter * silent call chansend(v:stderr, "\ePtmux;\e\e[<r\e\\")
-      autocmd InsertLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<s\e\e[<0t\e\\")
-      autocmd VimLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
-    else
-      call chansend(v:stderr, "\e[<0t\e[<s")
-      autocmd InsertEnter * silent call chansend(v:stderr, "\e[<r")
-      autocmd InsertLeave * silent call chansend(v:stderr, "\e[<s\e[<0t")
-      autocmd VimLeave * silent call chansend(v:stderr, "\e[<0t\e[<s")
-    endif
-  augroup END
 ]])
 
 local install_path = vim.fn.stdpath('data') ..
@@ -219,5 +175,51 @@ jetpack.startup(function(use)
   if JETPACK_BOOTSTRAP then jetpack.sync() end
 end)
 for _, v in ipairs(config) do v() end
+
+vim.cmd([[
+  autocmd vimrc InsertLeave * set nopaste
+
+  autocmd vimrc FileType * setlocal formatoptions-=ro
+  autocmd vimrc FileType c,cpp,java setlocal commentstring=//\ %s
+
+  autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
+  autocmd vimrc BufNewFile,BufRead *.gitconfig.* setfiletype gitconfig
+  autocmd vimrc BufNewFile,BufRead *.nspawn setfiletype systemd
+  autocmd vimrc BufNewFile,BufRead .clang-tidy,.clang-format setfiletype yaml
+  autocmd vimrc BufNewFile,BufRead *.pbtxt,*.pb.txt setfiletype proto
+  autocmd vimrc BufNewFile,BufRead .textlintrc setfiletype json
+
+  autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
+
+  augroup vimrc-restore-view
+    function! s:restore_view_check() abort
+      return expand('%') !=# '' && &buftype !~# 'nofile' && &filetype !~# 'gitcommit'
+    endfunction
+    autocmd!
+    autocmd BufWritePost,BufWinLeave * if s:restore_view_check() | silent! mkview | endif
+    autocmd BufRead * if s:restore_view_check() | silent! loadview | endif
+    set viewoptions=cursor,folds,slash,unix
+  augroup END
+
+  augroup vimrc-restore-ime
+    autocmd!
+    if exists('g:vscode') && filereadable('/proc/sys/fs/binfmt_misc/WSLInterop')
+      let b:ime_status = '0'
+      let s:ime_script = stdpath('config') . '/imeonoff.exe -s '
+      autocmd InsertEnter * silent call system(s:ime_script . b:ime_status)
+      autocmd InsertLeave * silent let b:ime_status = system(s:ime_script . '0')
+    elseif exists('$TMUX')
+      call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
+      autocmd InsertEnter * silent call chansend(v:stderr, "\ePtmux;\e\e[<r\e\\")
+      autocmd InsertLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<s\e\e[<0t\e\\")
+      autocmd VimLeave * silent call chansend(v:stderr, "\ePtmux;\e\e[<0t\e\e[<s\e\\")
+    else
+      call chansend(v:stderr, "\e[<0t\e[<s")
+      autocmd InsertEnter * silent call chansend(v:stderr, "\e[<r")
+      autocmd InsertLeave * silent call chansend(v:stderr, "\e[<s\e[<0t")
+      autocmd VimLeave * silent call chansend(v:stderr, "\e[<0t\e[<s")
+    endif
+  augroup END
+]])
 
 vim.opt.secure = true
