@@ -77,8 +77,6 @@ nvim: repo git utils efm
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server lua-format vim-language-server
 	@$(STOW-INSTALL) nvim
-	@vi --headless --cmd "let g:force_install=1" +qa
-	@vi --headless --cmd "let g:vscode=1" --cmd "let g:force_install=1" +qa
 
 .PHONY: clang
 clang: repo pip
