@@ -39,7 +39,7 @@ vim.cmd([[
 local install_path = vim.fn.stdpath('data') ..
                          '/site/pack/jetpack/start/jetpack'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  JETPACK_BOOTSTRAP = vim.fn.system({
+  vim.fn.system({
     'git', 'clone', '--depth', '1', 'https://github.com/tani/vim-jetpack.git',
     install_path
   })
@@ -52,19 +52,20 @@ jetpack.startup(function(use)
   use 'kana/vim-niceblock'
   use 'tpope/vim-commentary'
   use 'jghauser/mkdir.nvim'
-  use 'lilydjwg/colorizer'
   use 'thinca/vim-zenspace'
   use 'tpope/vim-unimpaired'
   use 'mhinz/vim-startify'
   use 'bogado/file-line'
   use 'kyazdani42/nvim-web-devicons'
   use 'nvim-lua/plenary.nvim'
+  use 'machakann/vim-sandwich'
 
   use 'LionC/nest.nvim'
   table.insert(config, function()
+    local builtin = require('telescope.builtin')
     require('nest').applyKeymaps {
       {'<Esc><Esc>', ':<C-u>nohlsearch<CR>'}, --
-      {'<C-p>', require('telescope.builtin').find_files}, --
+      {'<C-p>', builtin.find_files}, --
       {
         '<leader>', {
           {'o', '^f{a<CR><CR><UP>'}, --
@@ -75,7 +76,7 @@ jetpack.startup(function(use)
             ":<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>"
           }, --
           {'w', ':<C-u>setl wrap! wrap?<CR>'}, --
-          {'fb', require('telescope.builtin').buffers}, --
+          {'fb', builtin.buffers}, --
           {
             'rr',
             ':%s/\\<<C-r><C-w>\\>//g<Left><Left>',
@@ -102,6 +103,7 @@ jetpack.startup(function(use)
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use 'p00f/nvim-ts-rainbow'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
+  use 'romgrk/nvim-treesitter-context'
   table.insert(config, function()
     require('nvim-treesitter.configs').setup {
       highlight = {enable = true},
@@ -118,7 +120,9 @@ jetpack.startup(function(use)
       pcall(require('nvim-treesitter.install').ensure_installed, lang)
     end
     vim.cmd(
-        'autocmd vimrc BufEnter * :lua ensure_treesitter_language_installed()')
+        'autocmd vimrc BufEnter * ++once :lua ensure_treesitter_language_installed()')
+
+    require('treesitter-context').setup()
   end)
 
   use 'hoob3rt/lualine.nvim'
@@ -157,6 +161,12 @@ jetpack.startup(function(use)
     vim.cmd('colorscheme tokyonight')
   end)
 
+  use 'norcalli/nvim-colorizer.lua'
+  table.insert(config, function() require('colorizer').setup() end)
+
+  use 'lewis6991/gitsigns.nvim'
+  table.insert(config, function() require('gitsigns').setup() end)
+
   use 'milkypostman/vim-togglelist'
   vim.g.toggle_list_no_mappings = 1
 
@@ -177,9 +187,13 @@ jetpack.startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-nvim-lsp'
   table.insert(config, function() require('user.lsp') end)
-
-  if JETPACK_BOOTSTRAP then jetpack.sync() end
 end)
+for _, name in ipairs(vim.fn['jetpack#names']()) do
+  if jetpack.tap(name) == 0 then
+    jetpack.sync()
+    break
+  end
+end
 for _, v in ipairs(config) do v() end
 
 vim.cmd([[
