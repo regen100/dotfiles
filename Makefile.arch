@@ -77,6 +77,7 @@ nvim: repo git utils efm
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server lua-format vim-language-server
 	@$(STOW-INSTALL) nvim
+	@tic -x $(DOTFILES_DIR)/.extras/terminfo
 
 .PHONY: clang
 clang: repo pip
@@ -165,7 +166,7 @@ xfce: repo fcitx
 	@sudo sed -ie "s@^#greeter-setup-script=@greeter-setup-script=/usr/bin/numlockx on@" /etc/lightdm/lightdm.conf
 	@sudo mkdir -p /etc/systemd/system/lightdm.service.d
 	@echo -e "[Service]\nEnvironment=LANG=ja_JP.utf8" | sudo tee /etc/systemd/system/lightdm.service.d/override.conf >/dev/null
-	@sudo cp -f $(DOTFILES_DIR).extras/lightdm/lightdm-gtk-greeter.conf /etc/lightdm
+	@sudo cp -f $(DOTFILES_DIR)/.extras/lightdm/lightdm-gtk-greeter.conf /etc/lightdm
 	@sudo localectl set-x11-keymap jp,us
 	@sudo systemctl enable --now lightdm
 	@$(STOW-INSTALL) xprofile
