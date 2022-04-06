@@ -167,6 +167,9 @@ jetpack.startup(function(use)
   use 'lewis6991/gitsigns.nvim'
   table.insert(config, function() require('gitsigns').setup() end)
 
+  use 'folke/trouble.nvim'
+  table.insert(config, function() require('trouble').setup() end)
+
   use 'milkypostman/vim-togglelist'
   vim.g.toggle_list_no_mappings = 1
 

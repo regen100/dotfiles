@@ -74,8 +74,19 @@ local on_attach = function(client, bufnr)
   end
 end
 
-local lspconfig = require 'lspconfig'
+local function format(diagnostic)
+  local code = diagnostic.code or
+                   (diagnostic.user_data and diagnostic.user_data.lsp and
+                       diagnostic.user_data.lsp.code)
+  if code then return diagnostic.message .. ' [' .. code .. ']' end
+  return diagnostic.message
+end
+vim.diagnostic.config({
+  virtual_text = {source = "if_many", format = format},
+  float = {source = "if_many", format = format}
+})
 
+local lspconfig = require('lspconfig')
 lspconfig.cmake.setup {on_attach = on_attach}
 lspconfig.clangd.setup {
   cmd = {
@@ -85,8 +96,7 @@ lspconfig.clangd.setup {
   on_attach = function(client, bufnr)
     on_attach(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',
-                                '<Cmd>ClangdSwitchSourceHeader<CR>',
-                                {noremap = true, silent = true})
+                                '<Cmd>ClangdSwitchSourceHeader<CR>', opts)
   end
 }
 lspconfig.rls.setup {on_attach = on_attach}
@@ -100,7 +110,6 @@ lspconfig.efm.setup {
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
-
 lspconfig.sumneko_lua.setup {
   settings = {
     Lua = {
@@ -109,12 +118,9 @@ lspconfig.sumneko_lua.setup {
       workspace = {library = vim.api.nvim_get_runtime_file("", true)},
       telemetry = {enable = false}
     }
-  }
+  },
+  on_attach = on_attach
 }
-
-vim.lsp.handlers['textDocument/publishDiagnostics'] =
-    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics,
-                 {virtual_text = {prefix = '!', update_in_insert = false}})
 
 local cmp = require 'cmp'
 cmp.setup({
