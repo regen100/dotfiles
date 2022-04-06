@@ -20,6 +20,7 @@
 	co = checkout
 	pushf = push --force-with-lease
 	su = submodule update --init --recursive
+	r = rebase
 	ra = rebase --abort
 	rc = rebase --continue
 	rb = !git pull --rebase origin master && git su
@@ -35,3 +36,5 @@
 	hash = rev-parse HEAD
 	s = status
 	d = diff
+	ignore = update-index --skip-worktree
+	noignore = update-index --no-skip-worktree
