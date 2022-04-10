@@ -36,18 +36,22 @@ vim.cmd([[
   augroup END
 ]])
 
-local install_path = vim.fn.stdpath('data') ..
-                         '/site/pack/jetpack/start/jetpack'
+local jetpack_root = vim.fn.stdpath('data') .. '/site/pack/jetpack'
+local install_path = jetpack_root .. '/src/vim-jetpack'
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.system({
     'git', 'clone', '--depth', '1', 'https://github.com/tani/vim-jetpack.git',
     install_path
   })
+  vim.fn.mkdir(jetpack_root .. '/opt', 'p')
+  vim.loop.fs_symlink(install_path, jetpack_root .. '/opt/vim-jetpack')
 end
-
+vim.g['jetpack#copy_method'] = 'symlink'
+vim.cmd('packadd vim-jetpack')
 local config = {}
 local jetpack = require('jetpack')
 jetpack.startup(function(use)
+  use {'tani/vim-jetpack', opt = 1}
   use 'tpope/vim-repeat'
   use 'kana/vim-niceblock'
   use 'tpope/vim-commentary'
@@ -197,7 +201,7 @@ for _, name in ipairs(vim.fn['jetpack#names']()) do
     break
   end
 end
-for _, v in ipairs(config) do v() end
+for _, f in ipairs(config) do f() end
 
 vim.cmd([[
   autocmd vimrc InsertLeave * set nopaste
