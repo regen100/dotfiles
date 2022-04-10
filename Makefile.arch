@@ -28,6 +28,7 @@ wsl: repo
 
 .PHONY: repo
 repo:
+	@sudo sed -e 's/^#ParallelDownloads/ParallelDownloads/' -i /etc/pacman.conf
 	@if ! which yay >/dev/null; then \
 		cd /tmp; \
 		git clone https://aur.archlinux.org/yay-bin.git; \
@@ -43,9 +44,12 @@ repo:
 		sudo systemctl enable --now reflector.timer; \
 		sudo systemctl start reflector; \
 	fi
-	@$(PKG-INSTALL) informant && sudo usermod -a -G informant $$USER
 	@$(PKG-INSTALL) stow
 	@$(STOW-INSTALL) pacman
+
+.PHONY: informant
+informant: repo
+	@$(PKG-INSTALL) informant && sudo usermod -a -G informant $$USER
 
 .PHONY: pip
 pip: repo
@@ -95,10 +99,9 @@ nodejs: repo
 
 .PHONY: rust
 rust: repo
-	@$(PKG-INSTALL) sccache
-	@[ -d $$HOME/.cargo ] || curl https://sh.rustup.rs -sSf | sh -s -- -y
-	@$$HOME/.cargo/bin/rustup update stable
-	@$$HOME/.cargo/bin/rustup component add rust-src rustfmt-preview clippy rls rust-analysis
+	@$(PKG-INSTALL) rustup sccache
+	@rustup update stable
+	@rustup component add rust-src rustfmt-preview clippy rls rust-analysis
 	@$(STOW-INSTALL) rust
 
 .PHONY: plantuml
