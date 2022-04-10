@@ -103,7 +103,7 @@ lspconfig.rls.setup {on_attach = on_attach}
 lspconfig.vimls.setup {on_attach = on_attach}
 lspconfig.pylsp.setup {on_attach = on_attach}
 lspconfig.efm.setup {
-  filetypes = {'bzl', 'json', 'lua', 'markdown', 'sh', 'zsh'},
+  filetypes = {'bzl', 'dockerfile', 'json', 'lua', 'markdown', 'sh', 'zsh'},
   on_attach = on_attach
 }
 
