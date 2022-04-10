@@ -73,7 +73,7 @@ git: repo
 
 .PHONY: efm
 efm: repo
-	@$(PKG-INSTALL) efm-langserver shellcheck
+	@$(PKG-INSTALL) efm-langserver shellcheck hadolint-bin
 	@$(STOW-INSTALL) efm
 
 .PHONY: nvim
