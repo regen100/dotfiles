@@ -92,4 +92,8 @@ autoload -Uz manydots-magic 2>/dev/null && manydots-magic
 
 zstyle ":acceptline:default" nocompwarn true
 
+if [[ -n $WSL_HOST_IP && -n $DISPLAY ]]; then
+  (( $+commands[xauth] )) && xauth generate "$DISPLAY"
+fi
+
 [[ -e $HOME/.zshrc.$HOST ]] && source $HOME/.zshrc.$HOST
