@@ -88,17 +88,6 @@ vim.diagnostic.config({
 
 local lspconfig = require('lspconfig')
 lspconfig.cmake.setup {on_attach = on_attach}
-lspconfig.clangd.setup {
-  cmd = {
-    'clangd', '--clang-tidy', '--header-insertion=never',
-    '--completion-style=detailed'
-  },
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',
-                                '<Cmd>ClangdSwitchSourceHeader<CR>', opts)
-  end
-}
 lspconfig.rls.setup {on_attach = on_attach}
 lspconfig.vimls.setup {on_attach = on_attach}
 lspconfig.pylsp.setup {on_attach = on_attach}
@@ -120,6 +109,21 @@ lspconfig.sumneko_lua.setup {
     }
   },
   on_attach = on_attach
+}
+
+require("clangd_extensions").setup {
+  server = {
+    cmd = {
+      'clangd', '--clang-tidy', '--header-insertion=never',
+      '--completion-style=detailed'
+    },
+    on_attach = function(client, bufnr)
+      on_attach(client, bufnr)
+      vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',
+                                  '<Cmd>ClangdSwitchSourceHeader<CR>', opts)
+    end
+  },
+  extensions = {inlay_hints = {parameter_hints_prefix = ' <- '}}
 }
 
 local cmp = require 'cmp'
