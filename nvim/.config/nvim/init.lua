@@ -51,31 +51,28 @@ require('user.jetpack').startup(function(use, config)
 
   use 'LionC/nest.nvim'
   config(function()
-    local builtin = require('telescope.builtin')
     require('nest').applyKeymaps {
-      {'<Esc><Esc>', ':<C-u>nohlsearch<CR>'}, --
-      {'<C-p>', builtin.find_files}, --
+      {'<Esc><Esc>', '<Cmd>nohlsearch<CR>'}, --
       {
-        '<leader>', {
-          {'o', '^f{a<CR><CR><UP>'}, --
+        '<Leader>', {
+          {'o', '^f{a<CR><CR><Up>'}, --
           {'d', '"_d'}, --
           {
             'm',
-            ':<C-u>let &mouse=(&mouse == "a" ? "" : "a")<CR>:set mouse?<CR>'
+            '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>'
           }, --
-          {'w', ':<C-u>setl wrap! wrap?<CR>'}, --
-          {'fb', builtin.buffers}, --
+          {'w', '<Cmd>setl wrap! wrap?<CR>'}, --
           {
             'rr',
-            ':%s/\\<<C-r><C-w>\\>//g<Left><Left>',
+            '<Cmd>%s/\\<<C-r><C-w>\\>//g<Left><Left>',
             options = {silent = false}
           } --
         }
       }, {
         mode = 'v',
         {
-          {'<TAB>', '>gv'}, --
-          {'<S-TAB>', '<gv'}, --
+          {'<Tab>', '>gv'}, --
+          {'<S-Tab>', '<gv'}, --
           {'<LeftRelease>', 'y<CR>gv<LeftRelease>'} --
         }
       }
@@ -134,12 +131,23 @@ require('user.jetpack').startup(function(use, config)
 
   use 'nvim-telescope/telescope.nvim'
   config(function()
+    local actions = require('telescope.actions')
     require('telescope').setup {
       defaults = {
         mappings = {
           i = {
-            ['<Esc>'] = require('telescope.actions').close --
+            ['<Esc>'] = actions.close --
           }
+        }
+      }
+    }
+
+    local builtin = require('telescope.builtin')
+    require('nest').applyKeymaps {
+      {'<C-p>', builtin.find_files}, --
+      {
+        '<Leader>', {
+          {'fb', builtin.buffers} --
         }
       }
     }

@@ -1,42 +1,35 @@
 local M = {}
 
-local opts = {noremap = true, silent = true}
-
 local function on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD',
-                              '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd',
-                              '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K',
-                              '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi',
-                              '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>',
-                              '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wa',
-                              '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>',
-                              opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr',
-                              '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>',
-                              opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl',
-                              '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>',
-                              opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D',
-                              '<cmd>Telescope lsp_type_definitions<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn',
-                              '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca',
-                              '<cmd>Telescope lsp_code_actions<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr',
-                              '<cmd>Telescope lsp_references<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f',
-                              '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<CR>',
-                              '<cmd>Telescope lsp_definitions<CR>', opts)
+  local telescope = require('telescope.builtin')
+  require('nest').applyKeymaps {
+    buffer = bufnr,
+    {
+      {'gD', vim.lsp.buf.declaration}, --
+      {'gd', vim.lsp.buf.definition}, --
+      {'K', vim.lsp.buf.hover}, --
+      {'gi', vim.lsp.buf.implementation}, --
+      {'<C-k>', vim.lsp.buf.signature_help}, --
+      {'gr', telescope.lsp_references}, --
+      {'<CR>', telescope.lsp_definitions}, --
+      {
+        '<Leader>', {
+          {'wa', vim.lsp.buf.add_workspace_folder}, --
+          {'wr', vim.lsp.buf.remove_workspace_folder}, --
+          {
+            'wl',
+            '<Cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))'
+          }, --
+          {'D', telescope.lsp_type_definitions}, --
+          {'rn', vim.lsp.buf.rename}, --
+          {'ca', telescope.lsp_code_actions}, --
+          {'f', vim.lsp.buf.formatting} --
+        }
+      } --
+    }
+  }
 
   if client.resolved_capabilities.document_formatting then
     vim.fn.system('git shortlog -se HEAD | grep $(git config user.email)')
@@ -48,12 +41,6 @@ local function on_attach(client, bufnr)
         augroup END
       ]]
     end
-  end
-
-  if client.resolved_capabilities.document_range_formatting then
-    vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>f',
-                                '<cmd>lua vim.lsp.buf.range_formatting()<CR>',
-                                opts)
   end
 
   require('illuminate').on_attach(client)
@@ -72,14 +59,16 @@ table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
 function M.setup()
-  vim.api.nvim_set_keymap('n', '<leader>e',
-                          '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>',
-                          opts)
-  vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>',
-                          opts)
-  vim.api.nvim_set_keymap('n', '<leader>q',
-                          '<cmd>Telescope diagnostics bufnr=0<CR>', opts)
+  require('nest').applyKeymaps {
+    {'[d', vim.diagnostic.goto_prev}, --
+    {']d', vim.diagnostic.goto_next}, --
+    {
+      '<Leader>', {
+        {'e', vim.diagnostic.open_float}, --
+        {'q', '<Cmd>Telescope diagnostics bufnr=0<CR>'} --
+      }
+    } --
+  }
 
   vim.diagnostic.config {
     virtual_text = {source = 'if_many', format = diagnostic_message},
@@ -120,8 +109,12 @@ function M.setup()
       },
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gs',
-                                    '<Cmd>ClangdSwitchSourceHeader<CR>', opts)
+        require('nest').applyKeymaps {
+          buffer = bufnr,
+          {
+            {'gs', '<Cmd>ClangdSwitchSourceHeader<CR>'} --
+          }
+        }
       end
     },
     extensions = {inlay_hints = {parameter_hints_prefix = ' <- '}}
