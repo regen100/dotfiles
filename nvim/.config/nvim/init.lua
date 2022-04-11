@@ -47,6 +47,7 @@ require('user.jetpack').startup(function(use, config)
   use 'bogado/file-line'
   use 'kyazdani42/nvim-web-devicons'
   use 'nvim-lua/plenary.nvim'
+  use 'lambdalisue/readablefold.vim'
 
   use 'LionC/nest.nvim'
   config(function()
@@ -88,6 +89,7 @@ require('user.jetpack').startup(function(use, config)
   use 'p00f/nvim-ts-rainbow'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'romgrk/nvim-treesitter-context'
+  use 'haringsrob/nvim_context_vt'
   config(function()
     require('nvim-treesitter.configs').setup {
       highlight = {enable = true},
@@ -107,6 +109,8 @@ require('user.jetpack').startup(function(use, config)
         'autocmd vimrc BufEnter * ++once :lua ensure_treesitter_language_installed()')
 
     require('treesitter-context').setup()
+
+    require('nvim_context_vt').setup {prefix = ' --'}
   end)
 
   use 'hoob3rt/lualine.nvim'
@@ -169,15 +173,41 @@ require('user.jetpack').startup(function(use, config)
     vim.cmd('highlight link MiniTrailspace NvimInternalError')
   end)
 
+  use 'folke/todo-comments.nvim'
+  config(function() require('todo-comments').setup() end)
+
+  use 'kevinhwang91/nvim-hlslens'
+  config(function()
+    local start = [[<Cmd>lua require('hlslens').start()<CR>]]
+    require('nest').applyKeymaps {
+      {'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]] .. start}, --
+      {'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR>]] .. start}, --
+      {'*', '*' .. start}, --
+      {'#', '#' .. start}, --
+      {'g*', 'g*' .. start}, --
+      {'g#', 'g#' .. start} --
+    }
+  end)
+
+  use 'petertriho/nvim-scrollbar'
+  config(function()
+    require('scrollbar').setup()
+    require('scrollbar.handlers.search').setup()
+  end)
+
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/nvim-cmp'
+  use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-nvim-lua'
+  use 'hrsh7th/cmp-cmdline'
   use 'p00f/clangd_extensions.nvim'
   use 'kosayoda/nvim-lightbulb'
   use 'onsails/lspkind-nvim'
   use 'ray-x/lsp_signature.nvim'
+  use 'j-hui/fidget.nvim'
+  use 'RRethy/vim-illuminate'
   config(function() require('user.lsp').setup() end)
 end)
 
