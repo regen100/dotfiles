@@ -34,25 +34,10 @@ vim.cmd([[
   augroup vimrc
     autocmd!
   augroup END
+  colorscheme desert
 ]])
 
-local jetpack_root = vim.fn.stdpath('data') .. '/site/pack/jetpack'
-local install_path = jetpack_root .. '/src/vim-jetpack'
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.fn.system({
-    'git', 'clone', '--depth', '1', 'https://github.com/tani/vim-jetpack.git',
-    install_path
-  })
-  vim.fn.mkdir(jetpack_root .. '/opt', 'p')
-  vim.loop.fs_symlink(install_path, jetpack_root .. '/opt/vim-jetpack')
-end
-vim.g['jetpack#copy_method'] = 'symlink'
-vim.cmd('packadd vim-jetpack')
-local hooks = {}
-local jetpack = require('jetpack')
-jetpack.startup(function(use)
-  local function config(f) table.insert(hooks, f) end
-
+require('user.jetpack').startup(function(use, config)
   use {'tani/vim-jetpack', opt = 1}
   use 'tpope/vim-repeat'
   use 'kana/vim-niceblock'
@@ -194,13 +179,6 @@ jetpack.startup(function(use)
   use 'ray-x/lsp_signature.nvim'
   config(function() require('user.lsp').setup() end)
 end)
-for _, name in ipairs(vim.fn['jetpack#names']()) do
-  if jetpack.tap(name) == 0 then
-    jetpack.sync()
-    break
-  end
-end
-for _, f in ipairs(hooks) do f() end
 
 vim.cmd([[
   autocmd vimrc InsertLeave * set nopaste
