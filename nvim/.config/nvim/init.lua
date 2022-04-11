@@ -194,7 +194,7 @@ jetpack.startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'p00f/clangd_extensions.nvim'
-  table.insert(config, function() require('user.lsp') end)
+  table.insert(config, function() require('user.lsp').setup() end)
 end)
 for _, name in ipairs(vim.fn['jetpack#names']()) do
   if jetpack.tap(name) == 0 then
