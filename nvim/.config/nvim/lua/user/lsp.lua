@@ -1,3 +1,5 @@
+local M = {}
+
 local opts = {noremap = true, silent = true}
 
 local function on_attach(client, bufnr)
@@ -37,8 +39,7 @@ local function on_attach(client, bufnr)
                               '<cmd>Telescope lsp_definitions<CR>', opts)
 
   if client.resolved_capabilities.document_formatting then
-    vim.cmd(
-        'call system("git shortlog -se HEAD | grep $(git config user.email)")')
+    vim.fn.system('git shortlog -se HEAD | grep $(git config user.email)')
     if vim.v.shell_error == 0 then
       vim.cmd [[
         augroup autoformat
@@ -75,10 +76,10 @@ local function diagnostic_message(diagnostic)
 end
 
 local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
+table.insert(runtime_path, 'lua/?.lua')
+table.insert(runtime_path, 'lua/?/init.lua')
 
-local function setup()
+function M.setup()
   vim.api.nvim_set_keymap('n', '<leader>e',
                           '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>',
@@ -89,8 +90,8 @@ local function setup()
                           '<cmd>Telescope diagnostics bufnr=0<CR>', opts)
 
   vim.diagnostic.config {
-    virtual_text = {source = "if_many", format = diagnostic_message},
-    float = {source = "if_many", format = diagnostic_message}
+    virtual_text = {source = 'if_many', format = diagnostic_message},
+    float = {source = 'if_many', format = diagnostic_message}
   }
 
   local lspconfig = require('lspconfig')
@@ -108,7 +109,7 @@ local function setup()
       Lua = {
         runtime = {version = 'LuaJIT', path = runtime_path},
         diagnostics = {globals = {'vim'}},
-        workspace = {library = vim.api.nvim_get_runtime_file("", true)},
+        workspace = {library = vim.api.nvim_get_runtime_file('', true)},
         telemetry = {enable = false}
       }
     },
@@ -119,7 +120,7 @@ local function setup()
     end
   }
 
-  require("clangd_extensions").setup {
+  require('clangd_extensions').setup {
     server = {
       cmd = {
         'clangd', '--clang-tidy', '--header-insertion=never',
@@ -145,8 +146,8 @@ local function setup()
         behavior = cmp.ConfirmBehavior.Replace,
         select = true
       },
-      ["<Tab>"] = cmp.mapping.select_next_item(),
-      ["<S-Tab>"] = cmp.mapping.select_prev_item()
+      ['<Tab>'] = cmp.mapping.select_next_item(),
+      ['<S-Tab>'] = cmp.mapping.select_prev_item()
     },
     formatting = {
       format = require('lspkind').cmp_format({mode = 'symbol_text'})
@@ -177,4 +178,4 @@ local function setup()
   end
 end
 
-return {setup = setup}
+return M
