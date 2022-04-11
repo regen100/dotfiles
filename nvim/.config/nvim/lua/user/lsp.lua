@@ -56,15 +56,7 @@ local function on_attach(client, bufnr)
                                 opts)
   end
 
-  if client.resolved_capabilities.document_highlight then
-    vim.cmd [[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]]
-  end
+  require('illuminate').on_attach(client)
 end
 
 local function diagnostic_message(diagnostic)
@@ -143,7 +135,7 @@ function M.setup()
       ['<C-f>'] = cmp.mapping.scroll_docs(4),
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
+        behavior = cmp.ConfirmBehavior.Insert,
         select = true
       },
       ['<Tab>'] = cmp.mapping.select_next_item(),
@@ -152,8 +144,13 @@ function M.setup()
     formatting = {
       format = require('lspkind').cmp_format({mode = 'symbol_text'})
     },
-    sources = {{name = 'nvim_lsp'}, {name = 'path'}, {name = 'buffer'}}
+    sources = {
+      {name = 'nvim_lsp'}, {name = 'path'}, {name = 'buffer'},
+      {name = 'nvim_lua'}
+    }
   }
+  cmp.setup.cmdline(':', {sources = {{name = 'cmdline'}}})
+  cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
 
   require('nvim-lightbulb').setup {
     sign = {enabled = false},
@@ -162,6 +159,8 @@ function M.setup()
   vim.cmd [[autocmd vimrc CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
 
   require('lsp_signature').setup()
+
+  require('fidget').setup()
 
   local win = require('lspconfig.ui.windows')
   local _default_opts = win.default_opts
