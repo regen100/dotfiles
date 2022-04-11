@@ -12,8 +12,8 @@ vim.opt.cursorline = true
 vim.opt.number = true
 vim.opt.wrap = false
 vim.opt.list = true
-vim.opt.listchars:append({eol = '↲', extends = '»', precedes = '«'})
-vim.opt.matchpairs:append({'<:>'})
+vim.opt.listchars:append{eol = '↲', extends = '»', precedes = '«'}
+vim.opt.matchpairs:append{'<:>'}
 vim.opt.mouse = 'a'
 vim.opt.scrolloff = 3
 vim.opt.showbreak = '↳'
@@ -27,7 +27,7 @@ vim.opt.virtualedit = 'block'
 vim.opt.termguicolors = true
 vim.opt.pumblend = 10
 vim.opt.undofile = true
-vim.opt.clipboard:append({'unnamedplus'})
+vim.opt.clipboard:append{'unnamedplus'}
 vim.opt.viewoptions = {'cursor', 'folds', 'slash', 'unix'}
 
 vim.cmd([[
@@ -48,9 +48,11 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 vim.g['jetpack#copy_method'] = 'symlink'
 vim.cmd('packadd vim-jetpack')
-local config = {}
+local hooks = {}
 local jetpack = require('jetpack')
 jetpack.startup(function(use)
+  local function config(f) table.insert(hooks, f) end
+
   use {'tani/vim-jetpack', opt = 1}
   use 'tpope/vim-repeat'
   use 'kana/vim-niceblock'
@@ -61,7 +63,7 @@ jetpack.startup(function(use)
   use 'nvim-lua/plenary.nvim'
 
   use 'LionC/nest.nvim'
-  table.insert(config, function()
+  config(function()
     local builtin = require('telescope.builtin')
     require('nest').applyKeymaps {
       {'<Esc><Esc>', ':<C-u>nohlsearch<CR>'}, --
@@ -72,7 +74,7 @@ jetpack.startup(function(use)
           {'d', '"_d'}, --
           {
             'm',
-            ":<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>"
+            ':<C-u>let &mouse=(&mouse == "a" ? "" : "a")<CR>:set mouse?<CR>'
           }, --
           {'w', ':<C-u>setl wrap! wrap?<CR>'}, --
           {'fb', builtin.buffers}, --
@@ -100,7 +102,7 @@ jetpack.startup(function(use)
   use 'p00f/nvim-ts-rainbow'
   use 'JoosepAlviste/nvim-ts-context-commentstring'
   use 'romgrk/nvim-treesitter-context'
-  table.insert(config, function()
+  config(function()
     require('nvim-treesitter.configs').setup {
       highlight = {enable = true},
       rainbow = {enable = true, extended_mode = true, max_file_lines = nil},
@@ -122,7 +124,7 @@ jetpack.startup(function(use)
   end)
 
   use 'hoob3rt/lualine.nvim'
-  table.insert(config, function()
+  config(function()
     require('lualine').setup {
       options = {theme = 'tokyonight'},
       tabline = {lualine_a = {'buffers'}, lualine_z = {'tabs'}}
@@ -130,7 +132,7 @@ jetpack.startup(function(use)
   end)
 
   use 'lukas-reineke/indent-blankline.nvim'
-  table.insert(config, function()
+  config(function()
     require('indent_blankline').setup {
       filetype_exclude = {'', 'help', 'gitcommit', 'lspinfo'},
       buftype_exclude = {'terminal'},
@@ -141,7 +143,7 @@ jetpack.startup(function(use)
   end)
 
   use 'nvim-telescope/telescope.nvim'
-  table.insert(config, function()
+  config(function()
     require('telescope').setup {
       defaults = {
         mappings = {
@@ -154,23 +156,23 @@ jetpack.startup(function(use)
   end)
 
   use 'folke/tokyonight.nvim'
-  table.insert(config, function()
+  config(function()
     vim.g.tokyonight_style = 'night'
     vim.g.tokyonight_italic_keywords = false
     vim.cmd('colorscheme tokyonight')
   end)
 
   use 'norcalli/nvim-colorizer.lua'
-  table.insert(config, function() require('colorizer').setup() end)
+  config(function() require('colorizer').setup() end)
 
   use 'lewis6991/gitsigns.nvim'
-  table.insert(config, function() require('gitsigns').setup() end)
+  config(function() require('gitsigns').setup() end)
 
   use 'folke/trouble.nvim'
-  table.insert(config, function() require('trouble').setup() end)
+  config(function() require('trouble').setup() end)
 
   use 'echasnovski/mini.nvim'
-  table.insert(config, function()
+  config(function()
     require('mini.comment').setup()
     require('mini.jump').setup()
     require('mini.misc').setup()
@@ -190,7 +192,7 @@ jetpack.startup(function(use)
   use 'kosayoda/nvim-lightbulb'
   use 'onsails/lspkind-nvim'
   use 'ray-x/lsp_signature.nvim'
-  table.insert(config, function() require('user.lsp').setup() end)
+  config(function() require('user.lsp').setup() end)
 end)
 for _, name in ipairs(vim.fn['jetpack#names']()) do
   if jetpack.tap(name) == 0 then
@@ -198,7 +200,7 @@ for _, name in ipairs(vim.fn['jetpack#names']()) do
     break
   end
 end
-for _, f in ipairs(config) do f() end
+for _, f in ipairs(hooks) do f() end
 
 vim.cmd([[
   autocmd vimrc InsertLeave * set nopaste
