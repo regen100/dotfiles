@@ -23,9 +23,9 @@ vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.softtabstop = 2
 vim.opt.splitbelow = true
-vim.opt.virtualedit:append({'block'})
+vim.opt.virtualedit = 'block'
 vim.opt.termguicolors = true
-vim.opt.pumblend = 30
+vim.opt.pumblend = 10
 vim.opt.undofile = true
 vim.opt.clipboard:append({'unnamedplus'})
 vim.opt.viewoptions = {'cursor', 'folds', 'slash', 'unix'}
@@ -54,15 +54,11 @@ jetpack.startup(function(use)
   use {'tani/vim-jetpack', opt = 1}
   use 'tpope/vim-repeat'
   use 'kana/vim-niceblock'
-  use 'tpope/vim-commentary'
   use 'jghauser/mkdir.nvim'
-  use 'thinca/vim-zenspace'
   use 'tpope/vim-unimpaired'
-  use 'mhinz/vim-startify'
   use 'bogado/file-line'
   use 'kyazdani42/nvim-web-devicons'
   use 'nvim-lua/plenary.nvim'
-  use 'machakann/vim-sandwich'
 
   use 'LionC/nest.nvim'
   table.insert(config, function()
@@ -74,7 +70,6 @@ jetpack.startup(function(use)
         '<leader>', {
           {'o', '^f{a<CR><CR><UP>'}, --
           {'d', '"_d'}, --
-          {'l', ':call ToggleLocationList()<CR>'}, --
           {
             'm',
             ":<C-u>let &mouse=(&mouse == 'a' ? '' : 'a')<CR>:set mouse?<CR>"
@@ -97,9 +92,6 @@ jetpack.startup(function(use)
       }
     }
   end)
-
-  use 'easymotion/vim-easymotion'
-  vim.g.EasyMotion_use_migemo = 1
 
   use {'lambdalisue/suda.vim', on = 'SudaWrite'}
   vim.cmd('cabbrev w!! SudaWrite')
@@ -140,8 +132,11 @@ jetpack.startup(function(use)
   use 'lukas-reineke/indent-blankline.nvim'
   table.insert(config, function()
     require('indent_blankline').setup {
-      filetype_exclude = {'help', 'gitcommit'},
-      buftype_exclude = {'terminal'}
+      filetype_exclude = {'', 'help', 'gitcommit', 'lspinfo'},
+      buftype_exclude = {'terminal'},
+      space_char_blankline = ' ',
+      show_current_context = true,
+      show_end_of_line = true
     }
   end)
 
@@ -174,19 +169,17 @@ jetpack.startup(function(use)
   use 'folke/trouble.nvim'
   table.insert(config, function() require('trouble').setup() end)
 
-  use 'milkypostman/vim-togglelist'
-  vim.g.toggle_list_no_mappings = 1
-
-  use 'sheerun/vim-polyglot'
-  vim.g.cpp_class_scope_highlight = 1
-  vim.g.cpp_member_variable_highlight = 1
-  vim.g.cpp_class_decl_highlight = 1
-  vim.g.cpp_experimental_simple_template_highlight = 1
-  vim.g.cpp_concepts_highlight = 1
-  vim.g.cpp_no_function_highlight = 1
-  vim.g.vim_json_syntax_conceal = 0
-  vim.g.vim_markdown_conceal = 0
-  vim.g.vim_markdown_conceal_code_blocks = 0
+  use 'echasnovski/mini.nvim'
+  table.insert(config, function()
+    require('mini.comment').setup()
+    require('mini.jump').setup()
+    require('mini.misc').setup()
+    require('mini.sessions').setup()
+    require('mini.starter').setup()
+    require('mini.surround').setup()
+    require('mini.trailspace').setup()
+    vim.cmd('highlight link MiniTrailspace NvimInternalError')
+  end)
 
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/nvim-cmp'
@@ -194,6 +187,9 @@ jetpack.startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'p00f/clangd_extensions.nvim'
+  use 'kosayoda/nvim-lightbulb'
+  use 'onsails/lspkind-nvim'
+  use 'ray-x/lsp_signature.nvim'
   table.insert(config, function() require('user.lsp').setup() end)
 end)
 for _, name in ipairs(vim.fn['jetpack#names']()) do

@@ -148,8 +148,33 @@ local function setup()
       ["<Tab>"] = cmp.mapping.select_next_item(),
       ["<S-Tab>"] = cmp.mapping.select_prev_item()
     },
+    formatting = {
+      format = require('lspkind').cmp_format({mode = 'symbol_text'})
+    },
     sources = {{name = 'nvim_lsp'}, {name = 'path'}, {name = 'buffer'}}
   }
+
+  require('nvim-lightbulb').setup {
+    sign = {enabled = false},
+    float = {enabled = true}
+  }
+  vim.cmd [[autocmd vimrc CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+
+  require('lsp_signature').setup()
+
+  local win = require('lspconfig.ui.windows')
+  local _default_opts = win.default_opts
+  win.default_opts = function(options)
+    local ret = _default_opts(options)
+    ret.border = 'single'
+    return ret
+  end
+
+  local signs = {Error = " ", Warn = " ", Hint = " ", Info = " "}
+  for type, icon in pairs(signs) do
+    local hl = 'DiagnosticSign' .. type
+    vim.fn.sign_define(hl, {text = icon, texthl = hl, numhl = hl})
+  end
 end
 
 return {setup = setup}
