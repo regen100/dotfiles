@@ -193,6 +193,7 @@ require('user.jetpack').startup(function(use)
     'echasnovski/mini.nvim',
     config = function()
       require('mini.comment').setup()
+      require('mini.completion').setup()
       require('mini.jump').setup()
       require('mini.misc').setup()
       require('mini.sessions').setup()
@@ -229,36 +230,6 @@ require('user.jetpack').startup(function(use)
     config = function()
       require('scrollbar').setup()
       require('scrollbar.handlers.search').setup()
-    end
-  }
-
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-nvim-lua'
-  use 'hrsh7th/cmp-cmdline'
-  use 'onsails/lspkind-nvim'
-  use 'ray-x/cmp-treesitter'
-  use {
-    'hrsh7th/nvim-cmp',
-    config = function()
-      local cmp = require('cmp')
-      cmp.setup {
-        snippet = {expand = function() end},
-        mapping = {
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<CR>'] = cmp.mapping.confirm {select = true},
-          ['<Tab>'] = cmp.mapping.select_next_item(),
-          ['<S-Tab>'] = cmp.mapping.select_prev_item()
-        },
-        formatting = {
-          format = require('lspkind').cmp_format {mode = 'symbol_text'}
-        },
-        sources = cmp.config.sources({{name = 'nvim_lsp'}, {name = 'nvim_lua'}},
-                                     {{name = 'treesitter'}},
-                                     {{name = 'buffer'}})
-      }
-      cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
     end
   }
 
