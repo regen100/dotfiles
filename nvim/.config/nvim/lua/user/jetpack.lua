@@ -26,10 +26,19 @@ function M.startup(fn)
   M.install()
 
   local hooks = {}
-  local function config(hook) table.insert(hooks, hook) end
 
   local jetpack = require('jetpack')
-  jetpack.startup(function(use) fn(use, config) end)
+  jetpack.startup(function(_use)
+    local function use(config)
+      if type(config) == 'table' and config['config'] then
+        table.insert(hooks, config['config'])
+        config['config'] = nil
+      end
+      _use(config)
+    end
+
+    fn(use)
+  end)
 
   for _, name in ipairs(vim.fn['jetpack#names']()) do
     if jetpack.tap(name) == 0 then
@@ -38,7 +47,13 @@ function M.startup(fn)
     end
   end
 
-  for _, hook in ipairs(hooks) do hook() end
+  for _, hook in ipairs(hooks) do
+    if type(hook) == 'function' then
+      hook()
+    elseif type(hook) == 'string' then
+      vim.cmd(hook)
+    end
+  end
 end
 
 return M
