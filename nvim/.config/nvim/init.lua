@@ -203,6 +203,9 @@ require('user.jetpack').startup(function(use, config)
     require('scrollbar.handlers.search').setup()
   end)
 
+  use 'Pocco81/AutoSave.nvim'
+  config(function() require("autosave").setup() end)
+
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
