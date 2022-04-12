@@ -75,14 +75,18 @@ function M.setup()
     float = {source = 'if_many', format = diagnostic_message}
   }
 
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp
+                                                                       .protocol
+                                                                       .make_client_capabilities())
   local lspconfig = require('lspconfig')
-  lspconfig.cmake.setup {on_attach = on_attach}
-  lspconfig.rls.setup {on_attach = on_attach}
-  lspconfig.vimls.setup {on_attach = on_attach}
-  lspconfig.pylsp.setup {on_attach = on_attach}
+  lspconfig.cmake.setup {on_attach = on_attach, capabilities = capabilities}
+  lspconfig.rls.setup {on_attach = on_attach, capabilities = capabilities}
+  lspconfig.vimls.setup {on_attach = on_attach, capabilities = capabilities}
+  lspconfig.pylsp.setup {on_attach = on_attach, capabilities = capabilities}
   lspconfig.efm.setup {
     filetypes = {'bzl', 'dockerfile', 'json', 'lua', 'markdown', 'sh', 'zsh'},
-    on_attach = on_attach
+    on_attach = on_attach,
+    capabilities = capabilities
   }
 
   lspconfig.sumneko_lua.setup {
@@ -98,7 +102,8 @@ function M.setup()
       client.resolved_capabilities.document_formatting = false
       client.resolved_capabilities.document_range_formatting = false
       on_attach(client, bufnr)
-    end
+    end,
+    capabilities = capabilities
   }
 
   require('clangd_extensions').setup {
@@ -115,7 +120,8 @@ function M.setup()
             {'gs', '<Cmd>ClangdSwitchSourceHeader<CR>'} --
           }
         }
-      end
+      end,
+      capabilities = capabilities
     },
     extensions = {inlay_hints = {parameter_hints_prefix = ' <- '}}
   }
