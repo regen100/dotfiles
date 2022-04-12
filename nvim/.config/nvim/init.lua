@@ -48,6 +48,7 @@ require('user.jetpack').startup(function(use)
   use 'kyazdani42/nvim-web-devicons'
   use 'nvim-lua/plenary.nvim'
   use 'lambdalisue/readablefold.vim'
+  use 'sakhnik/nvim-gdb'
 
   use {
     'LionC/nest.nvim',
@@ -255,7 +256,6 @@ require('user.jetpack').startup(function(use)
           {name = 'nvim_lua'}
         }
       }
-      cmp.setup.cmdline(':', {sources = {{name = 'cmdline'}}})
       cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
     end
   }
