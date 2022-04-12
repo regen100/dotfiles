@@ -224,11 +224,6 @@ require('user.jetpack').startup(function(use)
     end
   }
 
-  use {
-    'Pocco81/AutoSave.nvim',
-    config = function() require('autosave').setup() end
-  }
-
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
@@ -246,6 +241,8 @@ require('user.jetpack').startup(function(use)
     config = function() require('user.lsp').setup() end
   }
 end)
+
+require('user.autosave').setup()
 
 vim.cmd([[
   autocmd vimrc InsertLeave * set nopaste
