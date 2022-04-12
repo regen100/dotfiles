@@ -238,6 +238,7 @@ require('user.jetpack').startup(function(use)
   use 'hrsh7th/cmp-nvim-lua'
   use 'hrsh7th/cmp-cmdline'
   use 'onsails/lspkind-nvim'
+  use 'ray-x/cmp-treesitter'
   use {
     'hrsh7th/nvim-cmp',
     config = function()
@@ -245,23 +246,17 @@ require('user.jetpack').startup(function(use)
       cmp.setup {
         snippet = {expand = function() end},
         mapping = {
-          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<CR>'] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Insert,
-            select = true
-          },
+          ['<CR>'] = cmp.mapping.confirm {select = true},
           ['<Tab>'] = cmp.mapping.select_next_item(),
           ['<S-Tab>'] = cmp.mapping.select_prev_item()
         },
         formatting = {
           format = require('lspkind').cmp_format {mode = 'symbol_text'}
         },
-        sources = {
-          {name = 'nvim_lsp'}, {name = 'path'}, {name = 'buffer'},
-          {name = 'nvim_lua'}
-        }
+        sources = cmp.config.sources({{name = 'nvim_lsp'}, {name = 'nvim_lua'}},
+                                     {{name = 'treesitter'}},
+                                     {{name = 'buffer'}})
       }
       cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
     end
