@@ -1,5 +1,8 @@
 local M = {}
 
+vim.fn.system('git shortlog -se HEAD | grep $(git config user.email)')
+local own_code = vim.v.shell_error == 0
+
 local function on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -31,16 +34,13 @@ local function on_attach(client, bufnr)
     }
   }
 
-  if client.resolved_capabilities.document_formatting then
-    vim.fn.system('git shortlog -se HEAD | grep $(git config user.email)')
-    if vim.v.shell_error == 0 then
-      vim.cmd [[
-        augroup autoformat
-          autocmd! * <buffer>
-          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-        augroup END
-      ]]
-    end
+  if client.resolved_capabilities.document_formatting and own_code then
+    vim.cmd [[
+      augroup autoformat
+        autocmd! * <buffer>
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+      augroup END
+    ]]
   end
 
   require('illuminate').on_attach(client)
@@ -119,41 +119,6 @@ function M.setup()
     },
     extensions = {inlay_hints = {parameter_hints_prefix = ' <- '}}
   }
-
-  local cmp = require('cmp')
-  cmp.setup {
-    snippet = {expand = function() end},
-    mapping = {
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<CR>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true
-      },
-      ['<Tab>'] = cmp.mapping.select_next_item(),
-      ['<S-Tab>'] = cmp.mapping.select_prev_item()
-    },
-    formatting = {
-      format = require('lspkind').cmp_format({mode = 'symbol_text'})
-    },
-    sources = {
-      {name = 'nvim_lsp'}, {name = 'path'}, {name = 'buffer'},
-      {name = 'nvim_lua'}
-    }
-  }
-  cmp.setup.cmdline(':', {sources = {{name = 'cmdline'}}})
-  cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
-
-  require('nvim-lightbulb').setup {
-    sign = {enabled = false},
-    float = {enabled = true}
-  }
-  vim.cmd [[autocmd vimrc CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
-
-  require('lsp_signature').setup()
-
-  require('fidget').setup()
 
   local win = require('lspconfig.ui.windows')
   local _default_opts = win.default_opts
