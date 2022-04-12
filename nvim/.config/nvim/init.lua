@@ -40,6 +40,12 @@ vim.cmd([[
 
 require('user.jetpack').startup(function(use)
   use {'tani/vim-jetpack', opt = 1}
+
+  use {
+    'rcarriga/nvim-notify',
+    config = function() vim.notify = require('notify') end
+  }
+
   use 'tpope/vim-repeat'
   use 'kana/vim-niceblock'
   use 'jghauser/mkdir.nvim'
