@@ -224,22 +224,63 @@ require('user.jetpack').startup(function(use)
     end
   }
 
-  use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-nvim-lua'
   use 'hrsh7th/cmp-cmdline'
-  use 'p00f/clangd_extensions.nvim'
-  use 'kosayoda/nvim-lightbulb'
   use 'onsails/lspkind-nvim'
-  use 'ray-x/lsp_signature.nvim'
-  use 'j-hui/fidget.nvim'
+  use {
+    'hrsh7th/nvim-cmp',
+    config = function()
+      local cmp = require('cmp')
+      cmp.setup {
+        snippet = {expand = function() end},
+        mapping = {
+          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true
+          },
+          ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<S-Tab>'] = cmp.mapping.select_prev_item()
+        },
+        formatting = {
+          format = require('lspkind').cmp_format {mode = 'symbol_text'}
+        },
+        sources = {
+          {name = 'nvim_lsp'}, {name = 'path'}, {name = 'buffer'},
+          {name = 'nvim_lua'}
+        }
+      }
+      cmp.setup.cmdline(':', {sources = {{name = 'cmdline'}}})
+      cmp.setup.cmdline('/', {sources = {{name = 'buffer'}}})
+    end
+  }
+
+  use 'p00f/clangd_extensions.nvim'
   use 'RRethy/vim-illuminate'
   use {
     'neovim/nvim-lspconfig',
     config = function() require('user.lsp').setup() end
   }
+  use {
+    'kosayoda/nvim-lightbulb',
+    config = function()
+      require('nvim-lightbulb').setup {
+        sign = {enabled = false},
+        float = {enabled = true}
+      }
+      vim.cmd [[autocmd vimrc CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+    end
+  }
+  use {
+    'ray-x/lsp_signature.nvim',
+    config = function() require('lsp_signature').setup() end
+  }
+  use {'j-hui/fidget.nvim', config = function() require('fidget').setup() end}
 end)
 
 require('user.autosave').setup()
