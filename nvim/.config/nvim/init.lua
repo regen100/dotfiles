@@ -211,7 +211,6 @@ require('user.jetpack').startup(function(use)
     'echasnovski/mini.nvim',
     config = function()
       require('mini.comment').setup()
-      require('mini.completion').setup({ delay = { signature = 10 ^ 7 } })
       require('mini.jump').setup()
       require('mini.misc').setup()
       require('mini.sessions').setup()
@@ -285,6 +284,12 @@ require('user.jetpack').startup(function(use)
       require('fidget').setup()
     end,
   })
+  use({
+    'onsails/lspkind-nvim',
+    config = function()
+      require('lspkind').init({ mode = 'symbol_text' })
+    end,
+  })
 end)
 
 require('user.autosave').setup()
@@ -333,5 +338,7 @@ vim.cmd([[
     endif
   augroup END
 ]])
+
+require('simple-cmp').setup({ disable_trigger = { ' ' } })
 
 vim.opt.secure = true
