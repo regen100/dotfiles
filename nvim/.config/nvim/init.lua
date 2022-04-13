@@ -55,6 +55,7 @@ require('user.jetpack').startup(function(use)
   use 'nvim-lua/plenary.nvim'
   use 'lambdalisue/readablefold.vim'
   use 'sakhnik/nvim-gdb'
+  use 'machakann/vim-sandwich'
 
   use {
     'LionC/nest.nvim',
@@ -193,13 +194,12 @@ require('user.jetpack').startup(function(use)
     'echasnovski/mini.nvim',
     config = function()
       require('mini.comment').setup()
-      require('mini.completion').setup()
+      require('mini.completion').setup {delay = {signature = 10 ^ 7}}
       require('mini.jump').setup()
       require('mini.misc').setup()
       require('mini.sessions').setup()
       vim.fn.mkdir(MiniSessions.config.directory, 'p')
       require('mini.starter').setup()
-      require('mini.surround').setup()
       require('mini.trailspace').setup()
       vim.cmd('highlight link MiniTrailspace NvimInternalError')
     end
