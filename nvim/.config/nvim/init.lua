@@ -233,6 +233,9 @@ require('user.jetpack').startup(function(use)
     end
   }
 
+  use 'nathom/filetype.nvim'
+  vim.g.did_load_filetypes = 1
+
   use 'p00f/clangd_extensions.nvim'
   use 'RRethy/vim-illuminate'
   use {
