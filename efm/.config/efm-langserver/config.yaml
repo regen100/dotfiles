@@ -21,6 +21,11 @@ tools:
     format-stdin: true
     root-markers:
       - .lua-format
+  lua-stylua: &lua-stylua
+    format-command: 'stylua -'
+    format-stdin: true
+    root-markers:
+      - stylua.toml
   sh-shellcheck: &sh-shellcheck
     lint-command: 'shellcheck -f gcc -x'
     lint-source: 'shellcheck'
@@ -64,7 +69,7 @@ languages:
   json:
     - <<: *json-jq
   lua:
-    - <<: *lua-lua-format
+    - <<: *lua-stylua
   markdown:
     - <<: *textlint-lint
   sh:

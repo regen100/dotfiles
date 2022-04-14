@@ -12,8 +12,8 @@ vim.opt.cursorline = true
 vim.opt.number = true
 vim.opt.wrap = false
 vim.opt.list = true
-vim.opt.listchars:append{eol = '↲', extends = '»', precedes = '«'}
-vim.opt.matchpairs:append{'<:>'}
+vim.opt.listchars:append({ eol = '↲', extends = '»', precedes = '«' })
+vim.opt.matchpairs:append({ '<:>' })
 vim.opt.mouse = 'a'
 vim.opt.scrolloff = 3
 vim.opt.showbreak = '↳'
@@ -27,9 +27,9 @@ vim.opt.virtualedit = 'block'
 vim.opt.termguicolors = true
 vim.opt.pumblend = 10
 vim.opt.undofile = true
-vim.opt.clipboard:append{'unnamedplus'}
-vim.opt.viewoptions = {'cursor', 'folds', 'slash', 'unix'}
-vim.opt.guicursor:append{'c:ver25'}
+vim.opt.clipboard:append({ 'unnamedplus' })
+vim.opt.viewoptions = { 'cursor', 'folds', 'slash', 'unix' }
+vim.opt.guicursor:append({ 'c:ver25' })
 
 vim.cmd([[
   augroup vimrc
@@ -39,70 +39,74 @@ vim.cmd([[
 ]])
 
 require('user.jetpack').startup(function(use)
-  use {'tani/vim-jetpack', opt = 1}
+  use({ 'tani/vim-jetpack', opt = 1 })
 
-  use {
+  use({
     'rcarriga/nvim-notify',
-    config = function() vim.notify = require('notify') end
-  }
+    config = function()
+      vim.notify = require('notify')
+    end,
+  })
 
-  use 'tpope/vim-repeat'
-  use 'kana/vim-niceblock'
-  use 'jghauser/mkdir.nvim'
-  use 'tpope/vim-unimpaired'
-  use 'bogado/file-line'
-  use 'kyazdani42/nvim-web-devicons'
-  use 'nvim-lua/plenary.nvim'
-  use 'lambdalisue/readablefold.vim'
-  use 'sakhnik/nvim-gdb'
-  use 'machakann/vim-sandwich'
+  use('tpope/vim-repeat')
+  use('kana/vim-niceblock')
+  use('jghauser/mkdir.nvim')
+  use('tpope/vim-unimpaired')
+  use('bogado/file-line')
+  use('kyazdani42/nvim-web-devicons')
+  use('nvim-lua/plenary.nvim')
+  use('lambdalisue/readablefold.vim')
+  use('sakhnik/nvim-gdb')
+  use('machakann/vim-sandwich')
 
-  use {
+  use({
     'LionC/nest.nvim',
     config = function()
-      require('nest').applyKeymaps {
-        {'<Esc><Esc>', '<Cmd>nohlsearch<CR>'}, --
+      require('nest').applyKeymaps({
+        { '<Esc><Esc>', '<Cmd>nohlsearch<CR>' }, --
         {
-          '<Leader>', {
-            {'o', '^f{a<CR><CR><Up>'}, --
-            {'d', '"_d'}, --
+          '<Leader>',
+          {
+            { 'o', '^f{a<CR><CR><Up>' }, --
+            { 'd', '"_d' }, --
             {
               'm',
-              '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>'
+              '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>',
             }, --
-            {'w', '<Cmd>setl wrap! wrap?<CR>'}, --
+            { 'w', '<Cmd>setl wrap! wrap?<CR>' }, --
             {
               'rr',
               '<Cmd>%s/\\<<C-r><C-w>\\>//g<Left><Left>',
-              options = {silent = false}
-            } --
-          }
-        }, {
+              options = { silent = false },
+            }, --
+          },
+        },
+        {
           mode = 'v',
           {
-            {'<Tab>', '>gv'}, --
-            {'<S-Tab>', '<gv'}, --
-            {'<LeftRelease>', 'y<CR>gv<LeftRelease>'} --
-          }
-        }
-      }
-    end
-  }
+            { '<Tab>', '>gv' }, --
+            { '<S-Tab>', '<gv' }, --
+            { '<LeftRelease>', 'y<CR>gv<LeftRelease>' }, --
+          },
+        },
+      })
+    end,
+  })
 
-  use {'lambdalisue/suda.vim', on = 'SudaWrite'}
+  use({ 'lambdalisue/suda.vim', on = 'SudaWrite' })
   vim.cmd('cabbrev w!! SudaWrite')
 
-  use 'p00f/nvim-ts-rainbow'
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
-  use {
+  use('p00f/nvim-ts-rainbow')
+  use('JoosepAlviste/nvim-ts-context-commentstring')
+  use({
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
     config = function()
-      require('nvim-treesitter.configs').setup {
-        highlight = {enable = true},
-        rainbow = {enable = true, extended_mode = true, max_file_lines = nil},
-        context_commentstring = {enable = true}
-      }
+      require('nvim-treesitter.configs').setup({
+        highlight = { enable = true },
+        rainbow = { enable = true, extended_mode = true, max_file_lines = nil },
+        context_commentstring = { enable = true },
+      })
 
       vim.opt.foldmethod = 'expr'
       vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
@@ -112,89 +116,102 @@ require('user.jetpack').startup(function(use)
         local lang = require('nvim-treesitter.parsers').get_buf_lang()
         pcall(require('nvim-treesitter.install').ensure_installed, lang)
       end
-      vim.cmd(
-          'autocmd vimrc BufEnter * ++once :lua ensure_treesitter_language_installed()')
-    end
-  }
-  use {
+      vim.cmd('autocmd vimrc BufEnter * ++once :lua ensure_treesitter_language_installed()')
+    end,
+  })
+  use({
     'romgrk/nvim-treesitter-context',
-    config = function() require('treesitter-context').setup() end
-  }
-  use {
+    config = function()
+      require('treesitter-context').setup()
+    end,
+  })
+  use({
     'haringsrob/nvim_context_vt',
-    config = function() require('nvim_context_vt').setup {prefix = ' --'} end
-  }
+    config = function()
+      require('nvim_context_vt').setup({ prefix = ' --' })
+    end,
+  })
 
-  use {
+  use({
     'hoob3rt/lualine.nvim',
     config = function()
-      require('lualine').setup {
-        options = {theme = 'tokyonight'},
-        tabline = {lualine_a = {'buffers'}, lualine_z = {'tabs'}}
-      }
-    end
-  }
+      require('lualine').setup({
+        options = { theme = 'tokyonight' },
+        tabline = { lualine_a = { 'buffers' }, lualine_z = { 'tabs' } },
+      })
+    end,
+  })
 
-  use {
+  use({
     'lukas-reineke/indent-blankline.nvim',
     config = function()
-      require('indent_blankline').setup {
-        filetype_exclude = {'', 'help', 'gitcommit', 'lspinfo'},
-        buftype_exclude = {'terminal'},
+      require('indent_blankline').setup({
+        filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo' },
+        buftype_exclude = { 'terminal' },
         space_char_blankline = ' ',
         show_current_context = true,
-        show_end_of_line = true
-      }
-    end
-  }
+        show_end_of_line = true,
+      })
+    end,
+  })
 
-  use {
+  use({
     'nvim-telescope/telescope.nvim',
     config = function()
       local actions = require('telescope.actions')
-      require('telescope').setup {
+      require('telescope').setup({
         defaults = {
           mappings = {
             i = {
-              ['<Esc>'] = actions.close --
-            }
-          }
-        }
-      }
+              ['<Esc>'] = actions.close, --
+            },
+          },
+        },
+      })
 
       local builtin = require('telescope.builtin')
-      require('nest').applyKeymaps {
-        {'<C-p>', builtin.find_files}, --
+      require('nest').applyKeymaps({
+        { '<C-p>', builtin.find_files }, --
         {
-          '<Leader>', {
-            {'fb', builtin.buffers} --
-          }
-        }
-      }
-    end
-  }
+          '<Leader>',
+          {
+            { 'fb', builtin.buffers }, --
+          },
+        },
+      })
+    end,
+  })
 
-  use {'folke/tokyonight.nvim', config = 'colorscheme tokyonight'}
+  use({ 'folke/tokyonight.nvim', config = 'colorscheme tokyonight' })
   vim.g.tokyonight_style = 'night'
   vim.g.tokyonight_italic_keywords = false
 
-  use {
+  use({
     'norcalli/nvim-colorizer.lua',
-    config = function() require('colorizer').setup() end
-  }
+    config = function()
+      require('colorizer').setup()
+    end,
+  })
 
-  use {
+  use({
     'lewis6991/gitsigns.nvim',
-    config = function() require('gitsigns').setup() end
-  }
+    config = function()
+      require('gitsigns').setup()
+    end,
+  })
 
-  use {'folke/trouble.nvim', config = function() require('trouble').setup() end}
+  use({
+    'folke/trouble.nvim',
+    config = function()
+      require('trouble').setup()
+    end,
+  })
 
-  use {
+  use({
     'echasnovski/mini.nvim',
     config = function()
       require('mini.comment').setup()
-      require('mini.completion').setup {delay = {signature = 10 ^ 7}}
+      require('mini.completion').setup({ delay = { signature = 10 ^ 7 } })
       require('mini.jump').setup()
       require('mini.misc').setup()
       require('mini.sessions').setup()
@@ -202,61 +219,72 @@ require('user.jetpack').startup(function(use)
       require('mini.starter').setup()
       require('mini.trailspace').setup()
       vim.cmd('highlight link MiniTrailspace NvimInternalError')
-    end
-  }
+    end,
+  })
 
-  use {
+  use({
     'folke/todo-comments.nvim',
-    config = function() require('todo-comments').setup() end
-  }
+    config = function()
+      require('todo-comments').setup()
+    end,
+  })
 
-  use {
+  use({
     'kevinhwang91/nvim-hlslens',
     config = function()
       local start = [[<Cmd>lua require('hlslens').start()<CR>]]
-      require('nest').applyKeymaps {
-        {'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]] .. start}, --
-        {'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR>]] .. start}, --
-        {'*', '*' .. start}, --
-        {'#', '#' .. start}, --
-        {'g*', 'g*' .. start}, --
-        {'g#', 'g#' .. start} --
-      }
-    end
-  }
+      require('nest').applyKeymaps({
+        { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]] .. start }, --
+        { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR>]] .. start }, --
+        { '*', '*' .. start }, --
+        { '#', '#' .. start }, --
+        { 'g*', 'g*' .. start }, --
+        { 'g#', 'g#' .. start }, --
+      })
+    end,
+  })
 
-  use {
+  use({
     'petertriho/nvim-scrollbar',
     config = function()
       require('scrollbar').setup()
       require('scrollbar.handlers.search').setup()
-    end
-  }
+    end,
+  })
 
-  use 'nathom/filetype.nvim'
+  use('nathom/filetype.nvim')
   vim.g.did_load_filetypes = 1
 
-  use 'p00f/clangd_extensions.nvim'
-  use 'RRethy/vim-illuminate'
-  use {
+  use('p00f/clangd_extensions.nvim')
+  use('RRethy/vim-illuminate')
+  use({
     'neovim/nvim-lspconfig',
-    config = function() require('user.lsp').setup() end
-  }
-  use {
+    config = function()
+      require('user.lsp').setup()
+    end,
+  })
+  use({
     'kosayoda/nvim-lightbulb',
     config = function()
-      require('nvim-lightbulb').setup {
-        sign = {enabled = false},
-        float = {enabled = true}
-      }
-      vim.cmd [[autocmd vimrc CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
-    end
-  }
-  use {
+      require('nvim-lightbulb').setup({
+        sign = { enabled = false },
+        float = { enabled = true },
+      })
+      vim.cmd([[autocmd vimrc CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]])
+    end,
+  })
+  use({
     'ray-x/lsp_signature.nvim',
-    config = function() require('lsp_signature').setup() end
-  }
-  use {'j-hui/fidget.nvim', config = function() require('fidget').setup() end}
+    config = function()
+      require('lsp_signature').setup()
+    end,
+  })
+  use({
+    'j-hui/fidget.nvim',
+    config = function()
+      require('fidget').setup()
+    end,
+  })
 end)
 
 require('user.autosave').setup()
