@@ -3,14 +3,20 @@ local M = {}
 local installed = false
 
 function M.install()
-  if installed then return end
+  if installed then
+    return
+  end
 
   local root = vim.fn.stdpath('data') .. '/site/pack/jetpack'
   local src = root .. '/src/vim-jetpack'
   if vim.fn.empty(vim.fn.glob(src)) > 0 then
     vim.fn.system({
-      'git', 'clone', '--depth', '1', 'https://github.com/tani/vim-jetpack.git',
-      src
+      'git',
+      'clone',
+      '--depth',
+      '1',
+      'https://github.com/tani/vim-jetpack.git',
+      src,
     })
     local opt = root .. '/opt/vim-jetpack'
     vim.fn.mkdir(root .. '/opt', 'p')
