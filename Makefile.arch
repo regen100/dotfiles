@@ -79,7 +79,7 @@ efm: repo
 .PHONY: nvim
 nvim: repo git utils efm
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua vim-language-server
+	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
 

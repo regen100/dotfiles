@@ -34,13 +34,13 @@ function M.startup(fn)
   local hooks = {}
 
   local jetpack = require('jetpack')
-  jetpack.startup(function(_use)
+  jetpack.startup(function(use_org)
     local function use(config)
       if type(config) == 'table' and config['config'] then
         table.insert(hooks, config['config'])
         config['config'] = nil
       end
-      _use(config)
+      use_org(config)
     end
 
     fn(use)
