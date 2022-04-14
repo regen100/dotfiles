@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 
 function M.save()
   if vim.fn.filereadable(vim.fn.expand('%:p')) == 0 then
