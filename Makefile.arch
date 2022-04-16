@@ -123,7 +123,7 @@ tmux-patch: repo
 
 .PHONY: tmux
 tmux: repo
-	@$(PKG-INSTALL) tmux
+	@$(PKG-INSTALL) tmux sysstat lm_sensors
 	@$(STOW-INSTALL) tmux
 
 .PHONY: zsh
