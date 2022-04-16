@@ -211,7 +211,6 @@ require('user.jetpack').startup(function(use)
     'echasnovski/mini.nvim',
     config = function()
       require('mini.comment').setup()
-      require('mini.completion').setup({ delay = { signature = 10 ^ 7 } })
       require('mini.jump').setup()
       require('mini.misc').setup()
       require('mini.sessions').setup()
@@ -283,6 +282,47 @@ require('user.jetpack').startup(function(use)
     'j-hui/fidget.nvim',
     config = function()
       require('fidget').setup()
+    end,
+  })
+
+  use({ 'hrsh7th/vim-vsnip', config = [[
+    imap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+    smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+    imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+    smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+  ]] })
+  use('hrsh7th/vim-vsnip-integ')
+  use('rafamadriz/friendly-snippets')
+
+  use('hrsh7th/cmp-nvim-lsp')
+  use('hrsh7th/cmp-vsnip')
+  use('onsails/lspkind-nvim')
+  use({
+    'hrsh7th/nvim-cmp',
+    config = function()
+      local cmp = require('cmp')
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            vim.fn['vsnip#anonymous'](args.body)
+          end,
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'vsnip' },
+        }),
+        formatting = {
+          format = require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 100, menu = {
+            nvim_lsp = '[LSP]',
+            vsnip = '[vsnip]',
+            nvim_lua = '[Lua]',
+          } }),
+        },
+      })
     end,
   })
 end)
