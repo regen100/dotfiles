@@ -1,5 +1,6 @@
 # shellcheck disable=SC1090,SC1091,SC1094,SC2086,SC2154,SC2193,SC2203
 
+
 export FZF_DEFAULT_COMMAND="rg --files 2>/dev/null"
 _fzf_compgen_path() {
   rg --files 2>/dev/null
@@ -29,13 +30,17 @@ if [[ $TERM != linux ]]; then
   fi
 fi
 
-setopt HIST_VERIFY
+setopt globdots
+setopt hist_verify
+setopt magic_equal_subst
 
 alias mmv='noglob zmv -W'
 alias gdbrun='gdb -ex=run --args'
 alias lldbrun='lldb -o run --'
 alias valgrindrun='valgrind --exit-on-first-error=yes --error-exitcode=1'
 alias g='git'
+alias man=' man'
+alias run-help=' run-help'
 
 CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -ferror-limit=1 -g"
 CMAKE_COMMON_OPTIONS=(-DBUILD_SHARED_LIBS=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=install -DBUILD_TESTING=ON)
@@ -70,8 +75,8 @@ ls_abbrev() {
 add-zsh-hook chpwd ls_abbrev
 
 reset_prompt() {
-  echo -ne '\e[5 q'     # reset cursor
-  echo -ne '\e[?1000l'  # mouse tracking off
+  echo -ne '\e[5 q'     # reset cursor (DECSCUSR)
+  echo -ne '\e[?1000l'  # mouse tracking off (man console_codes)
 }
 add-zsh-hook precmd reset_prompt
 
@@ -95,5 +100,22 @@ zstyle ":acceptline:default" nocompwarn true
 if [[ -n $WSL_HOST_IP && -n $DISPLAY && $+commands[xauth] == 1 ]]; then
   (( $(xauth list "$DISPLAY" 2>&1 | wc -l) )) || xauth generate "$DISPLAY"
 fi
+
+if (( $+commands[ghq] )) && (( $+functions[__fzfcmd] )); then
+  function ghq-fzf() {
+    local src
+    src=$(ghq list | $(__fzfcmd) --preview "ls --color=always -aghvF $(ghq root)/{} | tail -n+4")
+    if [[ -n $src ]]; then
+      # shellcheck disable=SC2034
+      BUFFER="cd -- $(ghq root)/$src"
+      zle accept-line
+    fi
+  }
+
+  zle -N ghq-fzf
+  bindkey "^]" ghq-fzf
+fi
+
+cdpath+=(~)
 
 [[ -e $HOME/.zshrc.$HOST ]] && source $HOME/.zshrc.$HOST
