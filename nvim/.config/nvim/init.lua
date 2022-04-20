@@ -38,6 +38,16 @@ vim.cmd([[
   colorscheme desert
 ]])
 
+if not vim.notify_once then
+  local notified = {}
+  function vim.notify_once(msg, ...) -- luacheck: no unused args
+    if not notified[msg] then
+      vim.notify(msg, ...)
+      notified[msg] = true
+    end
+  end
+end
+
 require('user.jetpack').startup(function(use)
   use({ 'tani/vim-jetpack', opt = 1 })
 
