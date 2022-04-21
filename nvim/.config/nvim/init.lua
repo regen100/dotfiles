@@ -73,7 +73,7 @@ require('user.jetpack').startup(function(use)
     'LionC/nest.nvim',
     config = function()
       require('nest').applyKeymaps({
-        { '<Esc><Esc>', ':nohlsearch<CR>' }, --
+        { '<Esc><Esc>', ':<C-u>nohlsearch<CR>' }, --
         {
           '<Leader>',
           {
