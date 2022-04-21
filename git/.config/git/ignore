@@ -2,12 +2,10 @@
 .gdb_history
 .envrc
 .direnv
-.lvimrc
 .ipynb_checkpoints
 CMakeLists.txt.user
 Session.vim
-.mypy_cache/
-tags/
-.clangd
-.vscode
 compile_commands.json
+.mypy_cache/
+.clangd/
+.vscode/
