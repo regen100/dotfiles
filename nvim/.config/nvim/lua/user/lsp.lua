@@ -125,7 +125,7 @@ function M.setup()
       end,
       capabilities = capabilities,
     },
-    extensions = { inlay_hints = { parameter_hints_prefix = ' <- ' } },
+    extensions = { inlay_hints = { parameter_hints_prefix = ' « ', other_hints_prefix = ' » ' } },
   })
 
   local win = require('lspconfig.ui.windows')

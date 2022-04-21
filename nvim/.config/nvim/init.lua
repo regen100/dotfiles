@@ -138,7 +138,7 @@ require('user.jetpack').startup(function(use)
   use({
     'haringsrob/nvim_context_vt',
     config = function()
-      require('nvim_context_vt').setup({ prefix = ' --' })
+      require('nvim_context_vt').setup({ prefix = ' »', disable_virtual_lines = true })
     end,
   })
 
