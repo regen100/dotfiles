@@ -120,7 +120,7 @@ require('user.jetpack').startup(function(use)
 
       vim.opt.foldmethod = 'expr'
       vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
-      vim.opt.foldlevel = 2
+      vim.opt.foldlevel = 10
 
       function _G.ensure_treesitter_language_installed()
         local lang = require('nvim-treesitter.parsers').get_buf_lang()
