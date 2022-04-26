@@ -167,6 +167,7 @@ require('user.jetpack').startup(function(use)
 
   use({
     'nvim-telescope/telescope.nvim',
+    tag = 'nvim-0.6',
     config = function()
       local actions = require('telescope.actions')
       require('telescope').setup({
