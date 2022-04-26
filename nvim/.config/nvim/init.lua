@@ -133,6 +133,7 @@ require('user.jetpack').startup(function(use)
     'romgrk/nvim-treesitter-context',
     config = function()
       require('treesitter-context').setup()
+      vim.cmd('autocmd vimrc VimEnter * highlight TreesitterContext gui=underline')
     end,
   })
   use({
