@@ -130,7 +130,7 @@ require('user.jetpack').startup(function(use)
     end,
   })
   use({
-    'romgrk/nvim-treesitter-context',
+    'lewis6991/nvim-treesitter-context',
     config = function()
       require('treesitter-context').setup()
       vim.cmd('autocmd vimrc VimEnter * highlight TreesitterContext gui=underline')
@@ -157,7 +157,7 @@ require('user.jetpack').startup(function(use)
     'lukas-reineke/indent-blankline.nvim',
     config = function()
       require('indent_blankline').setup({
-        filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo' },
+        filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo', 'starter' },
         buftype_exclude = { 'terminal' },
         space_char_blankline = ' ',
         show_current_context = true,
