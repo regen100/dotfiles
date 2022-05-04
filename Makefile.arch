@@ -12,6 +12,7 @@ all:
 .PHONY: system
 system: repo
 	@sudo sed -E 's/^#(en_US|ja_JP)\.UTF-8/\1.UTF-8/' -i /etc/locale.gen && sudo locale-gen
+	@sudo echo LANG=en_US.UTF-8 | sudo tee /etc/locale.conf
 	@sudo timedatectl set-ntp true
 	@$(PKG-INSTALL) base-devel openssh xorg-xauth systemd-boot-pacman-hook earlyoom
 	@sudo sed -i 's/#X11Forwarding .*/X11Forwarding yes/' /etc/ssh/sshd_config

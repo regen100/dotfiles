@@ -49,9 +49,6 @@ install_setup() {
   genfstab -U /mnt >> /mnt/etc/fstab
   arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
   arch-chroot /mnt hwclock --systohc --utc
-  sed -E 's/^#(en_US|ja_JP)\.UTF-8/\1.UTF-8/' -i /mnt/etc/locale.gen
-  arch-chroot /mnt locale-gen
-  echo LANG=en_US.UTF-8 > /mnt/etc/locale.conf
   echo KEYMAP=jp106 > /mnt/etc/vconsole.conf
   sed -E 's/^# (%wheel ALL=\(ALL\) ALL)/\1/; s/^# (Defaults env_keep \+= "HOME")/\1/' -i /mnt/etc/sudoers
 }
