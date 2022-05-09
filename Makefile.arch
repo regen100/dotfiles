@@ -58,7 +58,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man rsync htop direnv ripgrep pkgfile duf ncdu fzf bat bandwhich
+	@$(PKG-INSTALL) man rsync htop direnv ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart
 	@$(STOW-INSTALL) direnv
 	@sudo pkgfile --update
 
