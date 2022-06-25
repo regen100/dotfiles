@@ -46,7 +46,7 @@ function M.startup(fn)
     fn(use)
   end)
 
-  for _, name in ipairs(vim.fn['jetpack#names']()) do
+  for _, name in ipairs(jetpack.names()) do
     if jetpack.tap(name) == 0 then
       jetpack.sync()
       break
