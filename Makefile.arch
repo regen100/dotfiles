@@ -86,7 +86,7 @@ nvim: repo git utils efm
 
 .PHONY: clang
 clang: repo pip
-	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache compdb cmake-lint lldb
+	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache cmake-lint lldb
 	@$(STOW-INSTALL) clang
 	@$(PIP-INSTALL) cmake-language-server
 
@@ -157,7 +157,7 @@ verilog: repo git
 
 .PHONY: docker
 docker: repo
-	@$(PKG-INSTALL) docker docker-compose
+	@$(PKG-INSTALL) docker
 
 .PHONY: fcitx
 fcitx: repo
@@ -181,7 +181,7 @@ nftables: repo
 	@sudo systemctl enable --now nftables
 
 .PHONY: doxygen
-doxygen: repo
+doxygen: repo plantuml
 	@$(PKG-INSTALL) doxygen dot texlive-core texlive-bin
 
 .PHONY: k8s
