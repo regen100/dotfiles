@@ -157,7 +157,7 @@ verilog: repo git
 
 .PHONY: docker
 docker: repo
-	@$(PKG-INSTALL) docker
+	@$(PKG-INSTALL) docker docker-compose
 
 .PHONY: fcitx
 fcitx: repo
