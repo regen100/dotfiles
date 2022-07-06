@@ -159,6 +159,7 @@ verilog: repo git
 docker: repo
 	@$(PKG-INSTALL) docker docker-compose
 	@sudo gpasswd -a $$USER docker
+	@sudo systemctl enable --now docker
 
 .PHONY: fcitx
 fcitx: repo
