@@ -77,7 +77,7 @@ EOS
 
 install_bootloader() {
   set -euo pipefail
-  sed -i "s/^HOOKS=(base udev autodetect modconf block filesystems keyboard fsck)$/HOOKS=(base udev autodetect modconf keyboard keymap block encrypt filesystems keyboard fsck)/" /mnt/etc/mkinitcpio.conf
+  sed -i "s/^HOOKS=(base udev autodetect modconf block filesystems keyboard fsck)$/HOOKS=(base udev autodetect modconf keyboard keymap block encrypt filesystems resume fsck)/" /mnt/etc/mkinitcpio.conf
   arch-chroot /mnt mkinitcpio -P
   arch-chroot /mnt bootctl --path=/boot install
   if lscpu | grep GenuineIntel >/dev/null; then
@@ -91,7 +91,7 @@ install_bootloader() {
   fi
   local -r PARTUUID="$(blkid -s PARTUUID -o value "$DEVICE_DATA")"
   if [[ -n $LUKS_PASSWD ]]; then
-    local -r OPTS="root=/dev/mapper/cryptroot cryptdevice=PARTUUID=${PARTUUID}:cryptroot:allow-discards add_efi_memmap"
+    local -r OPTS="root=/dev/mapper/cryptroot cryptdevice=PARTUUID=${PARTUUID}:cryptroot:allow-discards add_efi_memmap zswap.enabled=1"
   else
     local -r OPTS="root=PARTUUID=${PARTUUID} add_efi_memmap"
   fi
@@ -124,5 +124,5 @@ install_user() {
   pacstrap /mnt git zsh
   arch-chroot /mnt useradd -m -g wheel -s /bin/zsh "$1"
   arch-chroot /mnt passwd "$1"
-  arch-chroot /mnt su "$1" -c "git clone https://github.com/regen100/dotfiles.git ~/dotfiles"
+  arch-chroot /mnt su "$1" -c "git clone git@github.com:regen100/dotfiles.git ~/dotfiles"
 }
