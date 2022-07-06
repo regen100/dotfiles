@@ -208,3 +208,22 @@ gpg: repo
 	@$(PKG-INSTALL) pinentry qt5-base
 	@grep -q pinentry-program $$HOME/.gnupg/gpg-agent.conf || echo "pinentry-program /usr/bin/pinentry-qt" >$$HOME/.gnupg/gpg-agent.conf
 	@gpg-connect-agent reloadagent /bye >/dev/null
+
+.PHONY: wpa
+wpa: repo
+	@$(PKG-INSTALL) wpa_supplicant
+	@sudo sh -c 'printf "ctrl_interface=/run/wpa_supplicant\nupdate_config=1\n" >/etc/wpa_supplicant/wpa_supplicant.conf'
+	@echo see https://wiki.archlinux.jp/index.php/Wpa_supplicant
+
+.PHONY: remote_luks
+remote_luks: repo
+	@$(PKG-INSTALL) mkinitcpio-netconf mkinitcpio-tinyssh mkinitcpio-utils
+	@sudo cp $$HOME/.ssh/authorized_keys /etc/tinyssh/root_key
+	@sudo sed -i "s/encrypt filesystems/netconf tinyssh encryptssh filesystems/" /etc/mkinitcpio.conf
+	@echo see https://wiki.archlinux.jp/index.php/Dm-crypt/%E7%89%B9%E8%A8%98%E4%BA%8B%E9%A0%85
+
+.PHONY: network
+network:
+	@sudo sed -i "s/^#MulticastDNS=yes/MulticastDNS=yes/" /etc/systemd/resolved.conf
+	@sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+	@sudo systemctl enable --now systemd-networkd systemd-resolved
