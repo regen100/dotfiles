@@ -202,3 +202,9 @@ readline: repo
 borg: repo
 	@$(PKG-INSTALL) borg
 	@$(STOW-INSTALL) borg
+
+.PHONY: gpg
+gpg: repo
+	@$(PKG-INSTALL) pinentry qt5-base
+	@grep -q pinentry-program $$HOME/.gnupg/gpg-agent.conf || echo "pinentry-program /usr/bin/pinentry-qt" >$$HOME/.gnupg/gpg-agent.conf
+	@gpg-connect-agent reloadagent /bye >/dev/null
