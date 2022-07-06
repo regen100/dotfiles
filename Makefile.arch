@@ -9,6 +9,11 @@ STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 .PHONY: all
 all:
 
+.PHONY: config
+config:
+	@git config user.name "$$(git log -1 --pretty=format:'%an')"
+	@git config user.email "$$(git log -1 --pretty=format:'%ae')"
+
 .PHONY: system
 system: repo
 	@sudo sed -E 's/^#(en_US|ja_JP)\.UTF-8/\1.UTF-8/' -i /etc/locale.gen && sudo locale-gen
