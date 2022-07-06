@@ -1,11 +1,17 @@
 #!/bin/bash
 
+# set environmental variables before running commands
+# LUKS_PASSWD=
+# DEVICE=/dev/sda
+# DEVICE_BOOT=/dev/sda1
+# DEVICE_DATA=/dev/sda2
+
 install_init() {
   loadkeys jp106
   setfont latarcyrheb-sun32
   timedatectl set-ntp true
-  wget "https://www.archlinux.org/mirrorlist/?country=JP&protocol=http&protocol=https&ip_version=4&ip_version=6" -O /etc/pacman.d/mirrorlist
-  sed -ie "s/^#Server/Server/" /etc/pacman.d/mirrorlist
+  curl -sSL "https://www.archlinux.org/mirrorlist/?country=JP&protocol=http&protocol=https&ip_version=4&ip_version=6" >/etc/pacman.d/mirrorlist
+  sed -i "s/^#Server/Server/" /etc/pacman.d/mirrorlist
 }
 
 install_checkmode() {
@@ -17,27 +23,29 @@ install_checkmode() {
 }
 
 install_partition() {
-  sgdisk -Z -n "0::+512M" -t 0:ef00 -n "0::" -t 0:8300 -p /dev/sda
-  mkfs.fat -F32 /dev/sda1
+  set -euo pipefail
+  sgdisk -Z -n "0::+512M" -t 0:ef00 -n "0::" -t 0:8300 -p "$DEVICE"
+  mkfs.fat -F32 "$DEVICE_BOOT"
   if [[ -n $LUKS_PASSWD ]]; then
-    echo -n "$LUKS_PASSWD" | cryptsetup luksFormat /dev/sda2 -q -d -
-    echo -n "$LUKS_PASSWD" | cryptsetup open /dev/sda2 cryptroot -d -
+    echo -n "$LUKS_PASSWD" | cryptsetup luksFormat "$DEVICE_DATA" -q -d -
+    echo -n "$LUKS_PASSWD" | cryptsetup open "$DEVICE_DATA" cryptroot -d -
     mkfs.ext4 /dev/mapper/cryptroot
     cryptsetup close cryptroot
   else
-    mkfs.ext4 /dev/sda2
+    mkfs.ext4 "$DEVICE_DATA"
   fi
 }
 
 install_mount() {
+  set -euo pipefail
   if [[ -n $LUKS_PASSWD ]]; then
-    echo -n "$LUKS_PASSWD" | cryptsetup open /dev/sda2 cryptroot -d -
+    echo -n "$LUKS_PASSWD" | cryptsetup open "$DEVICE_DATA" cryptroot -d -
     mount /dev/mapper/cryptroot /mnt
   else
-    mount /dev/sda2 /mnt
+    mount "$DEVICE_DATA" /mnt
   fi
   mkdir -p /mnt/boot
-  mount /dev/sda1 /mnt/boot
+  mount "$DEVICE_BOOT" /mnt/boot
 }
 
 install_system() {
@@ -50,7 +58,7 @@ install_setup() {
   arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
   arch-chroot /mnt hwclock --systohc --utc
   echo KEYMAP=jp106 > /mnt/etc/vconsole.conf
-  sed -E 's/^# (%wheel ALL=\(ALL\) ALL)/\1/; s/^# (Defaults env_keep \+= "HOME")/\1/' -i /mnt/etc/sudoers
+  sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/; s/^# Defaults env_keep += "HOME"/ Defaults env_keep += "HOME"/' /mnt/etc/sudoers
 }
 
 install_hostname() {
@@ -68,38 +76,39 @@ EOS
 }
 
 install_bootloader() {
-  local PARTUUID UCODE
+  set -euo pipefail
+  sed -i "s/^HOOKS=(base udev autodetect modconf block filesystems keyboard fsck)$/HOOKS=(base udev autodetect modconf keyboard keymap block encrypt filesystems keyboard fsck)/" /mnt/etc/mkinitcpio.conf
   arch-chroot /mnt mkinitcpio -P
   arch-chroot /mnt bootctl --path=/boot install
   if lscpu | grep GenuineIntel >/dev/null; then
-    UCODE="initrd  /intel-ucode.img"
+    local -r UCODE="initrd  /intel-ucode.img"
     pacstrap /mnt intel-ucode
   elif lscpu | grep AuthenticAMD >/dev/null; then
-    UCODE="initrd  /amd-ucode.img"
+    local -r UCODE="initrd  /amd-ucode.img"
     pacstrap /mnt amd-ucode
   else
-    UCODE=
+    local -r UCODE=
   fi
-  PARTUUID=$(blkid -s PARTUUID -o value /dev/sda2)
+  local -r PARTUUID="$(blkid -s PARTUUID -o value "$DEVICE_DATA")"
   if [[ -n $LUKS_PASSWD ]]; then
-    OPTS="root=/dev/mapper/cryptroot cryptdevice=PARTUUID=$PARTUUID:cryptroot:allow-discards add_efi_memmap"
+    local -r OPTS="root=/dev/mapper/cryptroot cryptdevice=PARTUUID=${PARTUUID}:cryptroot:allow-discards add_efi_memmap"
   else
-    OPTS="root=PARTUUID=$PARTUUID add_efi_memmap"
+    local -r OPTS="root=PARTUUID=${PARTUUID} add_efi_memmap"
   fi
-  cat << EOS > /mnt/boot/loader/entries/arch.conf
+  cat <<EOS >/mnt/boot/loader/entries/arch.conf
 title   Arch Linux
 linux   /vmlinuz-linux
 $UCODE
 initrd  /initramfs-linux.img
 options $OPTS
 EOS
-  cat << EOS > /mnt/boot/loader/entries/arch-lts.conf
+  cat <<EOS >/mnt/boot/loader/entries/arch-lts.conf
 title   Arch Linux (LTS)
 linux   /vmlinuz-linux-lts
 initrd  /initramfs-linux-lts.img
 options $OPTS
 EOS
-  cat << EOS > /mnt/boot/loader/loader.conf
+  cat <<EOS >/mnt/boot/loader/loader.conf
 default Arch Linux
 timeout 3
 editor  yes
