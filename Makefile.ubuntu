@@ -5,10 +5,6 @@ APT-INSTALL := sudo apt-get install -y --no-install-recommends
 PIP-INSTALL := sudo python3 -m pip install -U
 STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 
-
-.PHONY: all
-all:
-
 .PHONY: repo
 repo:
 	@if grep "//archive.ubuntu.com" /etc/apt/sources.list > /dev/null; then \
