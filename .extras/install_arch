@@ -1,10 +1,19 @@
 #!/bin/bash
 
 # set environmental variables before running commands
-# LUKS_PASSWD=
-# DEVICE=/dev/sda
-# DEVICE_BOOT=/dev/sda1
-# DEVICE_DATA=/dev/sda2
+# export LUKS_PASSWD=
+
+install_init_sda() {
+  export DEVICE=/dev/sda
+  export DEVICE_BOOT=/dev/sda1
+  export DEVICE_DATA=/dev/sda2
+}
+
+install_init_nvme() {
+  export DEVICE=/dev/nvme0n1
+  export DEVICE_BOOT=/dev/nvme0n1p1
+  export DEVICE_DATA=/dev/nvme0n1p2
+}
 
 install_init() {
   loadkeys jp106
@@ -54,10 +63,10 @@ install_system() {
 }
 
 install_setup() {
-  genfstab -U /mnt >> /mnt/etc/fstab
+  genfstab -U /mnt >>/mnt/etc/fstab
   arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
   arch-chroot /mnt hwclock --systohc --utc
-  echo KEYMAP=jp106 > /mnt/etc/vconsole.conf
+  echo KEYMAP=jp106 >/mnt/etc/vconsole.conf
   install -m 440 <(echo '%wheel ALL=(ALL:ALL) ALL') /mnt/etc/sudoers.d/10-wheel
   install -m 440 <(echo 'Defaults env_keep += "HOME"') /mnt/etc/sudoers.d/20-env
 }
@@ -68,8 +77,8 @@ install_hostname() {
     return 1
   fi
 
-  echo "$1" > /mnt/etc/hostname
-  cat << EOS > /mnt/etc/hosts
+  echo "$1" >/mnt/etc/hostname
+  cat <<EOS >/mnt/etc/hosts
 127.0.0.1	localhost
 ::1		localhost
 127.0.1.1	$1.localdomain	$1
