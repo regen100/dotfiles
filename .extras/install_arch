@@ -58,7 +58,8 @@ install_setup() {
   arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
   arch-chroot /mnt hwclock --systohc --utc
   echo KEYMAP=jp106 > /mnt/etc/vconsole.conf
-  sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/; s/^# Defaults env_keep += "HOME"/ Defaults env_keep += "HOME"/' /mnt/etc/sudoers
+  install -m 440 <(echo '%wheel ALL=(ALL:ALL) ALL') /mnt/etc/sudoers.d/10-wheel
+  install -m 440 <(echo 'Defaults env_keep += "HOME"') /mnt/etc/sudoers.d/20-env
 }
 
 install_hostname() {
