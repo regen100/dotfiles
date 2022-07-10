@@ -7,33 +7,22 @@ local function on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   local telescope = require('telescope.builtin')
-  require('nest').applyKeymaps({
-    buffer = bufnr,
-    {
-      { 'gD', vim.lsp.buf.declaration }, --
-      { 'gd', vim.lsp.buf.definition }, --
-      { 'K', vim.lsp.buf.hover }, --
-      { 'gi', vim.lsp.buf.implementation }, --
-      { '<C-k>', vim.lsp.buf.signature_help }, --
-      { 'gr', telescope.lsp_references }, --
-      { '<CR>', telescope.lsp_definitions }, --
-      {
-        '<Leader>',
-        {
-          { 'wa', vim.lsp.buf.add_workspace_folder }, --
-          { 'wr', vim.lsp.buf.remove_workspace_folder }, --
-          {
-            'wl',
-            '<Cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))',
-          }, --
-          { 'D', telescope.lsp_type_definitions }, --
-          { 'rn', vim.lsp.buf.rename }, --
-          { 'ca', telescope.lsp_code_actions }, --
-          { 'f', vim.lsp.buf.formatting }, --
-        },
-      }, --
-    },
-  })
+
+  require('which-key').register({
+    K = { vim.lsp.buf.hover, 'Display hover information' }, --
+    ['<C-k>'] = { vim.lsp.buf.signature_help, 'Display signature information' }, --
+    ['<CR>'] = { telescope.lsp_definitions, 'Goto the definition' }, --
+    gD = { vim.lsp.buf.declaration, 'Goto the declaration' }, --
+    gd = { telescope.lsp_definitions, 'Goto the definition' }, --
+    gi = { telescope.lsp_implementations, 'Goto the implementations' }, --
+    gr = { telescope.lsp_references, 'Goto the references' }, --
+    gt = { telescope.lsp_type_definitions, 'Goto the definition of the type' }, --
+    ['<Leader>'] = {
+      rn = { vim.lsp.buf.rename, 'Rename' }, --
+      ca = { telescope.lsp_code_actions, 'Code actions' }, --
+      f = { vim.lsp.buf.formatting, 'Format' }, --
+    }, --
+  }, { buffer = bufnr })
 
   if client.resolved_capabilities.document_formatting and own_code then
     vim.cmd([[
@@ -60,15 +49,12 @@ table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
 function M.setup()
-  require('nest').applyKeymaps({
-    { '[d', vim.diagnostic.goto_prev }, --
-    { ']d', vim.diagnostic.goto_next }, --
-    {
-      '<Leader>',
-      {
-        { 'e', vim.diagnostic.open_float }, --
-        { 'q', '<Cmd>Telescope diagnostics bufnr=0<CR>' }, --
-      },
+  require('which-key').register({
+    ['[d'] = { vim.diagnostic.goto_prev, 'Goto previous diagnostic' }, --
+    [']d'] = { vim.diagnostic.goto_next, 'Goto next diagnostic' }, --
+    ['<Leader>'] = {
+      e = { vim.diagnostic.open_float, 'Show diagnostics' }, --
+      q = { '<Cmd>Telescope diagnostics bufnr=0<CR>', 'List diagnostics' }, --
     }, --
   })
 
@@ -116,12 +102,9 @@ function M.setup()
       },
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
-        require('nest').applyKeymaps({
-          buffer = bufnr,
-          {
-            { 'gs', '<Cmd>ClangdSwitchSourceHeader<CR>' }, --
-          },
-        })
+        require('which-key').register({
+          gs = { '<Cmd>ClangdSwitchSourceHeader<CR>', 'Switch between source/header' }, --
+        }, { buffer = bufnr })
       end,
       capabilities = capabilities,
     },

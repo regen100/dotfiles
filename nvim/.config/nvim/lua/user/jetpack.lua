@@ -47,7 +47,7 @@ function M.startup(fn)
   end)
 
   for _, name in ipairs(jetpack.names()) do
-    if jetpack.tap(name) == 0 then
+    if not jetpack.tap(name) then
       jetpack.sync()
       break
     end

@@ -38,16 +38,6 @@ vim.cmd([[
   colorscheme desert
 ]])
 
-if not vim.notify_once then
-  local notified = {}
-  function vim.notify_once(msg, ...) -- luacheck: no unused args
-    if not notified[msg] then
-      vim.notify(msg, ...)
-      notified[msg] = true
-    end
-  end
-end
-
 require('user.jetpack').startup(function(use)
   use({ 'tani/vim-jetpack', opt = 1 })
 
@@ -70,41 +60,28 @@ require('user.jetpack').startup(function(use)
   use('machakann/vim-sandwich')
 
   use({
-    'LionC/nest.nvim',
+    'folke/which-key.nvim',
     config = function()
-      require('nest').applyKeymaps({
-        { '<Esc><Esc>', ':<C-u>nohlsearch<CR>' }, --
-        {
-          '<Leader>',
-          {
-            { 'o', '^f{a<CR><CR><Up>' }, --
-            { 'd', '"_d' }, --
-            {
-              'm',
-              '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>',
-            }, --
-            { 'w', '<Cmd>setl wrap! wrap?<CR>' }, --
-            {
-              'rr',
-              '<Cmd>%s/\\<<C-r><C-w>\\>//g<Left><Left>',
-              options = { silent = false },
-            }, --
-          },
-        },
-        {
-          mode = 'v',
-          {
-            { '<Tab>', '>gv' }, --
-            { '<S-Tab>', '<gv' }, --
-            { '<LeftRelease>', 'y<CR>gv<LeftRelease>' }, --
-          },
-        },
+      local wk = require('which-key')
+      wk.setup()
+      wk.register({
+        ['<Esc><Esc>'] = { ':<C-u>nohlsearch<CR>', '' }, --
+        ['<Leader>'] = {
+          o = { '^f{a<CR><CR><Up>', 'Open {}' }, --
+          m = { '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>', 'Toggle mouse' }, --
+          w = { '<Cmd>setl wrap! wrap?<CR>', 'Toggle wrap' }, --
+          rr = { ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', 'Rename', silent = false }, --
+        }, --
       })
+      wk.register({
+        ['<Tab>'] = { '>gv', 'Indent' }, --
+        ['<S-Tab>'] = { '<gv', 'Unindent' }, --
+        ['<LeftRelease>'] = { 'y<CR>gv<LeftRelease>', '' }, --
+      }, { mode = 'v' })
     end,
   })
 
-  use({ 'lambdalisue/suda.vim', on = 'SudaWrite' })
-  vim.cmd('cabbrev w!! SudaWrite')
+  use({ 'lambdalisue/suda.vim', on = 'SudaWrite', config = 'cabbrev w!! SudaWrite' })
 
   use('p00f/nvim-ts-rainbow')
   use('JoosepAlviste/nvim-ts-context-commentstring')
@@ -168,7 +145,6 @@ require('user.jetpack').startup(function(use)
 
   use({
     'nvim-telescope/telescope.nvim',
-    tag = 'nvim-0.6',
     config = function()
       local actions = require('telescope.actions')
       require('telescope').setup({
@@ -182,13 +158,10 @@ require('user.jetpack').startup(function(use)
       })
 
       local builtin = require('telescope.builtin')
-      require('nest').applyKeymaps({
-        { '<C-p>', builtin.find_files }, --
-        {
-          '<Leader>',
-          {
-            { 'fb', builtin.buffers }, --
-          },
+      require('which-key').register({
+        ['<C-p>'] = { builtin.find_files, 'Find files' }, --
+        ['<Leader>'] = {
+          fb = { builtin.buffers, 'Find buffers' }, --
         },
       })
     end,
@@ -222,13 +195,13 @@ require('user.jetpack').startup(function(use)
   use({
     'echasnovski/mini.nvim',
     config = function()
-      require('mini.comment').setup()
-      require('mini.jump').setup()
-      require('mini.misc').setup()
-      require('mini.sessions').setup()
+      require('mini.comment').setup({})
+      require('mini.jump').setup({})
+      require('mini.misc').setup({})
+      require('mini.sessions').setup({})
       vim.fn.mkdir(require('mini.sessions').config.directory, 'p')
-      require('mini.starter').setup()
-      require('mini.trailspace').setup()
+      require('mini.starter').setup({})
+      require('mini.trailspace').setup({})
       vim.cmd('highlight link MiniTrailspace NvimInternalError')
     end,
   })
@@ -244,13 +217,13 @@ require('user.jetpack').startup(function(use)
     'kevinhwang91/nvim-hlslens',
     config = function()
       local start = [[<Cmd>lua require('hlslens').start()<CR>]]
-      require('nest').applyKeymaps({
-        { 'n', [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]] .. start }, --
-        { 'N', [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR>]] .. start }, --
-        { '*', '*' .. start }, --
-        { '#', '#' .. start }, --
-        { 'g*', 'g*' .. start }, --
-        { 'g#', 'g#' .. start }, --
+      require('which-key').register({
+        n = { [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]] .. start, '' },
+        N = { [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR>]] .. start, '' },
+        ['*'] = { '*' .. start, '' },
+        ['#'] = { '#' .. start, '' },
+        ['g*'] = { 'g*' .. start, '' },
+        ['g#'] = { 'g#' .. start, '' },
       })
     end,
   })
@@ -313,6 +286,7 @@ require('user.jetpack').startup(function(use)
     'hrsh7th/nvim-cmp',
     config = function()
       local cmp = require('cmp')
+      assert(cmp ~= nil)
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -320,7 +294,7 @@ require('user.jetpack').startup(function(use)
           end,
         },
         mapping = cmp.mapping.preset.insert({
-          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-Space>'] = cmp.mapping.complete({}),
           ['<CR>'] = cmp.mapping.confirm({ select = true }),
         }),
         sources = cmp.config.sources({
