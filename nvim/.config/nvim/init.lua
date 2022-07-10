@@ -59,6 +59,9 @@ require('user.jetpack').startup(function(use)
   use('sakhnik/nvim-gdb')
   use('machakann/vim-sandwich')
 
+  vim.g.gundo_prefer_python3 = 1
+  use('sjl/gundo.vim')
+
   use({
     'folke/which-key.nvim',
     config = function()
