@@ -239,8 +239,33 @@ require('user.jetpack').startup(function(use)
     end,
   })
 
-  use('nathom/filetype.nvim')
-  vim.g.did_load_filetypes = 1
+  use({
+    'nathom/filetype.nvim',
+    config = function()
+      require('filetype').setup({
+        overrides = {
+          extensions = {
+            tmux = 'tmux',
+            pbtxt = 'proto',
+          },
+          literal = {
+            ['.clang-tidy'] = 'yaml',
+            ['.textlintrc'] = 'json',
+          },
+          complex = {
+            ['.gitconfig*'] = 'gitconfig', -- Included in the plugin
+          },
+        },
+      })
+      vim.cmd([[
+        autocmd vimrc BufNewFile,BufRead * source $VIMRUNTIME/scripts.vim
+        autocmd vimrc FileType * setlocal formatoptions-=ro
+        autocmd vimrc FileType c,cpp,java setlocal commentstring=//\ %s
+        autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
+        autocmd vimrc FileType help nnoremap <buffer> <Esc> <C-w>c
+      ]])
+    end,
+  })
 
   use('p00f/clangd_extensions.nvim')
   use('RRethy/vim-illuminate')
@@ -320,18 +345,6 @@ require('user.autosave').setup()
 
 vim.cmd([[
   autocmd vimrc InsertLeave * set nopaste
-
-  autocmd vimrc FileType * setlocal formatoptions-=ro
-  autocmd vimrc FileType c,cpp,java setlocal commentstring=//\ %s
-  autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
-  autocmd vimrc FileType help nnoremap <buffer> <Esc> <C-w>c
-
-  autocmd vimrc BufNewFile,BufRead *.tmux setfiletype tmux
-  autocmd vimrc BufNewFile,BufRead *.gitconfig* setfiletype gitconfig
-  autocmd vimrc BufNewFile,BufRead *.nspawn setfiletype systemd
-  autocmd vimrc BufNewFile,BufRead .clang-tidy,.clang-format setfiletype yaml
-  autocmd vimrc BufNewFile,BufRead *.pbtxt,*.pb.txt setfiletype proto
-  autocmd vimrc BufNewFile,BufRead .textlintrc setfiletype json
 
   augroup vimrc-restore-view
     function! s:restore_view_check() abort
