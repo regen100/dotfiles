@@ -69,6 +69,8 @@ require('user.jetpack').startup(function(use)
       wk.setup()
       wk.register({
         ['<Esc><Esc>'] = { ':<C-u>nohlsearch<CR>', '' }, --
+        ['<Tab>'] = { 'V>', 'Indent' }, --
+        ['<S-Tab>'] = { 'V<', 'Unindent' }, --
         ['<Leader>'] = {
           o = { '^f{a<CR><CR><Up>', 'Open {}' }, --
           m = { '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>', 'Toggle mouse' }, --
