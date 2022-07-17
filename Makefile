@@ -1,4 +1,4 @@
-include Makefile.$(shell awk -F= '/^ID=/ {print $$2}' /etc/os-release)
+include Makefile.$(shell [[ "$$(uname -s)" == Linux ]] && awk -F= '/^ID=/ {print $$2}' /etc/os-release || uname -s)
 
 .PHONY: all
 all:

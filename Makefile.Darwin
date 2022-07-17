@@ -1,0 +1,86 @@
+SHELL := bash
+MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
+PKG-INSTALL := brew install
+PIP-INSTALL := python3 -m pip install --user --no-warn-script-location -U
+STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
+
+.PHONY: repo
+repo:
+#	@if ! which brew >/dev/null; then \
+#		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+#	fi
+	@$(PKG-INSTALL) stow
+
+.PHONY: pip
+pip: repo
+	@$(PKG-INSTALL) python3
+
+.PHONY: utils
+utils: repo
+	@$(PKG-INSTALL) htop direnv ripgrep duf ncdu fzf bat bandwhich ghq
+	@$(STOW-INSTALL) direnv
+
+.PHONY: git
+git: repo
+	@$(PKG-INSTALL) git git-lfs git-extras tig git-delta
+	@$(STOW-INSTALL) git tig
+	@[[ -f ~/.gitconfig ]] || touch ~/.gitconfig
+	@if ! grep "\~/\.gitconfig_global" ~/.gitconfig >/dev/null; then \
+		echo "[include]" >> ~/.gitconfig; \
+		echo "	path = ~/.gitconfig_global" >> ~/.gitconfig; \
+	fi
+
+.PHONY: efm
+efm: repo
+	@$(PKG-INSTALL) efm-langserver shellcheck hadolint
+	@$(STOW-INSTALL) efm
+
+.PHONY: nvim
+nvim: repo git utils efm
+	@$(PKG-INSTALL) neovim lua-language-server stylua
+	@$(STOW-INSTALL) nvim
+	@$(PIP-INSTALL) neovim
+	@tic -x $(DOTFILES_DIR)/.extras/terminfo
+	@mkdir -p $$HOME/.local/bin
+	@ln -sf /opt/homebrew/bin/nvim $$HOME/.local/bin/vi
+	@ln -sf /opt/homebrew/bin/nvim $$HOME/.local/bin/vim
+
+.PHONY: clang
+clang: repo pip
+	@$(PKG-INSTALL) cmake ninja cppcheck sccache
+	@$(STOW-INSTALL) clang
+	@$(PIP-INSTALL) cmake-language-server cmakelang
+
+.PHONY: python
+python: repo readline
+	@$(PKG-INSTALL) poetry
+
+.PHONY: tmux
+tmux: repo
+	@$(PKG-INSTALL) tmux
+	@$(STOW-INSTALL) tmux
+	@tic -x $(DOTFILES_DIR)/.extras/tmux-256color.terminfo
+
+.PHONY: zsh
+zsh: repo readline utils
+	@$(PKG-INSTALL) zsh-completions zsh-syntax-highlighting zsh-autosuggestions keychain starship
+	@chmod -R go-w /opt/homebrew/share/zsh /opt/homebrew/share
+	@curl -sSL https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc >$$HOME/.zshrc
+	@$(STOW-INSTALL) zsh starship
+	@mkdir -p ~/.zfunc
+
+.PHONY: font
+font: repo
+	@brew tap homebrew/cask-fonts
+	@$(PKG-INSTALL) font-hackgen-nerd
+
+.PHONY: readline
+readline: repo
+	@$(STOW-INSTALL) readline
+
+.PHONY: gpg
+gpg: repo
+	@$(PKG-INSTALL) gnupg pinentry-mac
+	@grep -q pinentry-program $$HOME/.gnupg/gpg-agent.conf || echo "pinentry-program /opt/homebrew/bin/pinentry-mac" >$$HOME/.gnupg/gpg-agent.conf
+	@gpg-connect-agent reloadagent /bye >/dev/null
