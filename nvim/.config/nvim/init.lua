@@ -148,11 +148,13 @@ require('user.jetpack').startup(function(use)
     end,
   })
 
+  use({ 'nvim-telescope/telescope-ui-select.nvim' })
   use({
     'nvim-telescope/telescope.nvim',
     config = function()
+      local telescope = require('telescope')
       local actions = require('telescope.actions')
-      require('telescope').setup({
+      telescope.setup({
         defaults = {
           mappings = {
             i = {
@@ -160,7 +162,13 @@ require('user.jetpack').startup(function(use)
             },
           },
         },
+        extensions = {
+          ['ui-select'] = {
+            require('telescope.themes').get_dropdown({}),
+          },
+        },
       })
+      telescope.load_extension('ui-select')
 
       local builtin = require('telescope.builtin')
       require('which-key').register({

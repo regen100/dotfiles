@@ -19,7 +19,7 @@ local function on_attach(client, bufnr)
     gt = { telescope.lsp_type_definitions, 'Goto the definition of the type' }, --
     ['<Leader>'] = {
       rn = { vim.lsp.buf.rename, 'Rename' }, --
-      ca = { telescope.lsp_code_actions, 'Code actions' }, --
+      ca = { vim.lsp.buf.code_action, 'Code actions' }, --
       f = { vim.lsp.buf.formatting, 'Format' }, --
     }, --
   }, { buffer = bufnr })
