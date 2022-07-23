@@ -223,3 +223,7 @@ network:
 	@sudo sed -i "s/^#MulticastDNS=yes/MulticastDNS=yes/" /etc/systemd/resolved.conf
 	@sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 	@sudo systemctl enable --now systemd-networkd systemd-resolved
+
+.PHONY: aws
+aws:
+	@$(PKG-INSTALL) awscli amazon-ecr-credential-helper
