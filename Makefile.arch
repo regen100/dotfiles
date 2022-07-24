@@ -227,3 +227,7 @@ network:
 .PHONY: aws
 aws:
 	@$(PKG-INSTALL) awscli amazon-ecr-credential-helper
+
+.PHONY: terraform
+terraform:
+	@$(PKG-INSTALL) terraform terraform-ls tflint-bin

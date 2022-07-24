@@ -69,6 +69,8 @@ function M.setup()
   lspconfig.rls.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.vimls.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
+  lspconfig.terraformls.setup({ on_attach = on_attach, capabilities = capabilities })
+  lspconfig.tflint.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.efm.setup({
     filetypes = { 'bzl', 'dockerfile', 'json', 'lua', 'markdown', 'sh', 'zsh' },
     on_attach = on_attach,

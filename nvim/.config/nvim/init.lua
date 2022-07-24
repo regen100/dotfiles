@@ -257,6 +257,9 @@ require('user.jetpack').startup(function(use)
           extensions = {
             tmux = 'tmux',
             pbtxt = 'proto',
+            tf = 'terraform',
+            tfvars = 'terraform',
+            tfstate = 'json',
           },
           literal = {
             ['.clang-tidy'] = 'yaml',
@@ -271,6 +274,7 @@ require('user.jetpack').startup(function(use)
         autocmd vimrc BufNewFile,BufRead * source $VIMRUNTIME/scripts.vim
         autocmd vimrc FileType * setlocal formatoptions-=ro
         autocmd vimrc FileType c,cpp,java setlocal commentstring=//\ %s
+        autocmd vimrc FileType terraform setlocal commentstring=#\ %s
         autocmd vimrc FileType help nnoremap <buffer> q <C-w>c
         autocmd vimrc FileType help nnoremap <buffer> <Esc> <C-w>c
       ]])
