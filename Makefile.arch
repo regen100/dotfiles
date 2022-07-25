@@ -96,9 +96,9 @@ nodejs: repo
 
 .PHONY: rust
 rust: repo
-	@$(PKG-INSTALL) rustup sccache
+	@$(PKG-INSTALL) rustup sccache rust-analyzer
 	@rustup update stable
-	@rustup component add rust-src rustfmt-preview clippy rls rust-analysis
+	@rustup component add rust-src rustfmt-preview clippy
 	@$(STOW-INSTALL) rust
 
 .PHONY: plantuml
