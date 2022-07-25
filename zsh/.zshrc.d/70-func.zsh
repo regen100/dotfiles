@@ -9,6 +9,7 @@ awsmfa() {
     return 1
   fi
   if [[ -n $1 ]]; then
+    unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
     local -r token="$(aws sts get-session-token --serial-number "$serial_number" --token-code "$1")"
     AWS_ACCESS_KEY_ID=$(echo "$token" | jq -r .Credentials.AccessKeyId)
     AWS_SECRET_ACCESS_KEY=$(echo "$token" | jq -r .Credentials.SecretAccessKey)
