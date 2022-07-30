@@ -283,6 +283,7 @@ require('user.jetpack').startup(function(use)
 
   use('p00f/clangd_extensions.nvim')
   use('RRethy/vim-illuminate')
+  use('simrat39/rust-tools.nvim')
   use({
     'neovim/nvim-lspconfig',
     config = function()

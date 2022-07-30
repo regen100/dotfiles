@@ -66,7 +66,6 @@ function M.setup()
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
   local lspconfig = require('lspconfig')
   lspconfig.cmake.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.rust_analyzer.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.vimls.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.terraformls.setup({ on_attach = on_attach, capabilities = capabilities })
@@ -111,6 +110,19 @@ function M.setup()
       capabilities = capabilities,
     },
     extensions = { inlay_hints = { parameter_hints_prefix = ' « ', other_hints_prefix = ' » ' } },
+  })
+
+  require('rust-tools').setup({
+    tools = {
+      inlay_hints = {
+        parameter_hints_prefix = ' « ',
+        other_hints_prefix = ' » ',
+      },
+    },
+    server = {
+      on_attach = on_attach,
+      capabilities = capabilities,
+    },
   })
 
   local win = require('lspconfig.ui.windows')
