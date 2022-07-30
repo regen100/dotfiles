@@ -56,7 +56,6 @@ require('user.jetpack').startup(function(use)
   use('kyazdani42/nvim-web-devicons')
   use('nvim-lua/plenary.nvim')
   use('lambdalisue/readablefold.vim')
-  use('sakhnik/nvim-gdb')
   use('machakann/vim-sandwich')
 
   vim.g.gundo_prefer_python3 = 1
@@ -129,7 +128,7 @@ require('user.jetpack').startup(function(use)
     'hoob3rt/lualine.nvim',
     config = function()
       require('lualine').setup({
-        options = { theme = 'tokyonight' },
+        options = { theme = 'tokyonight', disabled_filetypes = { 'gundo', 'dap-repl', 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_console', 'dapui_watches' } },
         tabline = { lualine_a = { 'buffers' }, lualine_z = { 'tabs' } },
       })
     end,
@@ -148,7 +147,8 @@ require('user.jetpack').startup(function(use)
     end,
   })
 
-  use({ 'nvim-telescope/telescope-ui-select.nvim' })
+  use('nvim-telescope/telescope-ui-select.nvim')
+  use('nvim-telescope/telescope-dap.nvim')
   use({
     'nvim-telescope/telescope.nvim',
     config = function()
@@ -169,6 +169,7 @@ require('user.jetpack').startup(function(use)
         },
       })
       telescope.load_extension('ui-select')
+      telescope.load_extension('dap')
 
       local builtin = require('telescope.builtin')
       require('which-key').register({
@@ -325,6 +326,7 @@ require('user.jetpack').startup(function(use)
   use('hrsh7th/cmp-nvim-lsp')
   use('hrsh7th/cmp-vsnip')
   use('onsails/lspkind-nvim')
+  use('rcarriga/cmp-dap')
   use({
     'hrsh7th/nvim-cmp',
     config = function()
@@ -352,6 +354,20 @@ require('user.jetpack').startup(function(use)
           } }),
         },
       })
+      cmp.setup.filetype({ 'dap-repl', 'dapui_watches' }, {
+        sources = {
+          { name = 'dap' },
+        },
+      })
+    end,
+  })
+
+  use('rcarriga/nvim-dap-ui')
+  use('theHamsta/nvim-dap-virtual-text')
+  use({
+    'mfussenegger/nvim-dap',
+    config = function()
+      require('user.dap').setup()
     end,
   })
 end)
