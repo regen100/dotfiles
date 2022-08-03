@@ -4,3 +4,4 @@ fpath=(~/.zfunc(N-/) /usr/share/zsh/site-functions(N-/) /opt/homebrew/share/zsh/
 (( $+commands[rustc] )) && fpath=("$(rustc --print sysroot)"/share/zsh/site-functions $fpath)
 (( $+commands[rustup] )) && [[ ! -f ~/.zfunc/_rustup || ${commands[rustup]} -nt ~/.zfunc/_rustup ]] && rustup completions zsh >~/.zfunc/_rustup
 (( $+commands[poetry] )) && [[ ! -f ~/.zfunc/_poetry || ${commands[poetry]} -nt ~/.zfunc/_poetry ]] && poetry completions zsh >~/.zfunc/_poetry
+(( $+commands[molecule] )) && [[ ! -f ~/.zfunc/_molecule || ${commands[molecule]} -nt ~/.zfunc/_poetry ]] && _MOLECULE_COMPLETE=zsh_source molecule >~/.zfunc/_molecule
