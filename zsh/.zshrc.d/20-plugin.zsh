@@ -15,3 +15,6 @@
 
 url-quote
 autoload -Uz manydots-magic 2>/dev/null && manydots-magic 2>/dev/null
+
+autoload -Uz bashcompinit && bashcompinit
+(( $+commands[aws_completer] )) && complete -C aws_completer aws
