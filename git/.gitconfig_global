@@ -17,14 +17,15 @@
 [interactive]
 	diffFilter = delta --color-only
 [alias]
+	main = !basename "$(git rev-parse --abbrev-ref --short origin/HEAD)"
 	co = checkout
 	pushf = push --force-with-lease
 	su = submodule update --init --recursive
 	r = rebase
 	ra = rebase --abort
 	rc = rebase --continue
-	rb = !(git pull --rebase origin master || git pull --rebase origin main) && git su
-	m = !(git co master || git co main) && git fetch && git rb
+	rb = !git pull --rebase origin $(git main) && git su
+	m = !git co $(git main) && git fetch && git rb
 	delete-gone = !git remote prune origin && git delete-merged-branches && git delete-squashed-branches && git branch -vv | awk '/: gone]/{print $1}' | xargs --no-run-if-empty git branch -D
 	f = fetch
 	fco = !git fetch && git co
