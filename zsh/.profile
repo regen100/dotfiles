@@ -29,7 +29,3 @@ if [ -d "$HOME/.cargo/bin" ]; then
   PATH="$HOME/.cargo/bin:$PATH"
 fi
 export PATH
-
-if [ -n "$WSL_HOST_IP" ]; then
-  export DISPLAY="${WSL_HOST_IP}:0"
-fi
