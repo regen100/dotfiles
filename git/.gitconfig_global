@@ -17,7 +17,7 @@
 [interactive]
 	diffFilter = delta --color-only
 [alias]
-	main = !basename "$(git rev-parse --abbrev-ref --short origin/HEAD)"
+	main = !basename "$(git rev-parse --abbrev-ref --short origin/HEAD 2>/dev/null || echo origin/master)"
 	co = checkout
 	pushf = push --force-with-lease
 	su = submodule update --init --recursive
