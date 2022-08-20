@@ -2,6 +2,7 @@
 	pager = less -R -F -X
 [push]
 	default = current
+	autoSetupRemote = true
 [pull]
 	rebase = true
 [credential]
@@ -20,6 +21,8 @@
 	main = !basename "$(git rev-parse --abbrev-ref --short origin/HEAD 2>/dev/null || echo origin/master)"
 	co = checkout
 	pushf = push --force-with-lease
+	p = push
+	pf = pushf
 	su = submodule update --init --recursive
 	r = rebase
 	ra = rebase --abort
@@ -37,5 +40,5 @@
 	hash = rev-parse HEAD
 	s = status
 	d = diff
-	ignore = update-index --skip-worktree
-	noignore = update-index --no-skip-worktree
+	skip = update-index --skip-worktree
+	noskip = update-index --no-skip-worktree
