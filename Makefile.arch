@@ -99,6 +99,7 @@ rust: repo
 	@$(PKG-INSTALL) rustup sccache rust-analyzer
 	@rustup update stable
 	@rustup component add rust-src rustfmt-preview clippy
+	@mkdir -p ~/.cargo
 	@$(STOW-INSTALL) rust
 
 .PHONY: plantuml
