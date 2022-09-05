@@ -5,7 +5,7 @@ layout_poetry() {
     exit 2
   fi
 
-  local -r venev=$(cd "$root"; poetry env info | awk '/^Path:/{print $2}')
+  local -r venev=$(cd "$root"; poetry env info -p)
   export VIRTUAL_ENV=$venev
   export POETRY_ACTIVE=1
   PATH_add "$VIRTUAL_ENV/bin"
