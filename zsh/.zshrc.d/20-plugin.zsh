@@ -11,7 +11,7 @@
 
 [[ -n $CLOUDSDK_ROOT_DIR ]] && source $CLOUDSDK_ROOT_DIR/completion.zsh.inc
 (( $+commands[direnv] )) && source <(direnv hook zsh)
-(( $+commands[keychain] )) && (( $+commands[ssh-agent] )) && source <(keychain --eval --quiet --inherit any --ignore-missing --noask id_rsa id_ed25519)
+(( $+commands[keychain] )) && source <(keychain --eval --quiet --inherit any --agents ssh,gpg --ignore-missing --noask id_rsa id_ed25519)
 
 url-quote
 autoload -Uz manydots-magic 2>/dev/null && manydots-magic 2>/dev/null
