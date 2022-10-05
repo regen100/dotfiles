@@ -7,4 +7,8 @@ if [[ -z $DISPLAY ]]; then
   (( $(xauth list "$DISPLAY" 2>&1 | wc -l) )) || xauth generate "$DISPLAY"
 fi
 
-export BROWSER="powershell.exe /C start"
+if [[ ! -f ~/bin/start ]]; then
+  mkdir -p ~/bin
+  install -m 755 <(echo '#!/bin/bash'; echo 'powershell.exe /C start \""$1"\"') ~/bin/start
+fi
+export BROWSER=$HOME/bin/start
