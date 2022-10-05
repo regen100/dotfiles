@@ -175,7 +175,7 @@ require('user.jetpack').startup(function(use)
       require('which-key').register({
         ['<C-p>'] = { builtin.find_files, 'Find files' }, --
         ['<Leader>'] = {
-          fb = { builtin.buffers, 'Find buffers' }, --
+          b = { builtin.buffers, 'Find buffers' }, --
         },
       })
     end,
@@ -214,7 +214,6 @@ require('user.jetpack').startup(function(use)
       require('mini.misc').setup({})
       require('mini.sessions').setup({})
       vim.fn.mkdir(require('mini.sessions').config.directory, 'p')
-      require('mini.starter').setup({})
       require('mini.trailspace').setup({})
       vim.cmd('highlight link MiniTrailspace NvimInternalError')
     end,

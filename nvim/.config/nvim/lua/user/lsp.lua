@@ -20,15 +20,20 @@ local function on_attach(client, bufnr)
     ['<Leader>'] = {
       rn = { vim.lsp.buf.rename, 'Rename' }, --
       ca = { vim.lsp.buf.code_action, 'Code actions' }, --
-      f = { vim.lsp.buf.formatting, 'Format' }, --
+      f = {
+        function()
+          vim.lsp.buf.format({ async = true })
+        end,
+        'Format',
+      }, --
     }, --
   }, { buffer = bufnr })
 
-  if client.resolved_capabilities.document_formatting and own_code then
+  if client.server_capabilities.documentFormattingProvider and own_code then
     vim.cmd([[
       augroup autoformat
         autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
       augroup END
     ]])
   end
@@ -70,11 +75,7 @@ function M.setup()
   lspconfig.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.terraformls.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.tflint.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.efm.setup({
-    filetypes = { 'bzl', 'dockerfile', 'json', 'lua', 'markdown', 'sh', 'zsh' },
-    on_attach = on_attach,
-    capabilities = capabilities,
-  })
+  lspconfig.tsserver.setup({})
 
   lspconfig.sumneko_lua.setup({
     settings = {
@@ -86,8 +87,8 @@ function M.setup()
       },
     },
     on_attach = function(client, bufnr)
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
       on_attach(client, bufnr)
     end,
     capabilities = capabilities,
@@ -122,6 +123,29 @@ function M.setup()
     server = {
       on_attach = on_attach,
       capabilities = capabilities,
+    },
+  })
+
+  local null_ls = require('null-ls')
+  null_ls.setup({
+    on_attach = on_attach,
+    sources = {
+      null_ls.builtins.code_actions.shellcheck,
+      null_ls.builtins.diagnostics.ansiblelint,
+      null_ls.builtins.diagnostics.buildifier,
+      null_ls.builtins.diagnostics.cmake_lint,
+      null_ls.builtins.diagnostics.eslint,
+      null_ls.builtins.diagnostics.hadolint,
+      null_ls.builtins.diagnostics.luacheck,
+      null_ls.builtins.diagnostics.shellcheck,
+      null_ls.builtins.diagnostics.textlint,
+      null_ls.builtins.diagnostics.zsh,
+      null_ls.builtins.formatting.buildifier,
+      null_ls.builtins.formatting.jq,
+      null_ls.builtins.formatting.prettier,
+      null_ls.builtins.formatting.qmlformat,
+      null_ls.builtins.formatting.shfmt,
+      null_ls.builtins.formatting.stylua,
     },
   })
 
