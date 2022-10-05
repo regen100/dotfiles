@@ -18,7 +18,7 @@
 [interactive]
 	diffFilter = delta --color-only
 [alias]
-	main = !basename "$(git rev-parse --abbrev-ref --short origin/HEAD 2>/dev/null || echo origin/master)"
+	main = "!if git branch -r | grep -q origin/main; then echo main; else echo master; fi"
 	co = checkout
 	pushf = push --force-with-lease
 	p = push
