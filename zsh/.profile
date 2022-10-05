@@ -29,3 +29,5 @@ if [ -d "$HOME/.cargo/bin" ]; then
   PATH="$HOME/.cargo/bin:$PATH"
 fi
 export PATH
+
+export CLOUDSDK_PYTHON=python
