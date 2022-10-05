@@ -68,15 +68,10 @@ git: repo
 		echo "	path = ~/.gitconfig_global" >> ~/.gitconfig; \
 	fi
 
-.PHONY: efm
-efm: repo
-	@$(PKG-INSTALL) efm-langserver shellcheck hadolint-bin
-	@$(STOW-INSTALL) efm
-
 .PHONY: nvim
-nvim: repo git utils efm
+nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim
+	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck hadolint-bin
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
 
