@@ -136,7 +136,9 @@ function M.setup()
       null_ls.builtins.diagnostics.cmake_lint,
       null_ls.builtins.diagnostics.eslint,
       null_ls.builtins.diagnostics.hadolint,
-      null_ls.builtins.diagnostics.luacheck,
+      null_ls.builtins.diagnostics.luacheck.with({
+        extra_args = { '--globals', 'vim' },
+      }),
       null_ls.builtins.diagnostics.shellcheck,
       null_ls.builtins.diagnostics.textlint,
       null_ls.builtins.diagnostics.zsh,
