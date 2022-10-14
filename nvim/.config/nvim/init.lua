@@ -58,9 +58,7 @@ require('user.jetpack').startup(function(use)
   use('nvim-lua/plenary.nvim')
   use('lambdalisue/readablefold.vim')
   use('machakann/vim-sandwich')
-
-  vim.g.gundo_prefer_python3 = 1
-  use('sjl/gundo.vim')
+  use('mbbill/undotree')
 
   use({
     'folke/which-key.nvim',
