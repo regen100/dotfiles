@@ -30,6 +30,7 @@ vim.opt.undofile = true
 vim.opt.clipboard:append({ 'unnamedplus' })
 vim.opt.viewoptions = { 'cursor', 'folds', 'slash', 'unix' }
 vim.opt.guicursor:append({ 'c:ver25' })
+vim.opt.cmdheight = 0
 
 vim.cmd([[
   augroup vimrc
