@@ -127,28 +127,31 @@ function M.setup()
   })
 
   local null_ls = require('null-ls')
+  local null_ls_sources = {
+    null_ls.builtins.code_actions.shellcheck,
+    null_ls.builtins.diagnostics.ansiblelint,
+    null_ls.builtins.diagnostics.buildifier,
+    null_ls.builtins.diagnostics.cmake_lint,
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.diagnostics.hadolint,
+    null_ls.builtins.diagnostics.luacheck.with({
+      extra_args = { '--globals', 'vim' },
+    }),
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.zsh,
+    null_ls.builtins.formatting.buildifier,
+    null_ls.builtins.formatting.jq,
+    null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.qmlformat,
+    null_ls.builtins.formatting.shfmt,
+    null_ls.builtins.formatting.stylua,
+  }
+  if vim.fn.executable('textlint') ~= 0 then
+    table.insert(null_ls_sources, null_ls.builtins.diagnostics.textlint)
+  end
   null_ls.setup({
     on_attach = on_attach,
-    sources = {
-      null_ls.builtins.code_actions.shellcheck,
-      null_ls.builtins.diagnostics.ansiblelint,
-      null_ls.builtins.diagnostics.buildifier,
-      null_ls.builtins.diagnostics.cmake_lint,
-      null_ls.builtins.diagnostics.eslint,
-      null_ls.builtins.diagnostics.hadolint,
-      null_ls.builtins.diagnostics.luacheck.with({
-        extra_args = { '--globals', 'vim' },
-      }),
-      null_ls.builtins.diagnostics.shellcheck,
-      null_ls.builtins.diagnostics.textlint,
-      null_ls.builtins.diagnostics.zsh,
-      null_ls.builtins.formatting.buildifier,
-      null_ls.builtins.formatting.jq,
-      null_ls.builtins.formatting.prettier,
-      null_ls.builtins.formatting.qmlformat,
-      null_ls.builtins.formatting.shfmt,
-      null_ls.builtins.formatting.stylua,
-    },
+    sources = null_ls_sources,
   })
 
   local win = require('lspconfig.ui.windows')
