@@ -143,7 +143,9 @@ function M.setup()
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.qmlformat,
-    null_ls.builtins.formatting.shfmt,
+    null_ls.builtins.formatting.shfmt.with({
+      extra_args = { '-i', '2', '-ci' },
+    }),
     null_ls.builtins.formatting.stylua,
   }
   if vim.fn.executable('textlint') ~= 0 then
