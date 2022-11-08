@@ -68,7 +68,7 @@ function M.setup()
     float = { source = 'if_many', format = diagnostic_message },
   })
 
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local capabilities = require('cmp_nvim_lsp').default_capabilities()
   local lspconfig = require('lspconfig')
   lspconfig.cmake.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.vimls.setup({ on_attach = on_attach, capabilities = capabilities })

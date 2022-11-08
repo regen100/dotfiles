@@ -34,7 +34,7 @@ function M.startup(fn)
   local hooks = {}
 
   local jetpack = require('jetpack')
-  jetpack.startup(function(use_org)
+  require('jetpack.packer').startup(function(use_org)
     local function use(config)
       if type(config) == 'table' and config['config'] then
         table.insert(hooks, config['config'])

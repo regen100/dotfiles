@@ -228,6 +228,7 @@ require('user.jetpack').startup(function(use)
   use({
     'kevinhwang91/nvim-hlslens',
     config = function()
+      require('hlslens').setup()
       local start = [[<Cmd>lua require('hlslens').start()<CR>]]
       require('which-key').register({
         n = { [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]] .. start, '' },
