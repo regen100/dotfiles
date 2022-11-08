@@ -182,6 +182,7 @@ require('user.jetpack').startup(function(use)
       })
       telescope.load_extension('ui-select')
       telescope.load_extension('dap')
+      telescope.load_extension('notify')
 
       local builtin = require('telescope.builtin')
       require('which-key').register({
