@@ -88,6 +88,7 @@ require('user.jetpack').startup(function(use)
 
   use('p00f/nvim-ts-rainbow')
   use('JoosepAlviste/nvim-ts-context-commentstring')
+  use('nvim-treesitter/nvim-treesitter-textobjects')
   use({
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
@@ -96,6 +97,18 @@ require('user.jetpack').startup(function(use)
         highlight = { enable = true },
         rainbow = { enable = true, extended_mode = true, max_file_lines = nil },
         context_commentstring = { enable = true },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ['af'] = '@function.outer',
+              ['if'] = '@function.inner',
+              ['ac'] = '@class.outer',
+              ['ic'] = '@class.inner',
+            },
+          },
+        },
       })
 
       vim.opt.foldmethod = 'expr'
