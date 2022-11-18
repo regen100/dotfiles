@@ -1,3 +1,9 @@
+[user]
+	email = regen100@users.noreply.github.com
+	name = Regen
+	signingkey = 4195D64400E81B2A
+[commit]
+	gpgsign = true
 [core]
 	pager = less -R -F -X
 [push]
