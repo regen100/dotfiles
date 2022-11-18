@@ -72,7 +72,8 @@ function M.setup()
   local lspconfig = require('lspconfig')
   lspconfig.cmake.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.vimls.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
+  -- lspconfig.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
+  lspconfig.jedi_language_server.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.terraformls.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.tflint.setup({ on_attach = on_attach, capabilities = capabilities })
   lspconfig.tsserver.setup({})
@@ -128,25 +129,33 @@ function M.setup()
 
   local null_ls = require('null-ls')
   local null_ls_sources = {
+    -- shell
     null_ls.builtins.code_actions.shellcheck,
+    null_ls.builtins.diagnostics.shellcheck,
+    null_ls.builtins.diagnostics.zsh,
+    null_ls.builtins.formatting.shfmt.with({
+      extra_args = { '-i', '2', '-ci' },
+    }),
+    -- python
+    null_ls.builtins.formatting.black,
+    null_ls.builtins.diagnostics.mypy,
+    null_ls.builtins.diagnostics.flake8,
+    null_ls.builtins.formatting.isort,
+    -- lua
+    null_ls.builtins.diagnostics.luacheck.with({
+      extra_args = { '--globals', 'vim' },
+    }),
+    null_ls.builtins.formatting.stylua,
+    -- others
     null_ls.builtins.diagnostics.ansiblelint,
     null_ls.builtins.diagnostics.buildifier,
     null_ls.builtins.diagnostics.cmake_lint,
     null_ls.builtins.diagnostics.eslint,
     null_ls.builtins.diagnostics.hadolint,
-    null_ls.builtins.diagnostics.luacheck.with({
-      extra_args = { '--globals', 'vim' },
-    }),
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.zsh,
     null_ls.builtins.formatting.buildifier,
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.qmlformat,
-    null_ls.builtins.formatting.shfmt.with({
-      extra_args = { '-i', '2', '-ci' },
-    }),
-    null_ls.builtins.formatting.stylua,
   }
   if vim.fn.executable('textlint') ~= 0 then
     table.insert(null_ls_sources, null_ls.builtins.diagnostics.textlint)
