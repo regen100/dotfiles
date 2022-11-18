@@ -114,12 +114,6 @@ require('user.jetpack').startup(function(use)
       vim.opt.foldmethod = 'expr'
       vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
       vim.opt.foldlevel = 10
-
-      function _G.ensure_treesitter_language_installed()
-        local lang = require('nvim-treesitter.parsers').get_buf_lang()
-        pcall(require('nvim-treesitter.install').ensure_installed, lang)
-      end
-      vim.cmd('autocmd vimrc BufEnter * ++once :lua ensure_treesitter_language_installed()')
     end,
   })
   use({
@@ -318,7 +312,9 @@ require('user.jetpack').startup(function(use)
   use({
     'ray-x/lsp_signature.nvim',
     config = function()
-      require('lsp_signature').setup()
+      require('lsp_signature').setup({
+        toggle_key = '<M-x>',
+      })
     end,
   })
   use({
