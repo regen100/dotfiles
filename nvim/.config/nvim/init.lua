@@ -384,6 +384,21 @@ end)
 
 require('user.autosave').setup()
 
+if vim.fn.executable('xclip') ~= 0 then
+  vim.g.clipboard = {
+    name = 'xclip',
+    copy = {
+      ['+'] = { 'xclip', '-quiet', '-i', '-selection', 'clipboard' },
+      ['*'] = { 'xclip', '-quiet', '-i', '-selection', 'primary' },
+    },
+    paste = {
+      ['+'] = { 'sh', '-c', 'xclip -o -selection clipboard | sed s/\r//g' },
+      ['*'] = { 'sh', '-c', 'xclip -o -selection primary | sed s/\r//g' },
+    },
+    cache_enabled = true,
+  }
+end
+
 vim.cmd([[
   autocmd vimrc InsertLeave * set nopaste
 
