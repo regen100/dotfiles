@@ -310,14 +310,6 @@ require('user.jetpack').startup(function(use)
     end,
   })
   use({
-    'ray-x/lsp_signature.nvim',
-    config = function()
-      require('lsp_signature').setup({
-        toggle_key = '<M-x>',
-      })
-    end,
-  })
-  use({
     'j-hui/fidget.nvim',
     config = function()
       require('fidget').setup()
@@ -335,6 +327,7 @@ require('user.jetpack').startup(function(use)
 
   use('hrsh7th/cmp-nvim-lsp')
   use('hrsh7th/cmp-vsnip')
+  use('hrsh7th/cmp-nvim-lsp-signature-help')
   use('onsails/lspkind-nvim')
   use('rcarriga/cmp-dap')
   use({
@@ -355,6 +348,7 @@ require('user.jetpack').startup(function(use)
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'vsnip' },
+          { name = 'nvim_lsp_signature_help' },
         }),
         formatting = {
           format = require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 100, menu = {
