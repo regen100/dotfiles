@@ -128,6 +128,15 @@ function M.setup()
   })
 
   local null_ls = require('null-ls')
+  local jsonnetfmt = {
+    method = null_ls.methods.FORMATTING,
+    filetypes = { 'jsonnet' },
+    generator = require('null-ls.helpers').formatter_factory({
+      command = 'jsonnetfmt',
+      args = { '-' },
+      to_stdin = true,
+    }),
+  }
   local null_ls_sources = {
     -- shell
     null_ls.builtins.code_actions.shellcheck,
@@ -156,6 +165,7 @@ function M.setup()
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.qmlformat,
+    jsonnetfmt,
   }
   if vim.fn.executable('textlint') ~= 0 then
     table.insert(null_ls_sources, null_ls.builtins.diagnostics.textlint)
