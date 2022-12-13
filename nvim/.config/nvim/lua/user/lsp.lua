@@ -163,7 +163,10 @@ function M.setup()
     null_ls.builtins.diagnostics.hadolint,
     null_ls.builtins.formatting.buildifier,
     null_ls.builtins.formatting.jq,
-    null_ls.builtins.formatting.prettier,
+    null_ls.builtins.formatting.remark,
+    null_ls.builtins.formatting.prettier.with({
+      disabled_filetypes = { 'markdown' },
+    }),
     null_ls.builtins.formatting.qmlformat,
     jsonnetfmt,
   }
