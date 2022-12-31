@@ -5,5 +5,5 @@ set mouse = true
 bind generic + !git commit --amend
 bind main B !git rebase -i %(commit)
 bind diff B !git rebase -i %(commit)
-bind generic P ?git push --force-with-lease -u %(remote) %(repo:head)
+bind generic P ?git push --force-with-lease --force-if-includes -u %(remote) %(repo:head)
 bind generic ^ !git reset --soft HEAD^
