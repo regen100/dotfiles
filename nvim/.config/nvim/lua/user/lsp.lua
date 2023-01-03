@@ -7,27 +7,19 @@ local function on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   local telescope = require('telescope.builtin')
-
-  require('which-key').register({
-    K = { vim.lsp.buf.hover, 'Display hover information' }, --
-    ['<C-k>'] = { vim.lsp.buf.signature_help, 'Display signature information' }, --
-    ['<CR>'] = { telescope.lsp_definitions, 'Goto the definition' }, --
-    gD = { vim.lsp.buf.declaration, 'Goto the declaration' }, --
-    gd = { telescope.lsp_definitions, 'Goto the definition' }, --
-    gi = { telescope.lsp_implementations, 'Goto the implementations' }, --
-    gr = { telescope.lsp_references, 'Goto the references' }, --
-    gt = { telescope.lsp_type_definitions, 'Goto the definition of the type' }, --
-    ['<Leader>'] = {
-      rn = { vim.lsp.buf.rename, 'Rename' }, --
-      ca = { vim.lsp.buf.code_action, 'Code actions' }, --
-      f = {
-        function()
-          vim.lsp.buf.format({ async = true })
-        end,
-        'Format',
-      }, --
-    }, --
-  }, { buffer = bufnr })
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Display hover information', buffer = bufnr })
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { desc = 'Display signature information', buffer = bufnr })
+  vim.keymap.set('n', '<CR>', telescope.lsp_definitions, { desc = 'Goto the definition', buffer = bufnr })
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Goto the declaration', buffer = bufnr })
+  vim.keymap.set('n', 'gd', telescope.lsp_definitions, { desc = 'Goto the definition', buffer = bufnr })
+  vim.keymap.set('n', 'gi', telescope.lsp_implementations, { desc = 'Goto the implementations', buffer = bufnr })
+  vim.keymap.set('n', 'gr', telescope.lsp_references, { desc = 'Goto the references', buffer = bufnr })
+  vim.keymap.set('n', 'gt', telescope.lsp_type_definitions, { desc = 'Goto the definition of the type', buffer = bufnr })
+  vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, { desc = 'Rename', buffer = bufnr })
+  vim.keymap.set('n', '<Leader>ca', vim.lsp.buf.code_action, { desc = 'Code actions', buffer = bufnr })
+  vim.keymap.set('n', '<Leader>f', function()
+    vim.lsp.buf.format({ async = true })
+  end, { desc = 'Format', buffer = bufnr })
 
   if client.server_capabilities.documentFormattingProvider and own_code then
     vim.cmd([[
@@ -54,14 +46,10 @@ table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
 function M.setup()
-  require('which-key').register({
-    ['[d'] = { vim.diagnostic.goto_prev, 'Goto previous diagnostic' }, --
-    [']d'] = { vim.diagnostic.goto_next, 'Goto next diagnostic' }, --
-    ['<Leader>'] = {
-      e = { vim.diagnostic.open_float, 'Show diagnostics' }, --
-      q = { '<Cmd>Telescope diagnostics bufnr=0<CR>', 'List diagnostics' }, --
-    }, --
-  })
+  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Goto previous diagnostic' })
+  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Goto next diagnostic' })
+  vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostics' })
+  vim.keymap.set('n', '<Leader>q', '<Cmd>Telescope diagnostics bufnr=0<CR>', { desc = 'List diagnostics' })
 
   vim.diagnostic.config({
     virtual_text = { source = 'if_many', format = diagnostic_message },
@@ -106,9 +94,7 @@ function M.setup()
       },
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
-        require('which-key').register({
-          gs = { '<Cmd>ClangdSwitchSourceHeader<CR>', 'Switch between source/header' }, --
-        }, { buffer = bufnr })
+        vim.keymap.set('n', 'gs', '<Cmd>ClangdSwitchSourceHeader<CR>', { desc = 'Switch between source/header', buffer = bufnr })
       end,
       capabilities = capabilities,
     },

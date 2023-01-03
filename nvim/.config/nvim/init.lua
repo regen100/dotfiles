@@ -47,7 +47,6 @@ if vim.fn.executable('xclip') ~= 0 then
 end
 
 local g = vim.api.nvim_create_augroup('vimrc', {})
-
 vim.api.nvim_create_autocmd('InsertLeave', {
   group = g,
   callback = function()
@@ -55,32 +54,8 @@ vim.api.nvim_create_autocmd('InsertLeave', {
   end,
 })
 
-vim.filetype.add({
-  extension = {
-    pbtxt = 'proto',
-    tfvars = 'terraform',
-  },
-  filename = {
-    ['.clang-tidy'] = 'yaml',
-    ['.textlintrc'] = 'json',
-  },
-  pattern = {
-    ['tmux.*%.conf'] = 'tmux',
-    ['%.gitconfig.*'] = 'gitconfig',
-  },
-})
-local commentstringmap = { [{ 'c', 'cpp', 'java' }] = '// %s', [{ 'terraform' }] = '# %s' }
-for pattern, commentstring in pairs(commentstringmap) do
-  vim.api.nvim_create_autocmd('FileType', {
-    group = g,
-    pattern = pattern,
-    callback = function()
-      vim.bo.commentstring = commentstring
-    end,
-  })
-end
-
 require('user.plugin')
+require('user.filetype')
 require('user.autosave')
 require('user.restoreview')
 require('user.restoreimu')

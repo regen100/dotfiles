@@ -1,6 +1,6 @@
-export FZF_DEFAULT_COMMAND="rg --files 2>/dev/null"
+export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!**/.git/' 2>/dev/null"
 _fzf_compgen_path() {
-  rg --files 2>/dev/null
+  rg --files --hidden --glob '!**/.git/' 2>/dev/null
 }
 _fzf_compgen_dir() {
 	rg --files --null --sort path 2>/dev/null | xargs -0 dirname | uniq

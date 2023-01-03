@@ -24,6 +24,12 @@ local config = {
   'kyazdani42/nvim-web-devicons',
   'bogado/file-line',
   {
+    'lewis6991/impatient.nvim',
+    config = function()
+      require('impatient')
+    end,
+  },
+  {
     'folke/tokyonight.nvim',
     config = function()
       vim.cmd.colorscheme('tokyonight')
@@ -33,7 +39,7 @@ local config = {
       vim.g.tokyonight_italic_keywords = false
     end,
   },
-  {
+  b({
     'folke/which-key.nvim',
     config = function()
       local wk = require('which-key')
@@ -46,7 +52,7 @@ local config = {
           o = { '^f{a<CR><CR><Up>', 'Open {}' }, --
           m = { '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>', 'Toggle mouse' }, --
           w = { '<Cmd>setl wrap! wrap?<CR>', 'Toggle wrap' }, --
-          rr = { ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', 'Rename', silent = false }, --
+          rr = { [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], 'Rename', silent = false }, --
         }, --
       })
       wk.register({
@@ -55,7 +61,7 @@ local config = {
         ['<LeftRelease>'] = { 'y<CR>gv<LeftRelease>', '' }, --
       }, { mode = 'v' })
     end,
-  },
+  }),
   {
     'echasnovski/mini.nvim',
     config = function()
@@ -237,17 +243,18 @@ local config = {
             require('telescope.themes').get_dropdown({}),
           },
         },
+        pickers = {
+          find_files = {
+            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/' },
+          },
+        },
       })
       telescope.load_extension('ui-select')
       telescope.load_extension('dap')
 
       local builtin = require('telescope.builtin')
-      require('which-key').register({
-        ['<C-p>'] = { builtin.find_files, 'Find files' }, --
-        ['<Leader>'] = {
-          b = { builtin.buffers, 'Find buffers' }, --
-        },
-      })
+      vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Find files' })
+      vim.keymap.set('n', '<Leader>b', builtin.buffers, { desc = 'Find buffers' })
     end,
   }),
   -- search & scrollbar
@@ -256,15 +263,20 @@ local config = {
     requirs = 'kyazdani42/nvim-web-devicons',
     config = function()
       require('hlslens').setup()
-      local start = [[<Cmd>lua require('hlslens').start()<CR>]]
-      require('which-key').register({
-        n = { [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]] .. start, '' },
-        N = { [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR>]] .. start, '' },
-        ['*'] = { '*' .. start, '' },
-        ['#'] = { '#' .. start, '' },
-        ['g*'] = { 'g*' .. start, '' },
-        ['g#'] = { 'g#' .. start, '' },
-      })
+      local mapping = {
+        n = [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR>]],
+        N = [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR>]],
+        '*',
+        '#',
+        'g*',
+        'g#',
+      }
+      for k, v in pairs(mapping) do
+        if type(k) == 'number' then
+          k = v
+        end
+        vim.keymap.set('n', k, v .. [[<Cmd>lua require('hlslens').start()<CR>]])
+      end
     end,
   }),
   b({
@@ -283,6 +295,7 @@ local config = {
   b({
     'neovim/nvim-lspconfig',
     requires = {
+      'nvim-telescope/telescope.nvim',
       'RRethy/vim-illuminate',
       'p00f/clangd_extensions.nvim',
       'simrat39/rust-tools.nvim',

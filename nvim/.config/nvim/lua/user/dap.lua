@@ -47,13 +47,11 @@ function M.setup()
     dapui.close({})
   end
 
-  require('which-key').register({
-    ['<F5>'] = { dap.continue, 'Continue' },
-    ['<F9>'] = { dap.toggle_breakpoint, 'Toggle breakpoint' },
-    ['<F10>'] = { dap.step_over, 'Step over' },
-    ['<F11>'] = { dap.step_over, 'Step into' },
-    ['<F12>'] = { dap.step_over, 'Step out' },
-  })
+  vim.keymap.set("n", '<F5>', dap.continue, {desc='Continue'})
+  vim.keymap.set("n", '<F9>', dap.toggle_breakpoint, {desc='Toggle breakpoint'})
+  vim.keymap.set("n", '<F10>',dap.step_over , {desc='Step over'})
+  vim.keymap.set("n", '<F11>',dap.step_into , {desc='Step into'})
+  vim.keymap.set("n", '<F12>', dap.step_out, {desc='Step out'})
 end
 
 return M
