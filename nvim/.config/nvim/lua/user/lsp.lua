@@ -68,6 +68,7 @@ function M.setup()
     float = { source = 'if_many', format = diagnostic_message },
   })
 
+  vim.cmd.packadd('cmp-nvim-lsp')
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
   local lspconfig = require('lspconfig')
   lspconfig.cmake.setup({ on_attach = on_attach, capabilities = capabilities })

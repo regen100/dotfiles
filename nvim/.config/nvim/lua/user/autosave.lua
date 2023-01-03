@@ -1,6 +1,4 @@
-local M = {}
-
-function M.save()
+local function save()
   if vim.fn.filereadable(vim.fn.expand('%:p')) == 0 then
     return
   end
@@ -10,13 +8,12 @@ function M.save()
   vim.cmd('silent! noautocmd w')
 end
 
-function M.setup()
-  vim.cmd([[
-    augroup autosave
-      autocmd!
-      autocmd InsertLeave,BufLeave,TextChanged * lua require('user.autosave').save()
-    augroup END
-  ]])
+local function setup()
+  local g = vim.api.nvim_create_augroup('autosave', {})
+  vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufLeave', 'TextChanged' }, {
+    group = g,
+    callback = save,
+  })
 end
 
-return M
+setup()
