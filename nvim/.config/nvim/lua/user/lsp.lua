@@ -1,9 +1,17 @@
-local M = {}
-
 vim.fn.system('git shortlog -se HEAD | grep $(git config user.email)')
 local own_code = vim.v.shell_error == 0
 
-local function on_attach(client, bufnr)
+local function diagnostic_message(diagnostic)
+  local code = diagnostic.code or (diagnostic.user_data and diagnostic.user_data.lsp and diagnostic.user_data.lsp.code)
+  if code then
+    return diagnostic.message .. ' [' .. code .. ']'
+  end
+  return diagnostic.message
+end
+
+local M = {}
+
+function M.on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   local telescope = require('telescope.builtin')
@@ -22,162 +30,68 @@ local function on_attach(client, bufnr)
   end, { desc = 'Format', buffer = bufnr })
 
   if client.server_capabilities.documentFormattingProvider and own_code then
-    vim.cmd([[
-      augroup autoformat
-        autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.format()
-      augroup END
-    ]])
+    local g = vim.api.nvim_create_augroup('autoformat', { clear = false })
+    vim.api.nvim_clear_autocmds({ group = g, buffer = bufnr })
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      group = g,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ async = false })
+      end,
+    })
   end
-
-  require('illuminate').on_attach(client)
 end
 
-local function diagnostic_message(diagnostic)
-  local code = diagnostic.code or (diagnostic.user_data and diagnostic.user_data.lsp and diagnostic.user_data.lsp.code)
-  if code then
-    return diagnostic.message .. ' [' .. code .. ']'
-  end
-  return diagnostic.message
-end
+M.capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, 'lua/?.lua')
-table.insert(runtime_path, 'lua/?/init.lua')
+local function default(config)
+  config = config or {}
+  config.capabilities = config.capabilities or M.capabilities
+  if config.on_attach then
+    local fn = config.on_attach
+    config.on_attach = function(...)
+      fn(...)
+      M.on_attach(...)
+    end
+  else
+    config.on_attach = M.on_attach
+  end
+  return config
+end
 
 function M.setup()
-  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Goto previous diagnostic' })
-  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Goto next diagnostic' })
-  vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostics' })
-  vim.keymap.set('n', '<Leader>q', '<Cmd>Telescope diagnostics bufnr=0<CR>', { desc = 'List diagnostics' })
-
   vim.diagnostic.config({
     virtual_text = { source = 'if_many', format = diagnostic_message },
     float = { source = 'if_many', format = diagnostic_message },
   })
-
-  vim.cmd.packadd('cmp-nvim-lsp')
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
-  local lspconfig = require('lspconfig')
-  lspconfig.cmake.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.vimls.setup({ on_attach = on_attach, capabilities = capabilities })
-  -- lspconfig.pylsp.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.jedi_language_server.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.terraformls.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.tflint.setup({ on_attach = on_attach, capabilities = capabilities })
-  lspconfig.tsserver.setup({})
-
-  lspconfig.sumneko_lua.setup({
-    settings = {
-      Lua = {
-        runtime = { version = 'LuaJIT', path = runtime_path },
-        diagnostics = { globals = { 'vim' } },
-        workspace = { library = vim.api.nvim_get_runtime_file('', true) },
-        telemetry = { enable = false },
-      },
-    },
-    on_attach = function(client, bufnr)
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
-      on_attach(client, bufnr)
-    end,
-    capabilities = capabilities,
-  })
-
-  require('clangd_extensions').setup({
-    server = {
-      cmd = {
-        'clangd',
-        '--clang-tidy',
-        '--header-insertion=never',
-        '--completion-style=detailed',
-      },
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        vim.keymap.set('n', 'gs', '<Cmd>ClangdSwitchSourceHeader<CR>', { desc = 'Switch between source/header', buffer = bufnr })
-      end,
-      capabilities = capabilities,
-    },
-    extensions = { inlay_hints = { parameter_hints_prefix = ' « ', other_hints_prefix = ' » ' } },
-  })
-
-  require('rust-tools').setup({
-    tools = {
-      inlay_hints = {
-        parameter_hints_prefix = ' « ',
-        other_hints_prefix = ' » ',
-      },
-    },
-    server = {
-      on_attach = on_attach,
-      capabilities = capabilities,
-    },
-  })
-
-  local null_ls = require('null-ls')
-  local jsonnetfmt = {
-    method = null_ls.methods.FORMATTING,
-    filetypes = { 'jsonnet' },
-    generator = require('null-ls.helpers').formatter_factory({
-      command = 'jsonnetfmt',
-      args = { '-' },
-      to_stdin = true,
-    }),
-  }
-  local null_ls_sources = {
-    -- shell
-    null_ls.builtins.code_actions.shellcheck,
-    null_ls.builtins.diagnostics.shellcheck,
-    null_ls.builtins.diagnostics.zsh,
-    null_ls.builtins.formatting.shfmt.with({
-      extra_args = { '-i', '2', '-ci' },
-    }),
-    -- python
-    null_ls.builtins.formatting.black,
-    null_ls.builtins.diagnostics.mypy,
-    null_ls.builtins.diagnostics.flake8,
-    null_ls.builtins.formatting.isort,
-    -- lua
-    null_ls.builtins.diagnostics.luacheck.with({
-      extra_args = { '--globals', 'vim' },
-    }),
-    null_ls.builtins.formatting.stylua,
-    -- others
-    null_ls.builtins.diagnostics.ansiblelint,
-    null_ls.builtins.diagnostics.buildifier,
-    null_ls.builtins.diagnostics.cmake_lint,
-    null_ls.builtins.diagnostics.eslint,
-    null_ls.builtins.diagnostics.hadolint,
-    null_ls.builtins.formatting.buildifier,
-    null_ls.builtins.formatting.jq,
-    null_ls.builtins.formatting.remark,
-    null_ls.builtins.formatting.prettier.with({
-      disabled_filetypes = { 'markdown' },
-    }),
-    null_ls.builtins.formatting.qmlformat,
-    jsonnetfmt,
-  }
-  if vim.fn.executable('textlint') ~= 0 then
-    table.insert(null_ls_sources, null_ls.builtins.diagnostics.textlint)
-  end
-  null_ls.setup({
-    on_attach = on_attach,
-    sources = null_ls_sources,
-  })
-
-  local win = require('lspconfig.ui.windows')
-  local _default_opts = win.default_opts
-  win.default_opts = function(options)
-    local ret = _default_opts(options)
-    ret.border = 'single'
-    return ret
-  end
 
   local signs = { Error = ' ', Warn = ' ', Hint = ' ', Info = ' ' }
   for type, icon in pairs(signs) do
     local hl = 'DiagnosticSign' .. type
     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
   end
+
+  local lspconfig = require('lspconfig')
+  lspconfig.cmake.setup(default())
+  lspconfig.vimls.setup(default())
+  lspconfig.jedi_language_server.setup(default())
+  lspconfig.terraformls.setup(default())
+  lspconfig.tflint.setup(default())
+  lspconfig.tsserver.setup(default())
+  lspconfig.sumneko_lua.setup(default({
+    settings = {
+      Lua = {
+        runtime = { version = 'LuaJIT' },
+        diagnostics = { globals = { 'vim' } },
+        workspace = { library = vim.api.nvim_get_runtime_file('', true) },
+        telemetry = { enable = false },
+      },
+    },
+    on_attach = function(client, _)
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end,
+  }))
 end
 
 return M
