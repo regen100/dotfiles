@@ -6,7 +6,7 @@ local function defer(module)
   })
 end
 
-local function wrap(module)
+local function bind(module)
   return setmetatable({}, {
     __index = function(_, method)
       return function(...)
@@ -21,11 +21,9 @@ end
 
 local config = {
   'bogado/file-line',
-  'jghauser/mkdir.nvim',
   'tpope/vim-repeat',
   'kana/vim-niceblock',
   'machakann/vim-sandwich',
-  'rhysd/conflict-marker.vim',
   {
     'folke/tokyonight.nvim',
     config = function()
@@ -48,8 +46,22 @@ local config = {
         [']b'] = { ':bnext<CR>', 'Go to next buffer' },
         ['<Leader>'] = {
           o = { '^f{a<CR><CR><Up>', 'Open {}' }, --
-          m = { '<Cmd>let &mouse=(&mouse == "a" ? "" : "a")<CR><Cmd>set mouse?<CR>', 'Toggle mouse' }, --
-          w = { '<Cmd>setl wrap! wrap?<CR>', 'Toggle wrap' }, --
+          m = {
+            function()
+              if next(vim.opt.mouse:get()) then
+                vim.opt.mouse = {}
+              else
+                vim.opt.mouse = { a = true }
+              end
+            end,
+            'Toggle mouse',
+          }, --
+          w = {
+            function()
+              vim.opt.wrap = not vim.opt.wrap:get()
+            end,
+            'Toggle wrap',
+          }, --
           rr = { [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], 'Rename', silent = false }, --
         }, --
       })
@@ -74,7 +86,9 @@ local config = {
   --
   { 'nvim-lua/plenary.nvim', lazy = true },
   { 'kyazdani42/nvim-web-devicons', lazy = true },
-  { 'lambdalisue/readablefold.vim', event = 'VeryLazy' },
+  { 'jghauser/mkdir.nvim', event = 'BufWritePre' },
+  { 'lambdalisue/readablefold.vim', event = { 'BufRead', 'BufNewFile' } },
+  { 'rhysd/conflict-marker.vim', event = { 'BufRead', 'BufNewFile' } },
   {
     'mbbill/undotree',
     cmd = { 'UndotreeToggle', 'UndotreeShow' },
@@ -87,12 +101,12 @@ local config = {
   {
     'norcalli/nvim-colorizer.lua',
     event = { 'BufRead', 'BufNewFile' },
-    config = wrap('colorizer').setup(),
+    config = bind('colorizer').setup(),
   },
   {
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
-    config = wrap('gitsigns').setup(),
+    config = bind('gitsigns').setup(),
   },
   {
     'iberianpig/tig-explorer.vim',
@@ -106,17 +120,17 @@ local config = {
   {
     'folke/trouble.nvim',
     event = 'VeryLazy',
-    config = wrap('trouble').setup(),
+    config = bind('trouble').setup(),
   },
   {
     'folke/todo-comments.nvim',
     event = 'VeryLazy',
-    config = wrap('todo-comments').setup(),
+    config = bind('todo-comments').setup(),
   },
   {
     'lukas-reineke/indent-blankline.nvim',
     event = 'VeryLazy',
-    config = wrap('indent_blankline').setup({
+    config = bind('indent_blankline').setup({
       filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo', 'starter' },
       buftype_exclude = { 'terminal' },
       space_char_blankline = ' ',
@@ -161,7 +175,7 @@ local config = {
   {
     'ahmedkhalf/project.nvim',
     event = { 'BufRead', 'BufNewFile' },
-    config = wrap('project_nvim').setup(),
+    config = bind('project_nvim').setup(),
   },
   {
     'lambdalisue/suda.vim',
@@ -174,7 +188,7 @@ local config = {
     'kosayoda/nvim-lightbulb',
     event = 'VeryLazy',
     dependencies = 'antoinemadec/FixCursorHold.nvim',
-    config = wrap('nvim-lightbulb').setup({
+    config = bind('nvim-lightbulb').setup({
       sign = { enabled = false },
       float = { enabled = true },
       autocmd = { enabled = true },
@@ -182,18 +196,18 @@ local config = {
   },
   {
     'nvim-treesitter/nvim-treesitter',
-    event = 'VeryLazy',
+    event = { 'VeryLazy', 'FileType' },
     dependencies = {
       'p00f/nvim-ts-rainbow',
       'JoosepAlviste/nvim-ts-context-commentstring',
       'nvim-treesitter/nvim-treesitter-textobjects',
       {
         'nvim-treesitter/nvim-treesitter-context',
-        config = wrap('treesitter-context').setup(),
+        config = bind('treesitter-context').setup(),
       },
       {
         'haringsrob/nvim_context_vt',
-        config = wrap('nvim_context_vt').setup({ prefix = ' »', disable_virtual_lines = true }),
+        config = bind('nvim_context_vt').setup({ prefix = ' »', disable_virtual_lines = true }),
       },
     },
     build = ':TSUpdate',
@@ -202,7 +216,8 @@ local config = {
       vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
       vim.opt.foldenable = false
     end,
-    config = wrap('nvim-treesitter.configs').setup({
+    config = bind('nvim-treesitter.configs').setup({
+      auto_install = true,
       highlight = { enable = true },
       rainbow = { enable = true, extended_mode = true, max_file_lines = nil },
       context_commentstring = { enable = true },
@@ -226,12 +241,12 @@ local config = {
     keys = {
       {
         '<C-p>',
-        wrap('telescope.builtin').find_files(),
+        bind('telescope.builtin').find_files(),
         desc = 'Find files',
       },
       {
         '<Leader>b',
-        wrap('telescope.builtin').buffers(),
+        bind('telescope.builtin').buffers(),
         desc = 'Find buffers',
       },
     },
@@ -285,7 +300,7 @@ local config = {
         vim.keymap.set('n', k, v .. [[<Cmd>lua require('hlslens').start()<CR>]])
       end
     end,
-    config = wrap('hlslens').setup(),
+    config = bind('hlslens').setup(),
   },
   {
     'petertriho/nvim-scrollbar',
@@ -330,7 +345,7 @@ local config = {
       {
         'simrat39/rust-tools.nvim',
         config = function()
-          wrap('rust-tools').setup({
+          bind('rust-tools').setup({
             tools = {
               inlay_hints = {
                 parameter_hints_prefix = ' « ',
@@ -401,10 +416,10 @@ local config = {
       },
       {
         'j-hui/fidget.nvim',
-        config = wrap('fidget').setup(),
+        config = bind('fidget').setup(),
       },
     },
-    config = wrap('user.lsp').setup(),
+    config = bind('user.lsp').setup(),
   },
   -- cmp
   {
@@ -461,6 +476,7 @@ local config = {
             menu = {
               nvim_lsp = '[lsp]',
               vsnip = '[vsnip]',
+              nvim_lsp_signature_help = '[signature]',
               path = '[path]',
               buffer = '[buffer]',
             },
@@ -527,11 +543,11 @@ local config = {
       },
     },
     keys = {
-      { '<F5>', wrap('dap').continue(), desc = 'Continue' },
-      { '<F9>', wrap('dap').toggle_breakpoint(), desc = 'Toggle breakpoint' },
-      { '<F10>', wrap('dap').step_over(), desc = 'Step over' },
-      { '<F11>', wrap('dap').step_into(), desc = 'Step into' },
-      { '<F12>', wrap('dap').step_out(), desc = 'Step out' },
+      { '<F5>', bind('dap').continue(), desc = 'Continue' },
+      { '<F9>', bind('dap').toggle_breakpoint(), desc = 'Toggle breakpoint' },
+      { '<F10>', bind('dap').step_over(), desc = 'Step over' },
+      { '<F11>', bind('dap').step_into(), desc = 'Step into' },
+      { '<F12>', bind('dap').step_out(), desc = 'Step out' },
     },
     config = function()
       local dap = require('dap')
@@ -556,6 +572,28 @@ local config = {
       dap.configurations.c = dap.configurations.cpp
     end,
   },
+  -- fern
+  {
+    'lambdalisue/fern.vim',
+    cmd = 'Fern',
+    dependencies = {
+      { 'lambdalisue/fern-renderer-nerdfont.vim', dependencies = 'lambdalisue/nerdfont.vim' },
+    },
+    init = function()
+      vim.g.loaded_netrwPlugin = 1
+      vim.g['fern#renderer'] = 'nerdfont'
+      vim.api.nvim_create_autocmd('VimEnter', {
+        group = vim.api.nvim_create_augroup('startpage', {}),
+        nested = true,
+        callback = function()
+          if vim.fn.argc() == 0 then
+            vim.cmd.Fern('.')
+          end
+        end,
+      })
+    end,
+  },
+  'lambdalisue/fern-hijack.vim',
 }
 
 local function setup()

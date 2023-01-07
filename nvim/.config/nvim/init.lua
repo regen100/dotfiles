@@ -1,6 +1,5 @@
 vim.g.load_black = 1
 vim.g.loaded_fzf = 1
-vim.g.loaded_netrwPlugin = 1
 
 vim.g.mapleader = ' '
 
