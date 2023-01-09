@@ -43,6 +43,9 @@ local function setup()
     gitconfig = function()
       vim.bo.expandtab = false
     end,
+    ['*'] = function()
+      vim.opt.formatoptions:remove({ 'c', 'r', 'o' })
+    end,
   })
 end
 
