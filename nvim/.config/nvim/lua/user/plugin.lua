@@ -45,7 +45,6 @@ local config = {
         ['[b'] = { ':bprevious<CR>', 'Go to previous buffer' },
         [']b'] = { ':bnext<CR>', 'Go to next buffer' },
         ['<Leader>'] = {
-          o = { '^f{a<CR><CR><Up>', 'Open {}' }, --
           m = {
             function()
               if next(vim.opt.mouse:get()) then
@@ -185,16 +184,6 @@ local config = {
     end,
   },
   {
-    'kosayoda/nvim-lightbulb',
-    event = 'VeryLazy',
-    dependencies = 'antoinemadec/FixCursorHold.nvim',
-    config = bind('nvim-lightbulb').setup({
-      sign = { enabled = false },
-      float = { enabled = true },
-      autocmd = { enabled = true },
-    }),
-  },
-  {
     'nvim-treesitter/nvim-treesitter',
     event = { 'VeryLazy', 'FileType' },
     dependencies = {
@@ -306,20 +295,22 @@ local config = {
     'petertriho/nvim-scrollbar',
     event = 'VeryLazy',
     config = function()
-      require('scrollbar').setup()
+      require('scrollbar').setup({
+        excluded_filetypes = {
+          'prompt',
+          'TelescopePrompt',
+          'noice',
+          'lspsagafinder',
+        },
+      })
       require('scrollbar.handlers.search').setup()
+      require('scrollbar.handlers.gitsigns').setup()
     end,
   },
-  { 'RRethy/vim-illuminate', event = 'VeryLazy' },
+  { 'RRethy/vim-illuminate', event = 'VeryLazy', config = bind('illuminate').configure({ filetypes_denylist = { 'lspsagafinder' } }) },
   {
     'neovim/nvim-lspconfig',
     event = { 'InsertEnter', 'BufRead' },
-    keys = {
-      { '[d', vim.diagnostic.goto_prev, desc = 'Go to previous diagnostic' },
-      { ']d', vim.diagnostic.goto_next, desc = 'Go to next diagnostic' },
-      { '<Leader>e', vim.diagnostic.open_float, desc = 'Show diagnostics' },
-      { '<Leader>q', '<Cmd>Telescope diagnostics bufnr=0<CR>', desc = 'List diagnostics' },
-    },
     dependencies = {
       {
         'p00f/clangd_extensions.nvim',
@@ -417,6 +408,17 @@ local config = {
       {
         'j-hui/fidget.nvim',
         config = bind('fidget').setup(),
+      },
+      {
+        'glepnir/lspsaga.nvim',
+        config = function()
+          require('lspsaga').init_lsp_saga({
+            code_action_lightbulb = {
+              sign = false,
+            },
+          })
+          vim.api.nvim_set_hl(0, 'LspSagaFinderSelection', { link = 'Search' })
+        end,
       },
     },
     config = bind('user.lsp').setup(),

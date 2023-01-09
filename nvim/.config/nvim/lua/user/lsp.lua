@@ -14,17 +14,14 @@ local M = {}
 function M.on_attach(client, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  local telescope = require('telescope.builtin')
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Display hover information', buffer = bufnr })
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { desc = 'Display signature information', buffer = bufnr })
-  vim.keymap.set('n', '<CR>', telescope.lsp_definitions, { desc = 'Goto the definition', buffer = bufnr })
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { desc = 'Goto the declaration', buffer = bufnr })
-  vim.keymap.set('n', 'gd', telescope.lsp_definitions, { desc = 'Goto the definition', buffer = bufnr })
-  vim.keymap.set('n', 'gi', telescope.lsp_implementations, { desc = 'Goto the implementations', buffer = bufnr })
-  vim.keymap.set('n', 'gr', telescope.lsp_references, { desc = 'Goto the references', buffer = bufnr })
-  vim.keymap.set('n', 'gt', telescope.lsp_type_definitions, { desc = 'Goto the definition of the type', buffer = bufnr })
-  vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, { desc = 'Rename', buffer = bufnr })
-  vim.keymap.set('n', '<Leader>ca', vim.lsp.buf.code_action, { desc = 'Code actions', buffer = bufnr })
+  vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', { desc = 'Display hover information', buffer = bufnr })
+  vim.keymap.set('n', '<CR>', '<Cmd>Lspsaga lsp_finder<CR>', { desc = 'Show symbol info', buffer = bufnr })
+  vim.keymap.set('n', '<Leader>rn', '<Cmd>Lspsaga rename<CR>', { desc = 'Rename', buffer = bufnr })
+  vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<Cmd>Lspsaga code_action<CR>', { desc = 'Code actions', buffer = bufnr })
+  vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Goto next diagnostic', buffer = bufnr })
+  vim.keymap.set('n', ']d', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Goto previous diagnostic', buffer = bufnr })
+  vim.keymap.set('n', '<Leader>e', '<Cmd>Lspsaga show_cursor_diagnostics<CR>', { desc = 'Show diagnostics', buffer = bufnr })
+  vim.keymap.set('n', '<Leader>q', '<Cmd>Telescope diagnostics bufnr=0<CR>', { desc = 'List diagnostics', buffer = bufnr })
   vim.keymap.set('n', '<Leader>f', function()
     vim.lsp.buf.format({ async = true })
   end, { desc = 'Format', buffer = bufnr })
@@ -60,6 +57,8 @@ local function default(config)
 end
 
 function M.setup()
+  vim.keymap.set('n', '<Leader>o', '<Cmd>Lspsaga outline<CR>', { desc = 'Show outline' })
+
   vim.diagnostic.config({
     virtual_text = { source = 'if_many', format = diagnostic_message },
     float = { source = 'if_many', format = diagnostic_message },
