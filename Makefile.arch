@@ -71,7 +71,7 @@ git: repo
 .PHONY: nvim
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck hadolint-bin
+	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck-bin hadolint-bin
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
 
@@ -121,7 +121,7 @@ tmux: repo
 
 .PHONY: zsh
 zsh: repo readline utils
-	@$(PKG-INSTALL) zsh grml-zsh-config zsh-completions zsh-syntax-highlighting zsh-autosuggestions zsh-manydots-magic keychain starship
+	@$(PKG-INSTALL) zsh grml-zsh-config keychain starship
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh starship
 	@mkdir -p ~/.zfunc

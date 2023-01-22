@@ -2,7 +2,6 @@ alias xclip="xclip -selection clipboard"
 alias g="git"
 alias m="git m"
 alias t="tig"
-alias tf="terraform"
 alias ap="ansible-playbook"
 
 CMAKE_CXX_FLAGS="-fstandalone-debug -fcolor-diagnostics -march=native -ferror-limit=1 -g"
