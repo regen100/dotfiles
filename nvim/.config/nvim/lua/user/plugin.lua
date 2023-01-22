@@ -469,7 +469,6 @@ local config = {
           { name = 'vsnip' },
           { name = 'nvim_lsp_signature_help' },
           { name = 'path' },
-          { name = 'buffer' },
         }),
         formatting = {
           format = require('lspkind').cmp_format({
