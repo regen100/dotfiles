@@ -461,8 +461,11 @@ local config = {
           end,
         },
         mapping = cmp.mapping.preset.insert({
-          ['<C-Space>'] = cmp.mapping.complete({}),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<Down>'] = cmp.mapping.select_next_item(),
+          ['<Up>'] = cmp.mapping.select_prev_item(),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ['<C-j>'] = cmp.mapping.close(),
         }),
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
