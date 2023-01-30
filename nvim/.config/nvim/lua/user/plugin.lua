@@ -412,12 +412,11 @@ local config = {
       {
         'glepnir/lspsaga.nvim',
         config = function()
-          require('lspsaga').init_lsp_saga({
-            code_action_lightbulb = {
+          require('lspsaga').setup({
+            lightbulb = {
               sign = false,
             },
           })
-          vim.api.nvim_set_hl(0, 'LspSagaFinderSelection', { link = 'Search' })
         end,
       },
     },
