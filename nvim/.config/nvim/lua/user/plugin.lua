@@ -25,11 +25,27 @@ local config = {
   'kana/vim-niceblock',
   'machakann/vim-sandwich',
   {
-    'folke/tokyonight.nvim',
+    'catppuccin/nvim',
+    name = 'catppuccin',
     config = function()
-      vim.g.tokyonight_style = 'night'
-      vim.g.tokyonight_italic_keywords = false
-      vim.cmd.colorscheme('tokyonight')
+      require('catppuccin').setup({
+        integrations = {
+          cmp = true,
+          fern = true,
+          fidget = true,
+          gitsigns = true,
+          mini = true,
+          notify = true,
+          treesitter = true,
+          ts_rainbow = true,
+          which_key = true,
+          indent_blankline = {
+            enabled = true,
+            colored_indent_levels = false,
+          },
+        },
+      })
+      vim.cmd.colorscheme('catppuccin')
     end,
   },
   {
@@ -142,7 +158,7 @@ local config = {
     event = 'VeryLazy',
     config = function()
       require('lualine').setup({
-        options = { theme = 'tokyonight', disabled_filetypes = { 'gundo', 'dap-repl', 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_console', 'dapui_watches' } },
+        options = { theme = 'catppuccin', disabled_filetypes = { 'gundo', 'dap-repl', 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_console', 'dapui_watches' } },
         sections = {
           lualine_a = { 'mode' },
           lualine_b = { 'branch', 'diff', 'diagnostics' },
