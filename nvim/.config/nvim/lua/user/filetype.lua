@@ -26,6 +26,7 @@ local function setup()
   vim.filetype.add({
     extension = {
       pbtxt = 'proto',
+      tf = 'terraform',
       tfvars = 'terraform',
     },
     filename = {

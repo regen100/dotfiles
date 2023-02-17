@@ -345,24 +345,7 @@ local config = {
               end,
               capabilities = require('user.lsp').capabilities,
             },
-            extensions = { inlay_hints = { parameter_hints_prefix = ' « ', other_hints_prefix = ' » ' } },
-          })
-        end,
-      },
-      {
-        'simrat39/rust-tools.nvim',
-        config = function()
-          bind('rust-tools').setup({
-            tools = {
-              inlay_hints = {
-                parameter_hints_prefix = ' « ',
-                other_hints_prefix = ' » ',
-              },
-            },
-            server = {
-              on_attach = require('user.lsp').on_attach,
-              capabilities = require('user.lsp').capabilities,
-            },
+            extensions = { autoSetHints = false, inlay_hints = { parameter_hints_prefix = ' « ', other_hints_prefix = ' » ' } },
           })
         end,
       },
@@ -435,6 +418,15 @@ local config = {
           })
         end,
       },
+      { 'lvimuser/lsp-inlayhints.nvim', config = bind('lsp-inlayhints').setup({
+        inlay_hints = {
+          parameter_hints = {
+            show = true,
+            prefix = ' « ',
+            separator = ', ',
+          },
+        },
+      }) },
     },
     config = bind('user.lsp').setup(),
   },

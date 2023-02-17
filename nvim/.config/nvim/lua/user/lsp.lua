@@ -18,8 +18,8 @@ function M.on_attach(client, bufnr)
   vim.keymap.set('n', '<CR>', '<Cmd>Lspsaga lsp_finder<CR>', { desc = 'Show symbol info', buffer = bufnr })
   vim.keymap.set('n', '<Leader>rn', '<Cmd>Lspsaga rename<CR>', { desc = 'Rename', buffer = bufnr })
   vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<Cmd>Lspsaga code_action<CR>', { desc = 'Code actions', buffer = bufnr })
-  vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Goto next diagnostic', buffer = bufnr })
-  vim.keymap.set('n', ']d', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Goto previous diagnostic', buffer = bufnr })
+  vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Goto previous diagnostic', buffer = bufnr })
+  vim.keymap.set('n', ']d', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Goto next diagnostic', buffer = bufnr })
   vim.keymap.set('n', '<Leader>e', '<Cmd>Lspsaga show_cursor_diagnostics<CR>', { desc = 'Show diagnostics', buffer = bufnr })
   vim.keymap.set('n', '<Leader>q', '<Cmd>Telescope diagnostics bufnr=0<CR>', { desc = 'List diagnostics', buffer = bufnr })
   vim.keymap.set('n', '<Leader>f', function()
@@ -37,6 +37,8 @@ function M.on_attach(client, bufnr)
       end,
     })
   end
+
+  require('lsp-inlayhints').on_attach(client, bufnr, false)
 end
 
 M.capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -75,9 +77,9 @@ function M.setup()
   lspconfig.vimls.setup(default())
   lspconfig.jedi_language_server.setup(default())
   lspconfig.terraformls.setup(default())
-  lspconfig.tflint.setup(default())
   lspconfig.tsserver.setup(default())
-  lspconfig.sumneko_lua.setup(default({
+  lspconfig.rust_analyzer.setup(default())
+  lspconfig.lua_ls.setup(default({
     settings = {
       Lua = {
         runtime = { version = 'LuaJIT' },
