@@ -6,6 +6,6 @@ antidote load
 
 autoload -Uz manydots-magic 2>/dev/null && manydots-magic 2>/dev/null
 
-(( $+commands[keychain] )) && source <(keychain --eval --quiet --inherit any --agents ssh,gpg --ignore-missing --noask id_rsa id_ed25519)
+(( $+commands[keychain] )) && source <(keychain --eval --quiet --agents ssh --ignore-missing --noask id_ed25519)
 (( $+commands[aws_completer] )) && complete -C aws_completer aws
 (( $+commands[pdm] )) && eval "$(pdm --pep582)"
