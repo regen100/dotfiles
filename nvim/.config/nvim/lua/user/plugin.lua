@@ -284,6 +284,7 @@ local config = {
       telescope.load_extension('notify')
       telescope.load_extension('ui-select')
       telescope.load_extension('dap')
+      telescope.load_extension('projects')
     end,
   },
   {
