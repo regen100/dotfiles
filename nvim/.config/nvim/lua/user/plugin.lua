@@ -373,9 +373,15 @@ local config = {
             }),
             -- python
             null_ls.builtins.formatting.black,
-            null_ls.builtins.diagnostics.mypy,
-            null_ls.builtins.diagnostics.flake8,
-            null_ls.builtins.formatting.isort,
+            null_ls.builtins.diagnostics.mypy.with({
+              extra_args = { '--strict' },
+            }),
+            null_ls.builtins.diagnostics.flake8.with({
+              extra_args = { '--max-line-length=88', '--extend-ignore=E203' },
+            }),
+            null_ls.builtins.formatting.isort.with({
+              extra_args = { '--profile=black', '--line-length=88' },
+            }),
             -- lua
             null_ls.builtins.diagnostics.luacheck.with({
               extra_args = { '--globals', 'vim' },

@@ -71,7 +71,8 @@ git: repo
 .PHONY: nvim
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck-bin hadolint-bin
+	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck-bin hadolint-bin npm
+	@npm_config_prefix=~/.local npm install -g remark-cli
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
 
