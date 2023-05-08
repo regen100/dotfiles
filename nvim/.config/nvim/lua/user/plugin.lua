@@ -400,6 +400,7 @@ local config = {
               disabled_filetypes = { 'markdown' },
             }),
             null_ls.builtins.formatting.qmlformat,
+            null_ls.builtins.formatting.packer,
             jsonnetfmt,
           }
           if vim.fn.executable('textlint') ~= 0 then
