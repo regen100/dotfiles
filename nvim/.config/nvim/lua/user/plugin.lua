@@ -479,10 +479,11 @@ local config = {
           ['<Down>'] = cmp.mapping.select_next_item(),
           ['<Up>'] = cmp.mapping.select_prev_item(),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
           ['<C-j>'] = cmp.mapping.close(),
         }),
         sources = cmp.config.sources({
+          { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'vsnip' },
           { name = 'nvim_lsp_signature_help' },
@@ -499,6 +500,7 @@ local config = {
               path = '[path]',
               buffer = '[buffer]',
             },
+            symbol_map = { Copilot = '' },
           }),
         },
       })
@@ -613,6 +615,21 @@ local config = {
     end,
   },
   'lambdalisue/fern-hijack.vim',
+  -- copilot
+  {
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    config = function()
+      require('copilot').setup({})
+    end,
+  },
+  {
+    'zbirenbaum/copilot-cmp',
+    dependencies = { 'zbirenbaum/copilot.lua' },
+    config = function()
+      require('copilot_cmp').setup({})
+    end,
+  },
 }
 
 local function setup()
