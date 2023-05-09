@@ -9,3 +9,4 @@ compile_commands.json
 .mypy_cache/
 .clangd/
 .vscode/
+.cache/clangd
