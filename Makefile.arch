@@ -54,7 +54,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man rsync htop direnv ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin gotop-bin
+	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop direnv ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin gotop-bin
 	@$(STOW-INSTALL) direnv
 	@sudo pkgfile --update
 
