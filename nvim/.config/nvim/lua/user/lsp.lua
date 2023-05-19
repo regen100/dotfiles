@@ -11,52 +11,41 @@ end
 
 local M = {}
 
-function M.on_attach(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(args)
+    vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-  vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', { desc = 'Display hover information', buffer = bufnr })
-  vim.keymap.set('n', '<CR>', '<Cmd>Lspsaga lsp_finder<CR>', { desc = 'Show symbol info', buffer = bufnr })
-  vim.keymap.set('n', '<Leader>rn', '<Cmd>Lspsaga rename<CR>', { desc = 'Rename', buffer = bufnr })
-  vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<Cmd>Lspsaga code_action<CR>', { desc = 'Code actions', buffer = bufnr })
-  vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Goto previous diagnostic', buffer = bufnr })
-  vim.keymap.set('n', ']d', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Goto next diagnostic', buffer = bufnr })
-  vim.keymap.set('n', '<Leader>e', '<Cmd>Lspsaga show_line_diagnostics<CR>', { desc = 'Show diagnostics', buffer = bufnr })
-  vim.keymap.set('n', '<Leader>q', '<Cmd>Telescope diagnostics bufnr=0<CR>', { desc = 'List diagnostics', buffer = bufnr })
-  vim.keymap.set('n', '<Leader>f', function()
-    vim.lsp.buf.format({ async = true })
-  end, { desc = 'Format', buffer = bufnr })
+    vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', { desc = 'Display hover information', buffer = args.buf })
+    vim.keymap.set('n', '<CR>', '<Cmd>Lspsaga lsp_finder<CR>', { desc = 'Show symbol info', buffer = args.buf })
+    vim.keymap.set('n', '<Leader>rn', '<Cmd>Lspsaga rename<CR>', { desc = 'Rename', buffer = args.buf })
+    vim.keymap.set({ 'n', 'v' }, '<Leader>ca', '<Cmd>Lspsaga code_action<CR>', { desc = 'Code actions', buffer = args.buf })
+    vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Goto previous diagnostic', buffer = args.buf })
+    vim.keymap.set('n', ']d', '<Cmd>Lspsaga diagnostic_jump_next<CR>', { desc = 'Goto next diagnostic', buffer = args.buf })
+    vim.keymap.set('n', '<Leader>e', '<Cmd>Lspsaga show_line_diagnostics<CR>', { desc = 'Show diagnostics', buffer = args.buf })
+    vim.keymap.set('n', '<Leader>q', '<Cmd>Telescope diagnostics bufnr=0<CR>', { desc = 'List diagnostics', buffer = args.buf })
+    vim.keymap.set('n', '<Leader>f', function()
+      vim.lsp.buf.format({ async = true })
+    end, { desc = 'Format', buffer = args.buf })
 
-  if client.server_capabilities.documentFormattingProvider and own_code then
-    local g = vim.api.nvim_create_augroup('autoformat', { clear = false })
-    vim.api.nvim_clear_autocmds({ group = g, buffer = bufnr })
-    vim.api.nvim_create_autocmd('BufWritePre', {
-      group = g,
-      buffer = bufnr,
-      callback = function()
-        vim.lsp.buf.format({ async = false })
-      end,
-    })
-  end
-
-  require('lsp-inlayhints').on_attach(client, bufnr, false)
-end
-
-M.capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-local function default(config)
-  config = config or {}
-  config.capabilities = config.capabilities or M.capabilities
-  if config.on_attach then
-    local fn = config.on_attach
-    config.on_attach = function(...)
-      fn(...)
-      M.on_attach(...)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.server_capabilities.documentFormattingProvider and own_code then
+      local g = vim.api.nvim_create_augroup('autoformat', { clear = false })
+      vim.api.nvim_clear_autocmds({ group = g, buffer = args.buf })
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = g,
+        buffer = args.buf,
+        callback = function()
+          vim.lsp.buf.format({ async = false })
+        end,
+      })
     end
-  else
-    config.on_attach = M.on_attach
-  end
-  return config
-end
+
+    require('lsp-inlayhints').on_attach(client, args.buf, false)
+
+    client.server_capabilities = vim.tbl_extend('force', require('cmp_nvim_lsp').default_capabilities(), client.server_capabilities)
+  end,
+})
 
 function M.setup()
   vim.keymap.set('n', '<Leader>o', '<Cmd>Lspsaga outline<CR>', { desc = 'Show outline' })
@@ -73,13 +62,13 @@ function M.setup()
   end
 
   local lspconfig = require('lspconfig')
-  lspconfig.cmake.setup(default())
-  lspconfig.vimls.setup(default())
-  lspconfig.jedi_language_server.setup(default())
-  lspconfig.terraformls.setup(default())
-  lspconfig.tsserver.setup(default())
-  lspconfig.rust_analyzer.setup(default())
-  lspconfig.lua_ls.setup(default({
+  lspconfig.cmake.setup({})
+  lspconfig.vimls.setup({})
+  lspconfig.jedi_language_server.setup({})
+  lspconfig.terraformls.setup({})
+  lspconfig.tsserver.setup({})
+  lspconfig.rust_analyzer.setup({})
+  lspconfig.lua_ls.setup({
     settings = {
       Lua = {
         runtime = { version = 'LuaJIT' },
@@ -92,7 +81,18 @@ function M.setup()
       client.server_capabilities.documentFormattingProvider = false
       client.server_capabilities.documentRangeFormattingProvider = false
     end,
-  }))
+  })
+  lspconfig.clangd.setup({
+    cmd = {
+      'clangd',
+      '--clang-tidy',
+      '--header-insertion=never',
+      '--completion-style=detailed',
+    },
+    on_attach = function(_, bufnr)
+      vim.keymap.set('n', 'gs', '<Cmd>ClangdSwitchSourceHeader<CR>', { desc = 'Switch between source/header', buffer = bufnr })
+    end,
+  })
 end
 
 return M

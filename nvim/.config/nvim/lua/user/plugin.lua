@@ -330,27 +330,6 @@ local config = {
     event = { 'InsertEnter', 'BufRead' },
     dependencies = {
       {
-        'p00f/clangd_extensions.nvim',
-        config = function()
-          require('clangd_extensions').setup({
-            server = {
-              cmd = {
-                'clangd',
-                '--clang-tidy',
-                '--header-insertion=never',
-                '--completion-style=detailed',
-              },
-              on_attach = function(client, bufnr)
-                require('user.lsp').on_attach(client, bufnr)
-                vim.keymap.set('n', 'gs', '<Cmd>ClangdSwitchSourceHeader<CR>', { desc = 'Switch between source/header', buffer = bufnr })
-              end,
-              capabilities = require('user.lsp').capabilities,
-            },
-            extensions = { autoSetHints = false, inlay_hints = { parameter_hints_prefix = ' « ', other_hints_prefix = ' » ' } },
-          })
-        end,
-      },
-      {
         'jose-elias-alvarez/null-ls.nvim',
         config = function()
           local null_ls = require('null-ls')
@@ -407,7 +386,6 @@ local config = {
             table.insert(null_ls_sources, null_ls.builtins.diagnostics.textlint)
           end
           null_ls.setup({
-            on_attach = require('user.lsp').on_attach,
             sources = null_ls_sources,
           })
         end,
@@ -418,23 +396,27 @@ local config = {
       },
       {
         'glepnir/lspsaga.nvim',
+        event = 'LspAttach',
         config = function()
-          require('lspsaga').setup({
-            lightbulb = {
-              sign = false,
-            },
-          })
+          require('lspsaga').setup({})
         end,
-      },
-      { 'lvimuser/lsp-inlayhints.nvim', config = bind('lsp-inlayhints').setup({
-        inlay_hints = {
-          parameter_hints = {
-            show = true,
-            prefix = ' « ',
-            separator = ', ',
-          },
+        dependencies = {
+          { 'nvim-tree/nvim-web-devicons' },
+          { 'nvim-treesitter/nvim-treesitter' },
         },
-      }) },
+      },
+      {
+        'lvimuser/lsp-inlayhints.nvim',
+        config = bind('lsp-inlayhints').setup({
+          inlay_hints = {
+            parameter_hints = {
+              show = true,
+              prefix = ' « ',
+              separator = ', ',
+            },
+          },
+        }),
+      },
     },
     config = bind('user.lsp').setup(),
   },
@@ -479,7 +461,7 @@ local config = {
           ['<Down>'] = cmp.mapping.select_next_item(),
           ['<Up>'] = cmp.mapping.select_prev_item(),
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+          ['<CR>'] = cmp.mapping.confirm({ select = false }),
           ['<C-j>'] = cmp.mapping.close(),
         }),
         sources = cmp.config.sources({
