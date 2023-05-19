@@ -100,7 +100,7 @@ local config = {
   },
   --
   { 'nvim-lua/plenary.nvim', lazy = true },
-  { 'kyazdani42/nvim-web-devicons', lazy = true },
+  { 'nvim-tree/nvim-web-devicons', lazy = true },
   { 'jghauser/mkdir.nvim', event = 'BufWritePre' },
   { 'lambdalisue/readablefold.vim', event = { 'BufRead', 'BufNewFile' } },
   { 'rhysd/conflict-marker.vim', event = { 'BufRead', 'BufNewFile' } },
