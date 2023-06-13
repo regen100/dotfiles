@@ -54,7 +54,7 @@ pip: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop direnv ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin gotop-bin
+	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop-bin direnv ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin gotop-bin
 	@$(STOW-INSTALL) direnv
 	@sudo pkgfile --update
 
@@ -71,7 +71,7 @@ git: repo
 .PHONY: nvim
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck-bin hadolint-bin npm
+	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck hadolint-bin npm
 	@npm_config_prefix=~/.local npm install -g remark-cli
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
