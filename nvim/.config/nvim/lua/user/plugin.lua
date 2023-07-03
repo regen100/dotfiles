@@ -420,6 +420,14 @@ local config = {
     },
     config = bind('user.lsp').setup(),
   },
+  {
+    'akinsho/flutter-tools.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim',
+    },
+    config = bind('flutter-tools').setup({}),
+  },
   -- cmp
   {
     'hrsh7th/nvim-cmp',
