@@ -1,8 +1,6 @@
-if [[ -z $WSL_HOST_IP ]]; then
+if ! (( $+commands[wslpath] )); then
   return
 fi
-
-export DISPLAY="${WSL_HOST_IP}:0"
 
 if [[ ! -f ~/bin/start ]]; then
   mkdir -p ~/bin
