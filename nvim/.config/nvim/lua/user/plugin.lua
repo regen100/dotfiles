@@ -392,6 +392,7 @@ local config = {
       },
       {
         'j-hui/fidget.nvim',
+        tag = 'legacy',
         config = bind('fidget').setup(),
       },
       {
