@@ -1,24 +1,3 @@
-local function defer(module)
-  return setmetatable({}, {
-    __call = function(_, ...)
-      require(module)(...)
-    end,
-  })
-end
-
-local function bind(module)
-  return setmetatable({}, {
-    __index = function(_, method)
-      return function(...)
-        local args = { ... }
-        return function()
-          require(module)[method](unpack(args))
-        end
-      end
-    end,
-  })
-end
-
 local config = {
   'bogado/file-line',
   'tpope/vim-repeat',
@@ -73,6 +52,7 @@ local config = {
           }, --
           w = {
             function()
+              ---@diagnostic disable-next-line: undefined-field
               vim.opt.wrap = not vim.opt.wrap:get()
             end,
             'Toggle wrap',
@@ -115,12 +95,16 @@ local config = {
   {
     'norcalli/nvim-colorizer.lua',
     event = { 'BufRead', 'BufNewFile' },
-    config = bind('colorizer').setup(),
+    config = function()
+      require('colorizer').setup()
+    end,
   },
   {
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
-    config = bind('gitsigns').setup(),
+    config = function()
+      require('gitsigns').setup()
+    end,
   },
   {
     'iberianpig/tig-explorer.vim',
@@ -134,28 +118,35 @@ local config = {
   {
     'folke/trouble.nvim',
     event = 'VeryLazy',
-    config = bind('trouble').setup(),
+    config = function()
+      require('trouble').setup()
+    end,
   },
   {
     'folke/todo-comments.nvim',
     event = 'VeryLazy',
-    config = bind('todo-comments').setup(),
+    config = function()
+      require('todo-comments').setup()
+    end,
   },
   {
     'lukas-reineke/indent-blankline.nvim',
     event = 'VeryLazy',
-    config = bind('indent_blankline').setup({
-      filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo', 'starter' },
-      buftype_exclude = { 'terminal' },
-      space_char_blankline = ' ',
-      show_current_context = true,
-      show_end_of_line = true,
-    }),
+    config = function()
+      require('indent_blankline').setup({
+        filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo', 'starter' },
+        buftype_exclude = { 'terminal' },
+        space_char_blankline = ' ',
+        show_current_context = true,
+        show_end_of_line = true,
+      })
+    end,
   },
   {
     'hoob3rt/lualine.nvim',
     event = 'VeryLazy',
     config = function()
+      ---@diagnostic disable-next-line: undefined-field
       require('lualine').setup({
         options = { theme = 'catppuccin', disabled_filetypes = { 'gundo', 'dap-repl', 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_console', 'dapui_watches' } },
         sections = {
@@ -183,7 +174,7 @@ local config = {
     'rcarriga/nvim-notify',
     lazy = true,
     init = function()
-      vim.notify = defer('notify')
+      vim.notify = require('notify')
     end,
   },
   {
@@ -202,11 +193,15 @@ local config = {
       'nvim-treesitter/nvim-treesitter-textobjects',
       {
         'nvim-treesitter/nvim-treesitter-context',
-        config = bind('treesitter-context').setup(),
+        config = function()
+          require('treesitter-context').setup()
+        end,
       },
       {
         'haringsrob/nvim_context_vt',
-        config = bind('nvim_context_vt').setup({ prefix = ' »', disable_virtual_lines = true }),
+        config = function()
+          require('nvim_context_vt').setup({ prefix = ' »', disable_virtual_lines = true })
+        end,
       },
     },
     build = ':TSUpdate',
@@ -215,24 +210,28 @@ local config = {
       vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
       vim.opt.foldenable = false
     end,
-    config = bind('nvim-treesitter.configs').setup({
-      auto_install = true,
-      highlight = { enable = true },
-      rainbow = { enable = true, extended_mode = true, max_file_lines = nil },
-      context_commentstring = { enable = true },
-      textobjects = {
-        select = {
-          enable = true,
-          lookahead = true,
-          keymaps = {
-            ['af'] = '@function.outer',
-            ['if'] = '@function.inner',
-            ['ac'] = '@class.outer',
-            ['ic'] = '@class.inner',
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('nvim-treesitter.configs').setup({
+        ensure_installed = { 'markdown_inline' },
+        auto_install = true,
+        highlight = { enable = true },
+        rainbow = { enable = true, extended_mode = true, max_file_lines = nil },
+        context_commentstring = { enable = true },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ['af'] = '@function.outer',
+              ['if'] = '@function.inner',
+              ['ac'] = '@class.outer',
+              ['ic'] = '@class.inner',
+            },
           },
         },
-      },
-    }),
+      })
+    end,
   },
   {
     'nvim-telescope/telescope.nvim',
@@ -240,12 +239,16 @@ local config = {
     keys = {
       {
         '<C-p>',
-        bind('telescope.builtin').find_files(),
+        function()
+          require('telescope.builtin').find_files()
+        end,
         desc = 'Find files',
       },
       {
         '<Leader>b',
-        bind('telescope.builtin').buffers(),
+        function()
+          require('telescope.builtin').buffers()
+        end,
         desc = 'Find buffers',
       },
     },
@@ -299,7 +302,9 @@ local config = {
         vim.keymap.set('n', k, v .. [[<Cmd>lua require('hlslens').start()<CR>]])
       end
     end,
-    config = bind('hlslens').setup(),
+    config = function()
+      require('hlslens').setup()
+    end,
   },
   {
     'petertriho/nvim-scrollbar',
@@ -317,7 +322,13 @@ local config = {
       require('scrollbar.handlers.gitsigns').setup()
     end,
   },
-  { 'RRethy/vim-illuminate', event = 'VeryLazy', config = bind('illuminate').configure({ filetypes_denylist = { 'sagafinder' } }) },
+  {
+    'RRethy/vim-illuminate',
+    event = 'VeryLazy',
+    config = function()
+      require('illuminate').configure({ filetypes_denylist = { 'sagafinder' } })
+    end,
+  },
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -385,7 +396,9 @@ local config = {
       {
         'j-hui/fidget.nvim',
         tag = 'legacy',
-        config = bind('fidget').setup(),
+        config = function()
+          require('fidget').setup()
+        end,
       },
       {
         'glepnir/lspsaga.nvim',
@@ -404,18 +417,22 @@ local config = {
       },
       {
         'lvimuser/lsp-inlayhints.nvim',
-        config = bind('lsp-inlayhints').setup({
-          inlay_hints = {
-            parameter_hints = {
-              show = true,
-              prefix = ' « ',
-              separator = ', ',
+        config = function()
+          require('lsp-inlayhints').setup({
+            inlay_hints = {
+              parameter_hints = {
+                show = true,
+                prefix = ' « ',
+                separator = ', ',
+              },
             },
-          },
-        }),
+          })
+        end,
       },
     },
-    config = bind('user.lsp').setup(),
+    config = function()
+      require('user.lsp').setup()
+    end,
   },
   {
     'akinsho/flutter-tools.nvim',
@@ -423,7 +440,9 @@ local config = {
       'nvim-lua/plenary.nvim',
       'stevearc/dressing.nvim',
     },
-    config = bind('flutter-tools').setup({}),
+    config = function()
+      require('flutter-tools').setup({})
+    end,
   },
   -- cmp
   {
@@ -551,11 +570,41 @@ local config = {
       },
     },
     keys = {
-      { '<F5>', bind('dap').continue(), desc = 'Continue' },
-      { '<F9>', bind('dap').toggle_breakpoint(), desc = 'Toggle breakpoint' },
-      { '<F10>', bind('dap').step_over(), desc = 'Step over' },
-      { '<F11>', bind('dap').step_into(), desc = 'Step into' },
-      { '<F12>', bind('dap').step_out(), desc = 'Step out' },
+      {
+        '<F5>',
+        function()
+          require('dap').continue()
+        end,
+        desc = 'Continue',
+      },
+      {
+        '<F9>',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = 'Toggle breakpoint',
+      },
+      {
+        '<F10>',
+        function()
+          require('dap').step_over()
+        end,
+        desc = 'Step over',
+      },
+      {
+        '<F11>',
+        function()
+          require('dap').step_into()
+        end,
+        desc = 'Step into',
+      },
+      {
+        '<F12>',
+        function()
+          require('dap').step_out()
+        end,
+        desc = 'Step out',
+      },
     },
     config = function()
       local dap = require('dap')
