@@ -6,7 +6,7 @@ local config = {
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    config = function()
+    opts = function()
       require('catppuccin').setup({
         integrations = {
           cmp = true,
@@ -93,79 +93,61 @@ local config = {
   {
     'norcalli/nvim-colorizer.lua',
     event = { 'BufRead', 'BufNewFile' },
-    config = function()
-      require('colorizer').setup()
-    end,
+    opts = {},
   },
   {
     'lewis6991/gitsigns.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('gitsigns').setup()
-    end,
-  },
-  {
-    'iberianpig/tig-explorer.vim',
-    event = 'VeryLazy',
-    dependencies = 'rbgrouleff/bclose.vim',
-    keys = {
-      { '<Leader>T', '<Cmd>TigOpenCurrentFile<CR>' },
-      { '<Leader>t', '<Cmd>TigOpenProjectRootDir<CR>' },
-    },
+    opts = {},
   },
   {
     'folke/trouble.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('trouble').setup()
-    end,
+    opts = {},
   },
   {
     'folke/todo-comments.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('todo-comments').setup()
-    end,
+    opts = {},
   },
   {
     'lukas-reineke/indent-blankline.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('indent_blankline').setup({
-        filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo', 'starter' },
-        buftype_exclude = { 'terminal' },
-        space_char_blankline = ' ',
-        show_current_context = true,
-        show_end_of_line = true,
-      })
-    end,
+    opts = {
+      filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo', 'starter' },
+      buftype_exclude = { 'terminal' },
+      space_char_blankline = ' ',
+      show_current_context = true,
+      show_end_of_line = true,
+    },
   },
   {
     'hoob3rt/lualine.nvim',
     event = 'VeryLazy',
-    config = function()
-      ---@diagnostic disable-next-line: undefined-field
-      require('lualine').setup({
-        options = { theme = 'catppuccin', disabled_filetypes = { 'gundo', 'dap-repl', 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_console', 'dapui_watches' } },
-        sections = {
-          lualine_a = { 'mode' },
-          lualine_b = { 'branch', 'diff', 'diagnostics' },
-          lualine_c = { 'filename' },
-          lualine_x = {
-            {
-              require('lazy.status').updates,
-              cond = require('lazy.status').has_updates,
-              color = { fg = '#ff9e64' },
-            },
-            'encoding',
-            'fileformat',
-            'filetype',
+    opts = {
+      options = { theme = 'catppuccin', disabled_filetypes = { 'gundo', 'dap-repl', 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_console', 'dapui_watches' } },
+      sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch', 'diff', 'diagnostics' },
+        lualine_c = { 'filename' },
+        lualine_x = {
+          {
+            function()
+              return require('lazy.status').updates()
+            end,
+            cond = function()
+              return require('lazy.status').has_updates
+            end,
+            color = { fg = '#ff9e64' },
           },
-          lualine_y = { 'progress' },
-          lualine_z = { 'location' },
+          'encoding',
+          'fileformat',
+          'filetype',
         },
-      })
-    end,
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' },
+      },
+    },
   },
   {
     'romgrk/barbar.nvim',
@@ -327,9 +309,7 @@ local config = {
         vim.keymap.set('n', k, v .. [[<Cmd>lua require('hlslens').start()<CR>]])
       end
     end,
-    config = function()
-      require('hlslens').setup()
-    end,
+    opts = {},
   },
   {
     'petertriho/nvim-scrollbar',
@@ -421,38 +401,32 @@ local config = {
       {
         'j-hui/fidget.nvim',
         tag = 'legacy',
-        config = function()
-          require('fidget').setup()
-        end,
+        opts = {},
       },
       {
         'glepnir/lspsaga.nvim',
-        event = 'LspAttach',
-        config = function()
-          require('lspsaga').setup({
-            lightbulb = {
-              virtual_text = false,
-            },
-          })
-        end,
         dependencies = {
           { 'nvim-tree/nvim-web-devicons' },
           { 'nvim-treesitter/nvim-treesitter' },
         },
+        event = 'LspAttach',
+        opts = {
+          lightbulb = {
+            virtual_text = false,
+          },
+        },
       },
       {
         'lvimuser/lsp-inlayhints.nvim',
-        config = function()
-          require('lsp-inlayhints').setup({
-            inlay_hints = {
-              parameter_hints = {
-                show = true,
-                prefix = ' « ',
-                separator = ', ',
-              },
+        opts = {
+          inlay_hints = {
+            parameter_hints = {
+              show = true,
+              prefix = ' « ',
+              separator = ', ',
             },
-          })
-        end,
+          },
+        },
       },
     },
     config = function()
@@ -465,9 +439,7 @@ local config = {
       'nvim-lua/plenary.nvim',
       'stevearc/dressing.nvim',
     },
-    config = function()
-      require('flutter-tools').setup({})
-    end,
+    opts = {},
   },
   -- cmp
   {
@@ -680,19 +652,15 @@ local config = {
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
-    config = function()
-      require('copilot').setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
-    end,
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    },
   },
   {
     'zbirenbaum/copilot-cmp',
     dependencies = { 'zbirenbaum/copilot.lua' },
-    config = function()
-      require('copilot_cmp').setup({})
-    end,
+    opts = {},
   },
 }
 
