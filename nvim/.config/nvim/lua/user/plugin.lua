@@ -92,7 +92,6 @@ local config = {
     config = function()
       require('mini.comment').setup({})
       require('mini.jump').setup({})
-      require('mini.misc').setup({})
       require('mini.sessions').setup({})
       vim.fn.mkdir(require('mini.sessions').config.directory, 'p')
       require('mini.trailspace').setup({})
@@ -188,11 +187,6 @@ local config = {
     end,
   },
   {
-    'ahmedkhalf/project.nvim',
-    event = { 'BufRead', 'BufNewFile' },
-    config = bind('project_nvim').setup(),
-  },
-  {
     'lambdalisue/suda.vim',
     cmd = { 'SudaRead', 'SudaWrite' },
     init = function()
@@ -284,7 +278,6 @@ local config = {
       telescope.load_extension('notify')
       telescope.load_extension('ui-select')
       telescope.load_extension('dap')
-      telescope.load_extension('projects')
     end,
   },
   {
@@ -317,17 +310,16 @@ local config = {
           'prompt',
           'TelescopePrompt',
           'noice',
-          'lspsagafinder',
+          'sagafinder',
         },
       })
       require('scrollbar.handlers.search').setup()
       require('scrollbar.handlers.gitsigns').setup()
     end,
   },
-  { 'RRethy/vim-illuminate', event = 'VeryLazy', config = bind('illuminate').configure({ filetypes_denylist = { 'lspsagafinder' } }) },
+  { 'RRethy/vim-illuminate', event = 'VeryLazy', config = bind('illuminate').configure({ filetypes_denylist = { 'sagafinder' } }) },
   {
     'neovim/nvim-lspconfig',
-    event = { 'InsertEnter', 'BufRead' },
     dependencies = {
       {
         'jose-elias-alvarez/null-ls.nvim',
@@ -399,7 +391,11 @@ local config = {
         'glepnir/lspsaga.nvim',
         event = 'LspAttach',
         config = function()
-          require('lspsaga').setup({})
+          require('lspsaga').setup({
+            lightbulb = {
+              virtual_text = false,
+            },
+          })
         end,
         dependencies = {
           { 'nvim-tree/nvim-web-devicons' },
@@ -611,7 +607,10 @@ local config = {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     config = function()
-      require('copilot').setup({})
+      require('copilot').setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
     end,
   },
   {
