@@ -29,6 +29,7 @@ vim.opt.clipboard:append({ 'unnamedplus' })
 vim.opt.viewoptions = { 'cursor', 'folds', 'slash', 'unix' }
 vim.opt.guicursor:append({ 'c:ver25' })
 vim.opt.cmdheight = 0
+vim.opt.signcolumn = 'yes'
 
 if vim.fn.executable('xclip') ~= 0 then
   vim.g.clipboard = {
@@ -45,9 +46,8 @@ if vim.fn.executable('xclip') ~= 0 then
   }
 end
 
-local g = vim.api.nvim_create_augroup('vimrc', {})
 vim.api.nvim_create_autocmd('InsertLeave', {
-  group = g,
+  group = vim.api.nvim_create_augroup('vimrc', {}),
   callback = function()
     vim.opt.paste = false
   end,

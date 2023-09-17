@@ -1,6 +1,7 @@
-byobu/.config/byobu/.metadata_available
-byobu/.config/byobu/.ssh-agent
-byobu/.config/byobu/plugins
-byobu/.config/byobu/layouts
+.luarc.json
 borg/.borg/*.conf
 borg/.borg/*.exclude
+byobu/.config/byobu/.metadata_available
+byobu/.config/byobu/.ssh-agent
+byobu/.config/byobu/layouts
+byobu/.config/byobu/plugins
