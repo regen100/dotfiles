@@ -37,8 +37,6 @@ local config = {
         ['<Esc><Esc>'] = { ':<C-u>nohlsearch<CR>', '' }, --
         ['<Tab>'] = { 'V>', 'Indent' }, --
         ['<S-Tab>'] = { 'V<', 'Unindent' }, --
-        ['[b'] = { ':bprevious<CR>', 'Go to previous buffer' },
-        [']b'] = { ':bnext<CR>', 'Go to next buffer' },
         ['<Leader>'] = {
           m = {
             function()
@@ -166,9 +164,36 @@ local config = {
           lualine_y = { 'progress' },
           lualine_z = { 'location' },
         },
-        tabline = { lualine_a = { 'buffers' }, lualine_z = { 'tabs' } },
       })
     end,
+  },
+  {
+    'romgrk/barbar.nvim',
+    lazy = false,
+    keys = {
+      { '[b', '<Cmd>BufferPrevious<CR>', desc = 'Go to previous buffer' },
+      { ']b', '<Cmd>BufferNext<CR>', desc = 'Go to next buffer' },
+      { '<A-1>', '<Cmd>BufferGo 1<CR>' },
+      { '<A-2>', '<Cmd>BufferGo 2<CR>' },
+      { '<A-3>', '<Cmd>BufferGo 3<CR>' },
+      { '<A-4>', '<Cmd>BufferGo 4<CR>' },
+      { '<A-5>', '<Cmd>BufferGo 5<CR>' },
+      { '<A-6>', '<Cmd>BufferGo 6<CR>' },
+      { '<A-7>', '<Cmd>BufferGo 7<CR>' },
+      { '<A-8>', '<Cmd>BufferGo 8<CR>' },
+      { '<A-9>', '<Cmd>BufferGo 9<CR>' },
+      { '<A-0>', '<Cmd>BufferLast<CR>' },
+      { '<A-p>', '<Cmd>BufferPin<CR>' },
+      { '<A-c>', '<Cmd>BufferClose<CR>' },
+    },
+    init = function()
+      vim.g.barbar_auto_setup = false
+    end,
+    opts = {
+      icons = {
+        buffer_index = true,
+      },
+    },
   },
   {
     'rcarriga/nvim-notify',
@@ -215,7 +240,7 @@ local config = {
       require('nvim-treesitter.configs').setup({
         ensure_installed = { 'markdown_inline' },
         auto_install = true,
-        highlight = { enable = true },
+        highlight = { enable = true, additional_vim_regex_highlighting = false },
         rainbow = { enable = true, extended_mode = true, max_file_lines = nil },
         context_commentstring = { enable = true },
         textobjects = {
