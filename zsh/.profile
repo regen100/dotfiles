@@ -7,6 +7,10 @@ if type vim >/dev/null 2>&1; then
   export VISUAL=vim
 fi
 
+if type google-chrome-stable >/dev/null 2>&1; then
+  export CHROME_EXECUTABLE=google-chrome-stable
+fi
+
 if [ -e /opt/homebrew/bin/brew ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
