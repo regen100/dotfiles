@@ -107,19 +107,15 @@ local config = {
   },
   {
     'folke/todo-comments.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
     event = 'VeryLazy',
     opts = {},
   },
   {
     'lukas-reineke/indent-blankline.nvim',
     event = 'VeryLazy',
-    opts = {
-      filetype_exclude = { '', 'help', 'gitcommit', 'lspinfo', 'starter' },
-      buftype_exclude = { 'terminal' },
-      space_char_blankline = ' ',
-      show_current_context = true,
-      show_end_of_line = true,
-    },
+    main = 'ibl',
+    opts = {},
   },
   {
     'hoob3rt/lualine.nvim',
@@ -195,7 +191,6 @@ local config = {
     'nvim-treesitter/nvim-treesitter',
     event = { 'VeryLazy', 'FileType' },
     dependencies = {
-      'p00f/nvim-ts-rainbow',
       'JoosepAlviste/nvim-ts-context-commentstring',
       'nvim-treesitter/nvim-treesitter-textobjects',
       {
@@ -224,7 +219,6 @@ local config = {
         auto_install = true,
         highlight = { enable = true, additional_vim_regex_highlighting = false },
         rainbow = { enable = true, extended_mode = true, max_file_lines = nil },
-        context_commentstring = { enable = true },
         textobjects = {
           select = {
             enable = true,
@@ -338,7 +332,7 @@ local config = {
     'neovim/nvim-lspconfig',
     dependencies = {
       {
-        'jose-elias-alvarez/null-ls.nvim',
+        'nvimtools/none-ls.nvim',
         config = function()
           local null_ls = require('null-ls')
           local jsonnetfmt = {
@@ -359,16 +353,12 @@ local config = {
               extra_args = { '-i', '2', '-ci' },
             }),
             -- python
-            null_ls.builtins.formatting.black,
             null_ls.builtins.diagnostics.mypy.with({
               extra_args = { '--strict' },
             }),
-            null_ls.builtins.diagnostics.flake8.with({
-              extra_args = { '--max-line-length=88', '--extend-ignore=E203' },
-            }),
-            null_ls.builtins.formatting.isort.with({
-              extra_args = { '--profile=black', '--line-length=88' },
-            }),
+            null_ls.builtins.diagnostics.ruff,
+            null_ls.builtins.formatting.ruff,
+            null_ls.builtins.formatting.ruff_format,
             -- lua
             null_ls.builtins.diagnostics.luacheck.with({
               extra_args = { '--globals', 'vim' },
@@ -377,8 +367,7 @@ local config = {
             -- others
             null_ls.builtins.diagnostics.ansiblelint,
             null_ls.builtins.diagnostics.buildifier,
-            null_ls.builtins.diagnostics.cmake_lint,
-            null_ls.builtins.diagnostics.eslint,
+            -- null_ls.builtins.diagnostics.eslint,
             null_ls.builtins.diagnostics.hadolint,
             null_ls.builtins.formatting.buildifier,
             null_ls.builtins.formatting.jq,
@@ -653,6 +642,9 @@ local config = {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
     opts = {
+      filetypes = {
+        ['*'] = true,
+      },
       suggestion = { enabled = false },
       panel = { enabled = false },
     },

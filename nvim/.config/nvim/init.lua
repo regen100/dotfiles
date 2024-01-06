@@ -31,7 +31,7 @@ vim.opt.guicursor:append({ 'c:ver25' })
 vim.opt.cmdheight = 0
 vim.opt.signcolumn = 'yes'
 
-if vim.fn.executable('xclip') ~= 0 then
+if vim.fn.executable('xclip') ~= 0 and vim.env.DISPLAY then
   vim.g.clipboard = {
     name = 'xclip',
     copy = {
