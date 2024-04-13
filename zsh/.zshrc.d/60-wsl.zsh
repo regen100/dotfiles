@@ -9,3 +9,5 @@ fi
 export BROWSER=$HOME/bin/start
 
 hash -d desktop="$(wslpath "$(/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe /C Write-Output '${Env:USERPROFILE}' | sed 's/\r//')")/Desktop"
+
+ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/
