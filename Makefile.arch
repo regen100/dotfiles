@@ -72,7 +72,7 @@ git: repo
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua luacheck vim-language-server python-neovim shellcheck hadolint-bin npm
-	@npm_config_prefix=~/.local npm install -g remark-cli
+	@npm_config_prefix=~/.local npm install -g remark-cli remark-frontmatter
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
 
@@ -198,7 +198,7 @@ borg: repo
 
 .PHONY: gpg
 gpg: repo
-	@$(PKG-INSTALL) pinentry qt5-base
+	@$(PKG-INSTALL) pinentry qt5-base kwayland5 qt5-x11extras
 	@grep -q pinentry-program $$HOME/.gnupg/gpg-agent.conf || echo "pinentry-program /usr/bin/pinentry-qt" >$$HOME/.gnupg/gpg-agent.conf
 	@gpg-connect-agent reloadagent /bye >/dev/null
 
