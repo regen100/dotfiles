@@ -3,7 +3,8 @@ set main-view = line-number:yes,interval=5 id date author commit-title:graph=yes
 set mouse = true
 
 bind generic + !git commit --amend
-bind main B !git rebase -i %(commit)
-bind diff B !git rebase -i %(commit)
+bind main B !git rebase -i --autosquash %(commit)
+bind diff B !git rebase -i --autosquash %(commit)
 bind generic P ?git push --force-with-lease --force-if-includes -u %(remote) %(repo:head)
 bind generic ^ !git reset --soft HEAD^
+bind main = !git commit --fixup=%(commit)
