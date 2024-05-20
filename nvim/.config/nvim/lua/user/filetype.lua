@@ -28,6 +28,7 @@ local function setup()
       pbtxt = 'proto',
       tf = 'terraform',
       tfvars = 'terraform',
+      luau = 'luau',
     },
     filename = {
       ['.clang-tidy'] = 'yaml',
