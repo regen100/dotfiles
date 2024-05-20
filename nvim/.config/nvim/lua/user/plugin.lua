@@ -401,18 +401,6 @@ local config = {
           },
         },
       },
-      {
-        'lvimuser/lsp-inlayhints.nvim',
-        opts = {
-          inlay_hints = {
-            parameter_hints = {
-              show = true,
-              prefix = ' « ',
-              separator = ', ',
-            },
-          },
-        },
-      },
     },
     config = function()
       require('user.lsp').setup()

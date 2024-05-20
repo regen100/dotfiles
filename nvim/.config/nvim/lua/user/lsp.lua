@@ -29,7 +29,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, { desc = 'Format', buffer = args.buf })
 
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if client.server_capabilities.documentFormattingProvider and own_code then
+    assert(client ~= nil)
+    if own_code then
       local g = vim.api.nvim_create_augroup('autoformat', { clear = false })
       vim.api.nvim_clear_autocmds({ group = g, buffer = args.buf })
       vim.api.nvim_create_autocmd('BufWritePre', {
@@ -41,9 +42,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
       })
     end
 
-    require('lsp-inlayhints').on_attach(client, args.buf, false)
-
     client.server_capabilities = vim.tbl_extend('force', require('cmp_nvim_lsp').default_capabilities(), client.server_capabilities)
+
+    vim.lsp.inlay_hint.enable(true)
   end,
 })
 
