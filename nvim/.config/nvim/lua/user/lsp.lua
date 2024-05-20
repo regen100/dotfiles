@@ -73,6 +73,8 @@ function M.setup()
   lspconfig.terraformls.setup({})
   lspconfig.tsserver.setup({})
   lspconfig.rust_analyzer.setup({})
+  lspconfig.ruff_lsp.setup({})
+  lspconfig.bashls.setup({})
   lspconfig.lua_ls.setup({
     settings = {
       Lua = {

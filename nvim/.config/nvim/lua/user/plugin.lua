@@ -333,6 +333,9 @@ local config = {
     dependencies = {
       {
         'nvimtools/none-ls.nvim',
+        dependencies = {
+          'nvimtools/none-ls-extras.nvim',
+        },
         config = function()
           local null_ls = require('null-ls')
           local jsonnetfmt = {
@@ -346,8 +349,6 @@ local config = {
           }
           local null_ls_sources = {
             -- shell
-            null_ls.builtins.code_actions.shellcheck,
-            null_ls.builtins.diagnostics.shellcheck,
             null_ls.builtins.diagnostics.zsh,
             null_ls.builtins.formatting.shfmt.with({
               extra_args = { '-i', '2', '-ci' },
@@ -356,13 +357,8 @@ local config = {
             null_ls.builtins.diagnostics.mypy.with({
               extra_args = { '--strict' },
             }),
-            null_ls.builtins.diagnostics.ruff,
-            null_ls.builtins.formatting.ruff,
-            null_ls.builtins.formatting.ruff_format,
             -- lua
-            null_ls.builtins.diagnostics.luacheck.with({
-              extra_args = { '--globals', 'vim' },
-            }),
+            null_ls.builtins.diagnostics.selene,
             null_ls.builtins.formatting.stylua,
             -- others
             null_ls.builtins.diagnostics.ansiblelint,
@@ -370,7 +366,7 @@ local config = {
             -- null_ls.builtins.diagnostics.eslint,
             null_ls.builtins.diagnostics.hadolint,
             null_ls.builtins.formatting.buildifier,
-            null_ls.builtins.formatting.jq,
+            require('none-ls.formatting.jq'),
             null_ls.builtins.formatting.remark,
             null_ls.builtins.formatting.prettier.with({
               disabled_filetypes = { 'markdown' },
@@ -435,26 +431,10 @@ local config = {
     'hrsh7th/nvim-cmp',
     event = { 'InsertEnter', 'CmdlineEnter' },
     dependencies = {
-      {
-        'hrsh7th/vim-vsnip',
-        dependencies = {
-          'hrsh7th/vim-vsnip-integ',
-          'rafamadriz/friendly-snippets',
-        },
-        config = function()
-          vim.cmd([[
-            imap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
-            smap <expr> <Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<Tab>'
-            imap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
-            smap <expr> <S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
-          ]])
-        end,
-      },
       'onsails/lspkind-nvim',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-vsnip',
       'hrsh7th/cmp-nvim-lsp-signature-help',
       'hrsh7th/cmp-cmdline',
       'rcarriga/cmp-dap',
@@ -464,7 +444,7 @@ local config = {
       cmp.setup({
         snippet = {
           expand = function(args)
-            vim.fn['vsnip#anonymous'](args.body)
+            vim.snippet.expand(args.body)
           end,
         },
         mapping = cmp.mapping.preset.insert({
@@ -477,7 +457,6 @@ local config = {
         sources = cmp.config.sources({
           { name = 'copilot' },
           { name = 'nvim_lsp' },
-          { name = 'vsnip' },
           { name = 'nvim_lsp_signature_help' },
           { name = 'path' },
         }),
@@ -487,7 +466,6 @@ local config = {
             maxwidth = 100,
             menu = {
               nvim_lsp = '[lsp]',
-              vsnip = '[vsnip]',
               nvim_lsp_signature_help = '[signature]',
               path = '[path]',
               buffer = '[buffer]',
@@ -524,6 +502,7 @@ local config = {
     dependencies = {
       {
         'rcarriga/nvim-dap-ui',
+        dependencies = { 'nvim-neotest/nvim-nio' },
         config = function()
           local dap, dapui = require('dap'), require('dapui')
           dapui.setup({
