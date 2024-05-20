@@ -32,6 +32,9 @@ fi
 if [ -d "$HOME/.cargo/bin" ]; then
   PATH="$HOME/.cargo/bin:$PATH"
 fi
+if [ -d "$HOME/.pub-cache/bin" ]; then
+  PATH="$HOME/.pub-cache/bin:$PATH"
+fi
 export PATH
 
 export CLOUDSDK_PYTHON=python
