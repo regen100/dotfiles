@@ -10,3 +10,5 @@ compile_commands.json
 .clangd/
 .vscode/
 .cache/clangd
+.null-ls_*
+.venv/
