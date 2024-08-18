@@ -31,38 +31,37 @@ local config = {
     'folke/which-key.nvim',
     event = 'VeryLazy',
     config = function()
-      local wk = require('which-key')
-      wk.setup()
-      wk.register({
-        ['<Esc><Esc>'] = { ':<C-u>nohlsearch<CR>', '' }, --
-        ['<Tab>'] = { 'V>', 'Indent' }, --
-        ['<S-Tab>'] = { 'V<', 'Unindent' }, --
-        ['<Leader>'] = {
-          m = {
-            function()
-              if next(vim.opt.mouse:get()) then
-                vim.opt.mouse = {}
-              else
-                vim.opt.mouse = { a = true }
-              end
-            end,
-            'Toggle mouse',
-          }, --
-          w = {
-            function()
-              ---@diagnostic disable-next-line: undefined-field
-              vim.opt.wrap = not vim.opt.wrap:get()
-            end,
-            'Toggle wrap',
-          }, --
-          rr = { [[:%s/\<<C-r><C-w>\>//g<Left><Left>]], 'Rename', silent = false }, --
-        }, --
+      require('which-key').add({
+        { '<Esc><Esc>', ':<C-u>nohlsearch<CR>', desc = '' },
+        { '<Leader>rr', ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', desc = 'Rename', silent = false },
+        { '<S-Tab>', 'V<', desc = 'Unindent' },
+        { '<Tab>', 'V>', desc = 'Indent' },
+        {
+          '<Leader>m',
+          function()
+            if next(vim.opt.mouse:get()) then
+              vim.opt.mouse = {}
+            else
+              vim.opt.mouse = { a = true }
+            end
+          end,
+          desc = 'Toggle mouse',
+        },
+        {
+          '<Leader>w',
+          function()
+            ---@diagnostic disable-next-line: undefined-field
+            vim.opt.wrap = not vim.opt.wrap:get()
+          end,
+          desc = 'Toggle wrap',
+        },
+        {
+          mode = { 'v' },
+          { '<LeftRelease>', 'y<CR>gv<LeftRelease>', desc = '' },
+          { '<S-Tab>', '<gv', desc = 'Unindent' },
+          { '<Tab>', '>gv', desc = 'Indent' },
+        },
       })
-      wk.register({
-        ['<Tab>'] = { '>gv', 'Indent' }, --
-        ['<S-Tab>'] = { '<gv', 'Unindent' }, --
-        ['<LeftRelease>'] = { 'y<CR>gv<LeftRelease>', '' }, --
-      }, { mode = 'v' })
     end,
   },
   {
