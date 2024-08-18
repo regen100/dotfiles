@@ -156,7 +156,7 @@ docker: repo
 
 .PHONY: fcitx
 fcitx: repo
-	@$(PKG-INSTALL) fcitx-mozc fcitx-configtool fcitx-im
+	@$(PKG-INSTALL) fcitx5-mozc fcitx5-configtool fcitx5-im
 
 .PHONY: xfce
 xfce: repo fcitx
