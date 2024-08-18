@@ -13,7 +13,12 @@ fi
 
 if [ -e /opt/homebrew/bin/brew ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -e "$HOME/.linuxbrew/bin/brew" ]; then
+  eval "$("$HOME/linuxbrew/.linuxbrew/bin/brew" shellenv)"
 fi
+
 if [ -d /opt/homebrew/opt/coreutils/libexec/gnubin ]; then
   PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 fi
