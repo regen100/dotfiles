@@ -19,6 +19,8 @@ elif [ -e "$HOME/.linuxbrew/bin/brew" ]; then
   eval "$("$HOME/linuxbrew/.linuxbrew/bin/brew" shellenv)"
 fi
 
+export GEM_HOME="$HOME/.gem"
+
 if [ -d /opt/homebrew/opt/coreutils/libexec/gnubin ]; then
   PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 fi
@@ -39,6 +41,9 @@ if [ -d "$HOME/.cargo/bin" ]; then
 fi
 if [ -d "$HOME/.pub-cache/bin" ]; then
   PATH="$HOME/.pub-cache/bin:$PATH"
+fi
+if [ -d "$GEM_HOME/bin" ]; then
+  PATH="$GEM_HOME/bin:$PATH"
 fi
 export PATH
 
