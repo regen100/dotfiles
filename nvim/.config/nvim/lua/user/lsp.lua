@@ -14,10 +14,16 @@ local M = {}
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(args)
+    if vim.bo[args.buf].filetype == 'qf' then
+      return
+    end
+
     vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', { desc = 'Display hover information', buffer = args.buf })
-    vim.keymap.set('n', '<CR>', '<Cmd>Lspsaga finder def+tyd+imp<CR>', { desc = 'Show symbol info', buffer = args.buf })
+    vim.keymap.set('n', '<CR>', '<Cmd>lua vim.lsp.buf.definition()<CR>', { desc = 'Go to definition', buffer = args.buf })
+    vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', { desc = 'Go to definition', buffer = args.buf })
+    vim.keymap.set('n', 'go', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', { desc = 'Go to type definition', buffer = args.buf })
     vim.keymap.set('n', '<Leader>rn', '<Cmd>Lspsaga rename<CR>', { desc = 'Rename', buffer = args.buf })
     vim.keymap.set({ 'n', 'v' }, '<Leader>ca', '<Cmd>Lspsaga code_action<CR>', { desc = 'Code actions', buffer = args.buf })
     vim.keymap.set('n', '[d', '<Cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Goto previous diagnostic', buffer = args.buf })
