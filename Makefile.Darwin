@@ -37,7 +37,7 @@ efm: repo
 	@$(STOW-INSTALL) efm
 
 .PHONY: nvim
-nvim: repo git utils efm
+nvim: repo git utils
 	@$(PKG-INSTALL) neovim lua-language-server stylua
 	@$(STOW-INSTALL) nvim
 	@$(PIP-INSTALL) neovim
@@ -72,7 +72,6 @@ zsh: repo readline utils
 
 .PHONY: font
 font: repo
-	@brew tap homebrew/cask-fonts
 	@$(PKG-INSTALL) font-hackgen-nerd
 
 .PHONY: readline
@@ -82,5 +81,6 @@ readline: repo
 .PHONY: gpg
 gpg: repo
 	@$(PKG-INSTALL) gnupg pinentry-mac
+	@mkdir -p $$HOME/.gnupg
 	@grep -q pinentry-program $$HOME/.gnupg/gpg-agent.conf || echo "pinentry-program /opt/homebrew/bin/pinentry-mac" >$$HOME/.gnupg/gpg-agent.conf
 	@gpg-connect-agent reloadagent /bye >/dev/null
