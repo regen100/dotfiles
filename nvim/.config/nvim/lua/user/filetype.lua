@@ -37,6 +37,9 @@ local function setup()
     pattern = {
       ['tmux.*%.conf'] = 'tmux',
       ['%.gitconfig.*'] = 'gitconfig',
+      ['.*%.(%a+)%.mako'] = function(_, _, ext)
+        return ext
+      end,
     },
   })
 
