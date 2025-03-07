@@ -12,4 +12,6 @@ export BROWSER=$HOME/bin/start
 
 hash -d desktop="$(wslpath "$($powershell /C Write-Output '${Env:USERPROFILE}' | sed 's/\r//')")/Desktop"
 
-ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/
+if [[ ! -e /tmp/.X11-unix/X0 ]]; then
+  ln -sf /mnt/wslg/.X11-unix/X0 /tmp/.X11-unix/
+fi
