@@ -8,3 +8,5 @@ autoload -Uz manydots-magic 2>/dev/null && manydots-magic 2>/dev/null
 
 (( $+commands[aws_completer] )) && complete -C aws_completer aws
 (( $+commands[pdm] )) && eval "$(pdm --pep582)"
+
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
