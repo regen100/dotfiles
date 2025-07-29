@@ -20,6 +20,7 @@ elif [ -e "$HOME/.linuxbrew/bin/brew" ]; then
 fi
 
 export GEM_HOME="$HOME/.gem"
+export NPM_CONFIG_PREFIX="$HOME/.local"
 
 if [ -d /opt/homebrew/opt/coreutils/libexec/gnubin ]; then
   PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
