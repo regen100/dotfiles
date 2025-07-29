@@ -78,9 +78,9 @@ function M.setup()
   lspconfig.vimls.setup({})
   lspconfig.jedi_language_server.setup({})
   lspconfig.terraformls.setup({})
-  lspconfig.tsserver.setup({})
+  lspconfig.ts_ls.setup({})
   lspconfig.rust_analyzer.setup({})
-  lspconfig.ruff_lsp.setup({})
+  lspconfig.ruff.setup({})
   lspconfig.bashls.setup({})
   lspconfig.lua_ls.setup({
     settings = {

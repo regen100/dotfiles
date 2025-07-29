@@ -357,7 +357,6 @@ local config = {
               extra_args = { '--strict' },
             }),
             -- lua
-            null_ls.builtins.diagnostics.selene,
             null_ls.builtins.formatting.stylua,
             -- others
             null_ls.builtins.diagnostics.ansiblelint,
