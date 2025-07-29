@@ -122,7 +122,7 @@ tmux: repo
 
 .PHONY: zsh
 zsh: repo readline utils
-	@$(PKG-INSTALL) zsh grml-zsh-config keychain starship
+	@$(PKG-INSTALL) zsh grml-zsh-config starship
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh starship
 	@mkdir -p ~/.zfunc
