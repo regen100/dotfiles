@@ -8,8 +8,11 @@ Session.vim
 compile_commands.json
 .mypy_cache/
 .clangd/
-.vscode/
 .cache/clangd
 .null-ls_*
 .venv/
 .DS_Store
+
+**/.claude/settings.local.json
+
+**/CLAUDE.local.md
