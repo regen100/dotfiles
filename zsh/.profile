@@ -2,6 +2,16 @@
 
 export LESS="-giMRSW -z-4 -x4 -j4"
 
+ssh-add -l >/dev/null 2>&1
+if [ $? -eq 2 ]; then
+  export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.sock"
+  ssh-add -l >/dev/null 2>&1
+  if [ $? -eq 2 ]; then
+    rm -f "$SSH_AUTH_SOCK"
+    eval "$(ssh-agent -a "$SSH_AUTH_SOCK")" >/dev/null
+  fi
+fi
+
 if type vim >/dev/null 2>&1; then
   export EDITOR=vim
   export VISUAL=vim
