@@ -1,6 +1,9 @@
 #!/bin/sh
 
 export LESS="-giMRSW -z-4 -x4 -j4"
+export CLOUDSDK_PYTHON=python
+export GEM_HOME="$HOME/.gem"
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 
 if type vim >/dev/null 2>&1; then
   export EDITOR=vim
@@ -18,9 +21,6 @@ elif [ -e /home/linuxbrew/.linuxbrew/bin/brew ]; then
 elif [ -e "$HOME/.linuxbrew/bin/brew" ]; then
   eval "$("$HOME/linuxbrew/.linuxbrew/bin/brew" shellenv)"
 fi
-
-export GEM_HOME="$HOME/.gem"
-export NPM_CONFIG_PREFIX="$HOME/.local"
 
 if [ -d /opt/homebrew/opt/coreutils/libexec/gnubin ]; then
   PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
@@ -46,6 +46,7 @@ fi
 if [ -d "$GEM_HOME/bin" ]; then
   PATH="$GEM_HOME/bin:$PATH"
 fi
+if [ -d "$NPM_CONFIG_PREFIX/bin" ]; then
+  PATH="$NPM_CONFIG_PREFIX/bin:$PATH"
+fi
 export PATH
-
-export CLOUDSDK_PYTHON=python
