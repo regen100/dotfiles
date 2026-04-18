@@ -75,7 +75,6 @@ git: repo
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
 	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone
-	@[[ -d ~/.config/nvim ]] || git clone https://github.com/LazyVim/starter ~/.config/nvim
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
 

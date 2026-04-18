@@ -1,0 +1,5 @@
+vim.keymap.set("n", "<Esc><Esc>", "<Cmd>nohlsearch<CR>", { silent = true })
+vim.keymap.set("n", "<Tab>", "V>", { desc = "Indent" })
+vim.keymap.set("n", "<S-Tab>", "V<", { desc = "Unindent" })
+vim.keymap.set("x", "<Tab>", ">gv", { desc = "Indent" })
+vim.keymap.set("x", "<S-Tab>", "<gv", { desc = "Unindent" })

@@ -1,4 +1,5 @@
 .luarc.json
+nvim/.config/nvim/lazy-lock.json
 borg/.borg/*.conf
 borg/.borg/*.exclude
 byobu/.config/byobu/.metadata_available
