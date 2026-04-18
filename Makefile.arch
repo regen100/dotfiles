@@ -58,7 +58,7 @@ configs: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop-bin ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin
+	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop-bin ripgrep fd pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin
 	@sudo pkgfile --update
 
 .PHONY: git
