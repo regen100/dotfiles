@@ -22,6 +22,6 @@ reset_prompt() {
 add-zsh-hook precmd reset_prompt
 
 reset_env() {
-  [[ -n $TMUX ]] && eval "$(tmux show-environment -s)"
+  [[ -n $TMUX ]] && eval "$(tmux show-environment -s | grep -v '^unset .*SSH_AUTH_SOCK')"
 }
 add-zsh-hook preexec reset_env
