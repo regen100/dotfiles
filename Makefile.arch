@@ -2,7 +2,6 @@ SHELL := bash
 MAKEFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 DOTFILES_DIR := $(dir $(MAKEFILE_PATH))
 PKG-INSTALL := yay --noconfirm --needed -S
-PIP-INSTALL := python3 -m pip install --user --no-warn-script-location -U
 STOW-INSTALL := stow -d $(DOTFILES_DIR) -t $(HOME)
 
 .PHONY: system
@@ -48,14 +47,18 @@ repo:
 informant: repo
 	@$(PKG-INSTALL) informant && sudo usermod -a -G informant $$USER
 
-.PHONY: pip
-pip: repo
-	@$(PKG-INSTALL) python python-pip python-wheel
+.PHONY: mise
+mise: repo
+	@$(PKG-INSTALL) mise
+	@mise use -g usage@latest
+
+.PHONY: configs
+configs: repo
+	@$(STOW-INSTALL) rust clang
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop-bin direnv ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin gotop-bin
-	@$(STOW-INSTALL) direnv
+	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop-bin ripgrep pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin
 	@sudo pkgfile --update
 
 .PHONY: git
@@ -71,41 +74,14 @@ git: repo
 .PHONY: nvim
 nvim: repo git utils
 	@sudo pacman --noconfirm -R vi 2>/dev/null || true
-	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone lua-language-server stylua selene vim-language-server python-neovim shellcheck hadolint-bin npm ruff-lsp
-	@npm_config_prefix=~/.local npm install -g remark-cli remark-frontmatter
+	@$(PKG-INSTALL) neovim xclip wl-clipboard neovim-drop-in xxd-standalone
+	@[[ -d ~/.config/nvim ]] || git clone https://github.com/LazyVim/starter ~/.config/nvim
 	@$(STOW-INSTALL) nvim
 	@tic -x $(DOTFILES_DIR)/.extras/terminfo
-
-.PHONY: clang
-clang: repo pip
-	@$(PKG-INSTALL) cmake ninja clang openmp cppcheck sccache cmake-lint lldb
-	@$(STOW-INSTALL) clang
-	@$(PIP-INSTALL) cmake-language-server
-
-.PHONY: python
-python: repo readline
-	@$(PKG-INSTALL) poetry
 
 .PHONY: nodejs
 nodejs: repo
 	@$(PKG-INSTALL) nodejs npm
-
-.PHONY: rust
-rust: repo
-	@$(PKG-INSTALL) rustup sccache rust-analyzer
-	@rustup update stable
-	@rustup component add rust-src rustfmt-preview clippy
-	@mkdir -p ~/.cargo
-	@$(STOW-INSTALL) rust
-
-.PHONY: plantuml
-plantuml: repo
-	@$(PKG-INSTALL) jdk-openjdk plantuml
-
-.PHONY: latex
-latex: repo font
-	@$(PKG-INSTALL) texlive-most texlive-langjapanese qpdfview poppler-data
-	@kanji-config-updmap-sys auto
 
 .PHONY: tmux-patch
 tmux-patch: repo
@@ -136,18 +112,6 @@ font: repo
 	@$(PKG-INSTALL) noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-times-new-roman ttf-hackgen
 	@$(STOW-INSTALL) font
 
-.PHONY: verilog
-verilog: repo git
-	@$(PKG-INSTALL) iverilog gtkwave
-	@if ! which iStyle >/dev/null; then \
-		cd /tmp; \
-		git clone -b v1.21 https://github.com/thomasrussellmurphy/istyle-verilog-formatter.git; \
-		cd istyle-verilog-formatter; \
-		make; \
-		cp bin/release/iStyle /usr/local/bin; \
-		rm -rf $$(pwd); \
-	fi
-
 .PHONY: docker
 docker: repo
 	@$(PKG-INSTALL) docker docker-compose
@@ -174,18 +138,6 @@ xfce: repo fcitx
 nftables: repo
 	@$(PKG-INSTALL) nftables
 	@sudo systemctl enable --now nftables
-
-.PHONY: doxygen
-doxygen: repo plantuml
-	@$(PKG-INSTALL) doxygen dot texlive-core texlive-bin
-
-.PHONY: k8s
-k8s: repo
-	@$(PKG-INSTALL) kubernetes-bin argo-bin jsonnet
-
-.PHONY: code
-code: repo nvim font
-	@$(PKG-INSTALL) visual-studio-code-insiders-bin gnome-keyring
 
 .PHONY: readline
 readline: repo
@@ -220,11 +172,3 @@ network:
 	@sudo sed -i "s/^#MulticastDNS=yes/MulticastDNS=yes/" /etc/systemd/resolved.conf
 	@sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 	@sudo systemctl enable --now systemd-networkd systemd-resolved
-
-.PHONY: aws
-aws:
-	@$(PKG-INSTALL) aws-cli-v2-bin amazon-ecr-credential-helper
-
-.PHONY: terraform
-terraform:
-	@$(PKG-INSTALL) terraform terraform-ls tflint-bin

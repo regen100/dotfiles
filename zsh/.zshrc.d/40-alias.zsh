@@ -6,6 +6,7 @@ alias ap="ansible-playbook"
 alias tf=terraform
 alias tg=terragrunt
 alias vi=nvim
+alias tmx='tmux attach || tmux'
 
 CMAKE_CXX_FLAGS="-fstandalone-debug -ferror-limit=1 -g -O1 -W -Wall"
 CMAKE_LDFLAGS=-fuse-ld=lld

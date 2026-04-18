@@ -22,13 +22,6 @@ reset_prompt() {
 add-zsh-hook precmd reset_prompt
 
 reset_env() {
-  [[ -z $TMUX ]] && return
-  while IFS=$'\n' read -r v; do
-    if [[ ${v:0:1} = - ]]; then
-      unset "${v:1}"
-    else
-      export "${v?}"
-    fi
-  done < <(tmux showenv)
+  [[ -n $TMUX ]] && eval "$(tmux show-environment -s)"
 }
 add-zsh-hook preexec reset_env

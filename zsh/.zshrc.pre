@@ -17,5 +17,6 @@ gen_comp rustup "rustup completions zsh"
 gen_comp poetry "poetry completions zsh"
 gen_comp molecule "_MOLECULE_COMPLETE=zsh_source molecule"
 gen_comp pdm "pdm completion zsh"
+gen_comp mise "mise completion zsh"
 
 unset gen_comp

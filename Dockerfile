@@ -11,7 +11,7 @@ RUN useradd -m -g wheel -s /usr/bin/zsh regen \
 WORKDIR /home/regen
 COPY --chown=regen:wheel . dotfiles
 WORKDIR /home/regen/dotfiles
-RUN su regen sh -c "make zsh utils clang python rust nvim tmux" \
+RUN su regen sh -c "make zsh utils mise nvim tmux" \
   && rm /var/cache/pacman/pkg/*
 
 USER regen
