@@ -35,7 +35,8 @@
 	rc = rebase --continue
 	rb = !git pull --rebase origin $(git main) && git su
 	m = !git co $(git main) && git fetch && git rb
-	delete-gone = !git remote prune origin && git delete-merged-branches && git delete-squashed-branches && git branch -vv | awk '/: gone]/{print $1}' | xargs --no-run-if-empty git branch -D
+	delete-gone = "!git remote prune origin; git delete-merged-branches; git delete-squashed-branches; git branch -vv | sed 's/^[*+] / /' | awk '/: gone]/{print $1}' | xargs --no-run-if-empty -n 1 git branch -D"
+	delete-merged-worktrees = "!git for-each-ref --format='%(refname:short) %(worktreepath)' refs/heads | grep -E '.+ .+' | while read b p; do [ \"$(gh pr view \"$b\" --json state --jq .state 2>/dev/null)\" = MERGED ] && echo \"removing $p ($b)\" && git worktree remove \"$p\"; done"
 	f = fetch
 	fco = !git fetch && git co
 	u = diff --name-only --diff-filter=U
