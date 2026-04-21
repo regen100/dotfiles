@@ -2,6 +2,11 @@ return {
   { "wsdjeg/vim-fetch", lazy = false },
 
   {
+    "nvim-treesitter/nvim-treesitter",
+    opts = { ensure_installed = { "markdown", "markdown_inline" } },
+  },
+
+  {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {

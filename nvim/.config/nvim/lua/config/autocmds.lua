@@ -28,6 +28,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+  callback = function()
+    vim.opt_local.spell = false
+  end,
+})
+
 local autosave = vim.api.nvim_create_augroup("user_autosave", {})
 vim.api.nvim_create_autocmd({ "InsertLeave", "BufLeave", "TextChanged" }, {
   group = autosave,

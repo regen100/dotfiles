@@ -16,6 +16,7 @@ if vim.fn.executable("xclip") ~= 0 and vim.env.DISPLAY then
 end
 
 vim.opt.relativenumber = false
+vim.opt.conceallevel = 0
 vim.opt.scrolloff = 3
 vim.opt.showmatch = true
 vim.opt.softtabstop = 2
