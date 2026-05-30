@@ -25,3 +25,31 @@ reset_env() {
   [[ -n $TMUX ]] && eval "$(tmux show-environment -s | grep -v '^unset .*SSH_AUTH_SOCK')"
 }
 add-zsh-hook preexec reset_env
+
+# Windows Terminal
+keep_current_path() {
+    printf "\e]9;9;%s\e\\" "$PWD"
+}
+add-zsh-hook chpwd keep_current_path
+
+mark_prompt_start() {
+  printf "\e]133;A\e\\"
+}
+add-zsh-hook precmd mark_prompt_start
+
+mark_command_start() {
+  if [[ $CONTEXT == "start" ]]; then
+    printf "\e]133;B\e\\"
+  fi
+}
+zle -N zle-line-init mark_command_start
+
+mark_command_executed() {
+  printf "\e]133;C\e\\"
+}
+add-zsh-hook preexec mark_command_executed
+
+mark_command_finished() {
+  printf "\e]133;D;%s\e\\" $?
+}
+add-zsh-hook precmd mark_command_finished
