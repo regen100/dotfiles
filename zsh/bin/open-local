@@ -1,0 +1,2 @@
+#!/bin/bash
+printf '%s\n' "$1" >/dev/tcp/127.0.0.1/17799 2>/dev/null || printf '%s\n' "$1"

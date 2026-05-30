@@ -97,7 +97,7 @@ tmux: repo
 
 .PHONY: zsh
 zsh: repo readline utils
-	@$(PKG-INSTALL) zsh grml-zsh-config starship
+	@$(PKG-INSTALL) zsh grml-zsh-config starship socat
 	@mkdir -p ~/bin
 	@$(STOW-INSTALL) zsh starship
 	@mkdir -p ~/.zfunc
