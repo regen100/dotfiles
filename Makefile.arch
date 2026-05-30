@@ -58,7 +58,7 @@ configs: repo
 
 .PHONY: utils
 utils: repo
-	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop-bin ripgrep fd pkgfile duf ncdu fzf bat bandwhich needrestart ghq-bin
+	@$(PKG-INSTALL) man rsync htop iftop nvtop gotop-bin ripgrep fd pkgfile duf ncdu fzf bat bandwhich needrestart ghq
 	@sudo pkgfile --update
 
 .PHONY: git
@@ -149,7 +149,7 @@ borg: repo
 
 .PHONY: gpg
 gpg: repo
-	@$(PKG-INSTALL) pinentry qt5-base kwayland5 qt5-x11extras
+	@$(PKG-INSTALL) pinentry qt5-base kwayland5 qt5-x11extras kguiaddons
 	@grep -q pinentry-program $$HOME/.gnupg/gpg-agent.conf || echo "pinentry-program /usr/bin/pinentry-qt" >$$HOME/.gnupg/gpg-agent.conf
 	@gpg-connect-agent reloadagent /bye >/dev/null
 
