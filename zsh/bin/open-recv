@@ -1,3 +1,74 @@
-#!/bin/bash
-IFS= read -r u
-case $u in http*//*) exec "${BROWSER-xdg-open}" "$u";; esac
+#!/usr/bin/env python3
+"""Receive a URL from the remote over the reverse-forwarded :17799 socket and
+open it in the local browser.
+
+For OAuth / loopback-redirect flows the authorization URL embeds a redirect_uri
+like http://127.0.0.1:PORT/oauth/callback. Before opening the browser we forward
+that PORT to the remote over the *existing* SSH ControlMaster, so the browser's
+request to localhost:PORT reaches the listener the remote CLI just started.
+
+Master selection:
+  * OPEN_FORWARD_HOST=<config alias>  -> `ssh -O forward <alias>` reapplies the
+    host's full config (HostName/Port/User), so the recomputed ControlPath
+    always matches the live socket. Use this when several sessions are open.
+  * otherwise, the first live control socket (OPEN_FORWARD_CONTROL_GLOB, default
+    ~/.ssh/cm-*) is targeted directly with `ssh -S <socket> -O forward`. The host
+    arg is then only a placeholder, so a ControlPath that encodes %h (the real
+    HostName) rather than the alias no longer causes a mismatch.
+"""
+
+import glob
+import os
+import re
+import subprocess
+import sys
+import webbrowser
+from urllib.parse import parse_qs, unquote, urlparse
+
+
+def extract_port(url: str) -> int | None:
+    ru = parse_qs(urlparse(url).query).get("redirect_uri", [""])[0]
+    port = urlparse(ru).port if ru else None
+    if not port:
+        m = re.search(r"(?:localhost|127\.0\.0\.1|\[::1\]):(\d+)", unquote(url))
+        port = int(m.group(1)) if m else None
+    return port
+
+
+def forward_cmd(port: int) -> list[str] | None:
+    """Build the `ssh ... -O forward` argv for a live master, or None."""
+    spec = ["-L", f"{port}:localhost:{port}"]
+    host = os.environ.get("OPEN_FORWARD_HOST")
+    if host:
+        return ["ssh", "-O", "forward", *spec, host]
+    pattern = os.environ.get(
+        "OPEN_FORWARD_CONTROL_GLOB", os.path.expanduser("~/.ssh/cm-*")
+    )
+    socks = sorted(glob.glob(pattern))
+    if socks:
+        # -S targets the master socket directly; trailing host is a placeholder.
+        return ["ssh", "-S", socks[0], "-O", "forward", *spec, "_"]
+    return None
+
+
+def open_browser(url: str) -> None:
+    browser = os.environ.get("BROWSER")
+    if browser:
+        os.execvp(browser, [browser, url])
+    webbrowser.open(url)
+
+
+def main() -> None:
+    url = sys.stdin.readline().strip()
+    if not re.match(r"^https?://", url):
+        return
+    port = extract_port(url)
+    if port:
+        cmd = forward_cmd(port)
+        if cmd:
+            subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    open_browser(url)
+
+
+if __name__ == "__main__":
+    main()
